@@ -7,7 +7,7 @@
 
     <!-- Center: Links -->
     <div class="space-x-6">
-      <router-link to="/shop" class="hover:text-red-500">All Items</router-link>
+      <router-link to="/shop" class="hover:text-red-500">Full Shop</router-link>
       <router-link to="/misc" class="hover:text-red-500">Misc</router-link>
     </div>
 
