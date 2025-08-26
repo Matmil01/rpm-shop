@@ -11,7 +11,6 @@ const routes = [
     path: "/admin",
     name: "AdminView",
     component: () => import("@/views/AdminUI/AdminView.vue"),
-    meta: { requiresAuth: true, adminOnly: true }
   }
 ]
 

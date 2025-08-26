@@ -20,7 +20,7 @@
       <router-link to="/cart" class="hover:text-red-500">🛒</router-link>
 
       <!-- Login -->
-      <router-link to="/login" class="hover:text-red-500">Login</router-link>
+      <router-link to="/admin" class="hover:text-red-500">Login</router-link>
     </div>
   </nav>
 </template>

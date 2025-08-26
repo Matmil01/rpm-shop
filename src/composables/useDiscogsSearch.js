@@ -5,20 +5,26 @@ export function useDiscogsSearch() {
   const loading = ref(false);
   const error = ref(null);
 
-  const searchAlbums = async (query) => {
+  const searchAlbums = async (query, page = 1) => {
     loading.value = true;
+    error.value = null;
     try {
       const res = await fetch(
-        `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&token=${import.meta.env.VITE_DISCOGS_TOKEN}`
+        `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&format=vinyl&page=${page}&token=${import.meta.env.VITE_DISCOGS_TOKEN}`
       );
       const data = await res.json();
       results.value = data.results;
     } catch (err) {
-      error.value = err;
+      error.value = err.message || "An error occurred while searching Discogs.";
     } finally {
       loading.value = false;
     }
   };
 
-  return { results, loading, error, searchAlbums };
+  const clearResults = () => {
+    results.value = [];
+    error.value = null;
+  };
+
+  return { results, loading, error, searchAlbums, clearResults };
 }
