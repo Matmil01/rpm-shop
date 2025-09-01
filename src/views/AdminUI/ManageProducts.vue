@@ -45,15 +45,7 @@
             <div class="flex flex-col justify-between h-full gap-4">
               <button
                 :disabled="savingId === product.id"
-                @click="updateProduct(product)"
-                class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 disabled:opacity-50 w-full"
-              >
-                <span v-if="savingId === product.id">Saving...</span>
-                <span v-else>Update</span>
-              </button>
-              <button
-                :disabled="savingId === product.id"
-                @click="deleteProduct(product.id)"
+                @click="confirmDelete(product.id)"
                 class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 w-full"
               >
                 Delete
@@ -63,44 +55,36 @@
         </tr>
       </tbody>
     </table>
+    <button
+      @click="saveAllChanges"
+      class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+      :disabled="saving"
+    >
+      <span v-if="saving">Saving...</span>
+      <span v-else>Save All Changes</span>
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { db } from '@/firebase'
-import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore'
+import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 
-const products = ref([])
-const loading = ref(true)
+const { randomPrice } = useRandomDefaults()
+const { products, loading, fetchProducts, updateProduct: crudUpdateProduct, deleteProduct: crudDeleteProduct } = useFirestoreCRUD()
+
 const savingId = ref(null)
+const saving = ref(false)
 const search = ref('')
 const tagsList = [
-  'Staff Favorite',
-  'Bestsellers',
+  'Staff Favorites',
+  'Special Offers',
   'New Arrivals',
   'Rare Finds',
   'Under 100,-',
   'Soundtracks'
 ]
-
-async function fetchProducts() {
-  loading.value = true
-  const querySnapshot = await getDocs(collection(db, 'products'))
-  products.value = querySnapshot.docs.map(doc => {
-    const data = doc.data()
-    return {
-      id: doc.id,
-      artist: data.artist || '',
-      album: data.album || '',
-      stock: typeof data.stock === 'number' ? data.stock : 0,
-      price: typeof data.price === 'number' ? data.price : 0,
-      discount: typeof data.discount === 'number' ? data.discount : 0,
-      tags: Array.isArray(data.tags) ? data.tags : []
-    }
-  })
-  loading.value = false
-}
 
 onMounted(fetchProducts)
 
@@ -114,31 +98,43 @@ const filteredProducts = computed(() => {
   )
 })
 
-async function updateProduct(product) {
-  savingId.value = product.id
+async function saveAllChanges() {
+  saving.value = true
   try {
-    await updateDoc(doc(db, 'products', product.id), {
-      stock: Number(product.stock) || 0,
-      price: Number(product.price) || 0,
-      discount: Number(product.discount) || 0,
-      tags: Array.isArray(product.tags) ? product.tags : []
-    })
+    await Promise.all(
+      products.value.map(product =>
+        crudUpdateProduct(product.id, {
+          stock: Number(product.stock) || 0,
+          price: Number(product.price) > 0 ? Number(product.price) : randomPrice(),
+          discount: Number(product.discount) || 0,
+          tags: Array.isArray(product.tags) ? product.tags : []
+        })
+      )
+    )
+    alert('All changes saved!')
   } catch (e) {
-    alert('Error updating product: ' + e.message)
+    alert('Error saving changes: ' + e.message)
   } finally {
-    savingId.value = null
+    saving.value = false
   }
 }
 
 async function deleteProduct(id) {
   savingId.value = id
   try {
-    await deleteDoc(doc(db, 'products', id))
-    products.value = products.value.filter(p => p.id !== id)
+    await crudDeleteProduct(id)
+    const idx = products.value.findIndex(p => p.id === id)
+    if (idx !== -1) products.value.splice(idx, 1)
   } catch (e) {
     alert('Error deleting product: ' + e.message)
   } finally {
     savingId.value = null
+  }
+}
+
+function confirmDelete(id) {
+  if (confirm('Are you sure?')) {
+    deleteProduct(id)
   }
 }
 </script>

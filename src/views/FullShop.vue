@@ -23,33 +23,26 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { db } from '@/firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import ProductCard from '@/components/ProductCard.vue'
 
 const route = useRoute()
-const products = ref([])
 const search = ref('')
 
-async function fetchProducts() {
-  const querySnapshot = await getDocs(collection(db, 'products'))
-  products.value = querySnapshot.docs.map(doc => {
-    const data = doc.data()
-    return {
-      id: doc.id,
-      album: data.album || '',
-      artist: data.artist || '',
-      coverImage: data.coverImage || '',
-      price: typeof data.price === 'number' ? data.price : 0,
-      discount: typeof data.discount === 'number' ? data.discount : 0,
-      tags: Array.isArray(data.tags) ? data.tags : []
-    }
-  })
-}
+const { products, fetchProducts } = useFirestoreCRUD()
 
 onMounted(fetchProducts)
+
+// Sync search box with ?search= query param
+watch(
+  () => route.query.search,
+  (val) => {
+    if (typeof val === 'string') search.value = val
+  },
+  { immediate: true }
+)
 
 const tag = computed(() => route.query.tag)
 const filteredProducts = computed(() => {

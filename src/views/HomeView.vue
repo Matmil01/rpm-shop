@@ -26,42 +26,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { db } from '@/firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import { computed, onMounted } from 'vue'
+import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import ProductCard from '@/components/ProductCard.vue'
 
 const categories = [
-  'Staff Favorite',
-  'Bestsellers',
+  'Soundtracks',
+  'Special Offers',
+  'Staff Favorites',
   'New Arrivals',
-  'Rare Finds',
   'Under 100,-',
-  'Soundtracks'
+  'Rare Finds',
 ]
 
-const allProducts = ref([])
-
-async function fetchProducts() {
-  const querySnapshot = await getDocs(collection(db, 'products'))
-  allProducts.value = querySnapshot.docs.map(doc => {
-    const data = doc.data()
-    return {
-      id: doc.id,
-      album: data.album || '',
-      artist: data.artist || '',
-      coverImage: data.coverImage || '',
-      price: typeof data.price === 'number' ? data.price : 0,
-      discount: typeof data.discount === 'number' ? data.discount : 0,
-      tags: Array.isArray(data.tags) ? data.tags : []
-    }
-  })
-}
+const { products, fetchProducts } = useFirestoreCRUD()
 
 onMounted(fetchProducts)
 
 function productsByCategory(category) {
-  return allProducts.value
+  return products.value
     .filter(p => p.tags && p.tags.includes(category))
     .slice(0, 4)
 }

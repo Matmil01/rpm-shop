@@ -1,7 +1,14 @@
 <template>
   <div class="p-6">
     <h1 class="text-2xl font-bold mb-1">{{ product.album }}</h1>
-    <div class="text-lg text-gray-700 mb-4">{{ product.artist }}</div>
+    <div class="text-lg text-gray-700 mb-4">
+      <router-link
+        :to="`/shop?search=${encodeURIComponent(product.artist)}`"
+        class="text-blue-600 hover:underline"
+      >
+        {{ product.artist }}
+      </router-link>
+    </div>
     <img :src="product.coverImage" alt="" class="w-64 h-64 object-cover mb-4 rounded shadow" />
     <div class="mb-2">
       <span v-if="product.discount && product.discount > 0">
@@ -13,6 +20,8 @@
         <span>Price: {{ product.price }} kr.</span>
       </span>
     </div>
+    <p class="mb-2">Genre: {{ product.genre || 'Unknown' }}</p>
+    <p class="mb-2">Year: {{ product.year || 'Unknown' }}</p>
     <p class="mb-2">Speed: {{ product.rpm || '33 RPM' }}</p>
     <p class="mb-2">Format: {{ product.format || '12"' }}</p>
     <p class="mb-2">Stock: {{ product.stock }}</p>
@@ -33,17 +42,17 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { db } from '@/firebase'
-import { doc, getDoc } from 'firebase/firestore'
+import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 
 const route = useRoute()
 const product = ref({})
 
+const { fetchProduct } = useFirestoreCRUD()
+
 onMounted(async () => {
-  const docRef = doc(db, 'products', route.params.id)
-  const docSnap = await getDoc(docRef)
-  if (docSnap.exists()) {
-    product.value = { id: docSnap.id, ...docSnap.data() }
+  const result = await fetchProduct(route.params.id)
+  if (result) {
+    product.value = result
   }
 })
 

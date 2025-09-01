@@ -17,7 +17,6 @@
     <div v-if="loading" class="mb-4 text-gray-500">Searching...</div>
     <div v-if="error" class="mb-4 text-red-500">{{ error }}</div>
     <div v-if="results.length" class="mb-6 space-y-2">
-      <!-- In your results list -->
       <div
         v-for="release in results"
         :key="release.id"
@@ -36,7 +35,7 @@
       </div>
     </div>
 
-    <!-- Product Meta Data Section -->
+    <!-- Meta Data -->
     <div class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Product Meta Data</h2>
       <div class="mb-4">
@@ -67,10 +66,6 @@
         <input v-model="format" type="text" class="w-full border rounded px-3 py-2" placeholder="e.g. Vinyl, LP, Album, 12&quot;" />
       </div>
       <div class="mb-4">
-        <label class="block mb-1 font-medium">Label</label>
-        <input v-model="label" type="text" class="w-full border rounded px-3 py-2" placeholder="Label" />
-      </div>
-      <div class="mb-4">
         <label class="block mb-1 font-medium">Genre</label>
         <input v-model="genre" type="text" class="w-full border rounded px-3 py-2" placeholder="Genre" />
       </div>
@@ -96,12 +91,12 @@
           <label class="block mb-1 font-medium">Tags</label>
           <div class="grid grid-cols-2 gap-2">
             <label class="flex items-center gap-2">
-              <input type="checkbox" value="Staff Favorite" v-model="tags" />
-              Staff Favorite
+              <input type="checkbox" value="Staff Favorites" v-model="tags" />
+              Staff Favorites
             </label>
             <label class="flex items-center gap-2">
-              <input type="checkbox" value="Bestsellers" v-model="tags" />
-              Bestsellers
+              <input type="checkbox" value="Special Offers" v-model="tags" />
+              Special Offers
             </label>
             <label class="flex items-center gap-2">
               <input type="checkbox" value="New Arrivals" v-model="tags" />
@@ -122,7 +117,7 @@
           </div>
         </div>
         <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800">
-          Add Record
+          Add to Firestore
         </button>
       </form>
     </div>
@@ -132,8 +127,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useDiscogsSearch } from '@/composables/useDiscogsSearch.js'
-import { db } from '@/firebase'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 
 const artist = ref('')
 const album = ref('')
@@ -141,7 +136,6 @@ const year = ref('')
 const rpm = ref('')
 const coverImage = ref('')
 const format = ref('')
-const label = ref('')
 const genre = ref('')
 
 const price = ref(0)
@@ -151,6 +145,8 @@ const tags = ref([])
 
 const searchQuery = ref('')
 const { results, loading, error, searchAlbums, fetchReleaseDetails, clearResults } = useDiscogsSearch()
+const { randomStock, randomPrice } = useRandomDefaults()
+const { addProduct } = useFirestoreCRUD()
 
 const tracklist = ref([])
 const numRecords = ref('')
@@ -173,7 +169,6 @@ async function fillForm(release) {
   year.value = release.year || ''
   coverImage.value = release.cover_image || ''
   format.value = release.format ? release.format.join(', ') : ''
-  label.value = release.label ? release.label.join(', ') : ''
   genre.value = release.genre ? release.genre.join(', ') : ''
   rpm.value = ''
 
@@ -200,9 +195,11 @@ async function fillForm(release) {
 }
 
 async function onSubmit() {
-  // If stock is blank or zero, assign a random number between 1 and 10
   if (!stock.value || stock.value === '') {
-    stock.value = Math.floor(Math.random() * 10) + 1
+    stock.value = randomStock()
+  }
+  if (!price.value || price.value === '') {
+    price.value = randomPrice()
   }
 
   // Build the product object
@@ -213,7 +210,6 @@ async function onSubmit() {
     rpm: rpm.value,
     coverImage: coverImage.value,
     format: format.value,
-    label: label.value,
     genre: genre.value,
     price: Number(price.value) || 0,
     discount: Number(discount.value) || 0,
@@ -221,13 +217,11 @@ async function onSubmit() {
     tags: Array.isArray(tags.value) ? tags.value : [],
     tracklist: Array.isArray(tracklist.value) ? tracklist.value : [],
     numRecords: numRecords.value,
-    createdAt: serverTimestamp()
   }
 
   try {
-    await addDoc(collection(db, 'products'), product)
-    alert('Product added to Firestore!')
-    // Optionally, clear the form fields here
+    await addProduct(product)
+    alert('Added to Firestore!')
   } catch (e) {
     alert('Error adding product: ' + e.message)
   }

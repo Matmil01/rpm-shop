@@ -5,7 +5,15 @@
   >
     <img :src="coverImage" alt="" class="w-full aspect-square object-cover mb-2 rounded group-hover:opacity-90" />
     <h2 class="text-lg font-bold text-left">{{ album }}</h2>
-    <div class="text-left text-gray-700 mb-2">{{ artist }}</div>
+    <div class="text-left text-gray-700 mb-2">
+      <router-link
+        :to="`/shop?search=${encodeURIComponent(artist)}`"
+        class="text-blue-600 hover:underline"
+        @click.stop
+      >
+        {{ artist }}
+      </router-link>
+    </div>
     <div class="text-left mb-2">
       <span v-if="discount && discount > 0">
         <span class="line-through text-gray-400 mr-2">{{ price }} kr.</span>

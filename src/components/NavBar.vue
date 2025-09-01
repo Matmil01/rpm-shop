@@ -1,8 +1,12 @@
 <template>
   <nav class="bg-black text-white px-6 py-4 flex justify-between items-center">
     <!-- Left side: Logo / Home -->
-    <router-link to="/" class="text-2xl font-bold tracking-widest hover:text-red-500">
-      ⚡ RPM SHOP ⚡
+    <router-link to="/" class="flex items-center">
+      <img
+        src="/rpm-logo-white.svg"
+        alt="RPM Logo"
+        class="h-10 w-auto transition-transform duration-200 hover:scale-110"
+      />
     </router-link>
 
     <!-- Center: Links -->
