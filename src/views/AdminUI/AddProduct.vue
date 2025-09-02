@@ -146,7 +146,7 @@ const tags = ref([])
 const searchQuery = ref('')
 const { results, loading, error, searchAlbums, fetchReleaseDetails, clearResults } = useDiscogsSearch()
 const { randomStock, randomPrice } = useRandomDefaults()
-const { addProduct } = useFirestoreCRUD()
+const { addRecord } = useFirestoreCRUD()
 
 const tracklist = ref([])
 const numRecords = ref('')
@@ -202,8 +202,8 @@ async function onSubmit() {
     price.value = randomPrice()
   }
 
-  // Build the product object
-  const product = {
+  // Build the record object
+  const record = {
     artist: artist.value,
     album: album.value,
     year: year.value,
@@ -220,10 +220,10 @@ async function onSubmit() {
   }
 
   try {
-    await addProduct(product)
+    await addRecord(record)
     alert('Added to Firestore!')
   } catch (e) {
-    alert('Error adding product: ' + e.message)
+    alert('Error adding record: ' + e.message)
   }
 }
 </script>

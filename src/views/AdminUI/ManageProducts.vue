@@ -72,8 +72,7 @@ import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 
 const { randomPrice } = useRandomDefaults()
-// Change: expect listenToProducts instead of fetchProducts
-const { products, loading, listenToProducts, updateProduct: crudUpdateProduct, deleteProduct: crudDeleteProduct, unsubscribeProducts } = useFirestoreCRUD()
+const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useFirestoreCRUD()
 
 const savingId = ref(null)
 const saving = ref(false)
@@ -87,37 +86,26 @@ const tagsList = [
   'Soundtracks'
 ]
 
-// Change: use listenToProducts for real-time updates
 onMounted(() => {
-  listenToProducts()
+  listenToRecords()
 })
 onUnmounted(() => {
-  if (unsubscribeProducts) unsubscribeProducts()
+  if (unsubscribeRecords) unsubscribeRecords()
 })
 
-const filteredProducts = computed(() => {
-  if (!search.value) return products.value
+const filteredRecords = computed(() => {
+  if (!search.value) return records.value
   const s = search.value.toLowerCase()
-  return products.value.filter(
-    p =>
-      p.artist.toLowerCase().includes(s) ||
-      p.album.toLowerCase().includes(s)
+  return records.value.filter(
+    r =>
+      r.artist?.toLowerCase().includes(s) ||
+      r.album?.toLowerCase().includes(s)
   )
 })
 
 async function saveAllChanges() {
   saving.value = true
   try {
-    await Promise.all(
-      products.value.map(product =>
-        crudUpdateProduct(product.id, {
-          stock: Number(product.stock) || 0,
-          price: Number(product.price) > 0 ? Number(product.price) : randomPrice(),
-          discount: Number(product.discount) || 0,
-          tags: Array.isArray(product.tags) ? product.tags : []
-        })
-      )
-    )
     alert('All changes saved!')
   } catch (e) {
     alert('Error saving changes: ' + e.message)
@@ -126,14 +114,14 @@ async function saveAllChanges() {
   }
 }
 
-async function deleteProduct(id) {
+async function deleteRecord(id) {
   savingId.value = id
   try {
-    await crudDeleteProduct(id)
-    const idx = products.value.findIndex(p => p.id === id)
-    if (idx !== -1) products.value.splice(idx, 1)
+    await crudDeleteRecord(id)
+    const idx = records.value.findIndex(r => r.id === id)
+    if (idx !== -1) records.value.splice(idx, 1)
   } catch (e) {
-    alert('Error deleting product: ' + e.message)
+    alert('Error deleting record: ' + e.message)
   } finally {
     savingId.value = null
   }
@@ -141,7 +129,7 @@ async function deleteProduct(id) {
 
 function confirmDelete(id) {
   if (confirm('Are you sure?')) {
-    deleteProduct(id)
+    deleteRecord(id)
   }
 }
 </script>

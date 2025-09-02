@@ -11,14 +11,14 @@
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         <ProductCard
-          v-for="product in productsByCategory(category)"
-          :key="product.id"
-          :id="product.id"
-          :album="product.album || ''"
-          :artist="product.artist || ''"
-          :coverImage="product.coverImage || ''"
-          :price="Number(product.price) || 0"
-          :discount="Number(product.discount) || 0"
+          v-for="record in recordsByCategory(category)"
+          :key="record.id"
+          :id="record.id"
+          :album="record.album || ''"
+          :artist="record.artist || ''"
+          :coverImage="record.coverImage || ''"
+          :price="Number(record.price) || 0"
+          :discount="Number(record.discount) || 0"
         />
       </div>
     </div>
@@ -39,18 +39,18 @@ const categories = [
   'Rare Finds',
 ]
 
-const { products, listenToProducts, unsubscribeProducts } = useFirestoreCRUD()
+const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
 
 onMounted(() => {
-  listenToProducts()
+  listenToRecords()
 })
 onUnmounted(() => {
-  if (unsubscribeProducts) unsubscribeProducts()
+  if (unsubscribeRecords) unsubscribeRecords()
 })
 
-function productsByCategory(category) {
-  return products.value
-    .filter(p => p.tags && p.tags.includes(category))
+function recordsByCategory(category) {
+  return records.value
+    .filter(r => r.tags && r.tags.includes(category))
     .slice(0, 4)
 }
 </script>

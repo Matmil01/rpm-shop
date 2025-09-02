@@ -9,14 +9,14 @@
     />
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
       <ProductCard
-        v-for="product in filteredProducts"
-        :key="product.id"
-        :id="product.id"
-        :album="product.album || ''"
-        :artist="product.artist || ''"
-        :coverImage="product.coverImage || ''"
-        :price="Number(product.price) || 0"
-        :discount="Number(product.discount) || 0"
+        v-for="record in filteredRecords"
+        :key="record.id"
+        :id="record.id"
+        :album="record.album || ''"
+        :artist="record.artist || ''"
+        :coverImage="record.coverImage || ''"
+        :price="Number(record.price) || 0"
+        :discount="Number(record.discount) || 0"
       />
     </div>
   </div>
@@ -31,13 +31,13 @@ import ProductCard from '@/components/ProductCard.vue'
 const route = useRoute()
 const search = ref('')
 
-const { products, listenToProducts, unsubscribeProducts } = useFirestoreCRUD()
+const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
 
 onMounted(() => {
-  listenToProducts()
+  listenToRecords()
 })
 onUnmounted(() => {
-  if (unsubscribeProducts) unsubscribeProducts()
+  if (unsubscribeRecords) unsubscribeRecords()
 })
 
 // Sync search box with ?search= query param
@@ -50,16 +50,16 @@ watch(
 )
 
 const tag = computed(() => route.query.tag)
-const filteredProducts = computed(() => {
+const filteredRecords = computed(() => {
   let filtered = tag.value
-    ? products.value.filter(p => p.tags && p.tags.includes(tag.value))
-    : products.value
+    ? records.value.filter(r => r.tags && r.tags.includes(tag.value))
+    : records.value
   if (search.value) {
     const s = search.value.toLowerCase()
     filtered = filtered.filter(
-      p =>
-        p.artist.toLowerCase().includes(s) ||
-        p.album.toLowerCase().includes(s)
+      r =>
+        r.artist.toLowerCase().includes(s) ||
+        r.album.toLowerCase().includes(s)
     )
   }
   return filtered
