@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import ProductCard from '@/components/ProductCard.vue'
@@ -31,9 +31,14 @@ import ProductCard from '@/components/ProductCard.vue'
 const route = useRoute()
 const search = ref('')
 
-const { products, fetchProducts } = useFirestoreCRUD()
+const { products, listenToProducts, unsubscribeProducts } = useFirestoreCRUD()
 
-onMounted(fetchProducts)
+onMounted(() => {
+  listenToProducts()
+})
+onUnmounted(() => {
+  if (unsubscribeProducts) unsubscribeProducts()
+})
 
 // Sync search box with ?search= query param
 watch(

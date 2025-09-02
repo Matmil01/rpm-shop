@@ -15,13 +15,12 @@ export function useDiscogsSearch() {
       const data = await res.json()
       results.value = data.results
     } catch (err) {
-      error.value = err.message || "An error occurred while searching Discogs."
+      error.value = err.message || "Error occurred while searching Discogs."
     } finally {
       loading.value = false
     }
   }
 
-  // Fetch full release details (for tracklist, number of records, etc)
   const fetchReleaseDetails = async (releaseId) => {
     try {
       const res = await fetch(

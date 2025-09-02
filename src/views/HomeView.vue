@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import ProductCard from '@/components/ProductCard.vue'
 
@@ -39,9 +39,14 @@ const categories = [
   'Rare Finds',
 ]
 
-const { products, fetchProducts } = useFirestoreCRUD()
+const { products, listenToProducts, unsubscribeProducts } = useFirestoreCRUD()
 
-onMounted(fetchProducts)
+onMounted(() => {
+  listenToProducts()
+})
+onUnmounted(() => {
+  if (unsubscribeProducts) unsubscribeProducts()
+})
 
 function productsByCategory(category) {
   return products.value

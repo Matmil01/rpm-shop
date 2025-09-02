@@ -67,12 +67,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 
 const { randomPrice } = useRandomDefaults()
-const { products, loading, fetchProducts, updateProduct: crudUpdateProduct, deleteProduct: crudDeleteProduct } = useFirestoreCRUD()
+// Change: expect listenToProducts instead of fetchProducts
+const { products, loading, listenToProducts, updateProduct: crudUpdateProduct, deleteProduct: crudDeleteProduct, unsubscribeProducts } = useFirestoreCRUD()
 
 const savingId = ref(null)
 const saving = ref(false)
@@ -86,7 +87,13 @@ const tagsList = [
   'Soundtracks'
 ]
 
-onMounted(fetchProducts)
+// Change: use listenToProducts for real-time updates
+onMounted(() => {
+  listenToProducts()
+})
+onUnmounted(() => {
+  if (unsubscribeProducts) unsubscribeProducts()
+})
 
 const filteredProducts = computed(() => {
   if (!search.value) return products.value

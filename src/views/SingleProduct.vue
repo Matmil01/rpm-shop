@@ -48,20 +48,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 
 const route = useRoute()
 const product = ref({})
+let unsubscribe = null
 
-const { fetchProduct } = useFirestoreCRUD()
+const { listenToProduct } = useFirestoreCRUD()
 
-onMounted(async () => {
-  const result = await fetchProduct(route.params.id)
-  if (result) {
-    product.value = result
-  }
+onMounted(() => {
+  unsubscribe = listenToProduct(route.params.id, (result) => {
+    if (result) product.value = result
+  })
+})
+onUnmounted(() => {
+  if (unsubscribe) unsubscribe()
 })
 
 const discountedPrice = computed(() => {
