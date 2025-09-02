@@ -24,7 +24,15 @@
     <p class="mb-2">Year: {{ product.year || 'Unknown' }}</p>
     <p class="mb-2">Speed: {{ product.rpm || '33 RPM' }}</p>
     <p class="mb-2">Format: {{ product.format || '12"' }}</p>
-    <p class="mb-2">Stock: {{ product.stock }}</p>
+    <p class="mb-2">
+      Stock:
+      <span v-if="product.stock > 0 && product.stock < 5" class="text-red-600 font-semibold ml-2">
+        Only {{ product.stock }} left, order now!
+      </span>
+      <span v-else>
+        {{ product.stock }}
+      </span>
+    </p>
     <p class="mb-2">Number of Records: {{ product.numRecords || '1' }}</p>
     <div v-if="product.tracklist && product.tracklist.length" class="mb-4">
       <h2 class="text-lg font-semibold mb-2">Tracklist</h2>

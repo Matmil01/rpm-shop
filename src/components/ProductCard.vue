@@ -3,7 +3,7 @@
     :to="`/product/${id}`"
     class="block border rounded p-4 hover:shadow w-full mx-auto bg-white transition-shadow cursor-pointer group"
   >
-    <img :src="coverImage" alt="" class="w-full aspect-square object-cover mb-2 rounded group-hover:opacity-90" />
+    <img :src="coverImage" alt="Album Cover" class="w-full aspect-square object-cover mb-2 rounded group-hover:opacity-90" />
     <h2 class="text-lg font-bold text-left">{{ album }}</h2>
     <div class="text-left text-gray-700 mb-2">
       <router-link
