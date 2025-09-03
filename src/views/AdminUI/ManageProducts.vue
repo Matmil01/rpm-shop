@@ -21,22 +21,22 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in filteredProducts" :key="product.id" class="border-t">
-          <td class="p-2 border">{{ product.artist }}</td>
-          <td class="p-2 border">{{ product.album }}</td>
+        <tr v-for="record in filteredRecords" :key="record.id" class="border-t">
+          <td class="p-2 border">{{ record.artist }}</td>
+          <td class="p-2 border">{{ record.album }}</td>
           <td class="p-2 border">
-            <input type="number" v-model.number="product.stock" class="border px-2 py-1 w-20" />
+            <input type="number" v-model.number="record.stock" class="border px-2 py-1 w-20" />
           </td>
           <td class="p-2 border">
-            <input type="number" v-model.number="product.price" class="border px-2 py-1 w-20" />
+            <input type="number" v-model.number="record.price" class="border px-2 py-1 w-20" />
           </td>
           <td class="p-2 border">
-            <input type="number" v-model.number="product.discount" class="border px-2 py-1 w-20" min="0" max="100" />
+            <input type="number" v-model.number="record.discount" class="border px-2 py-1 w-20" min="0" max="100" />
           </td>
           <td class="p-2 border">
             <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
               <label v-for="tag in tagsList" :key="tag" class="flex items-center gap-1">
-                <input type="checkbox" :value="tag" v-model="product.tags" />
+                <input type="checkbox" :value="tag" v-model="record.tags" />
                 {{ tag }}
               </label>
             </div>
@@ -44,8 +44,8 @@
           <td class="p-2 border align-middle">
             <div class="flex flex-col justify-between h-full gap-4">
               <button
-                :disabled="savingId === product.id"
-                @click="confirmDelete(product.id)"
+                :disabled="savingId === record.id"
+                @click="confirmDelete(record.id)"
                 class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 w-full"
               >
                 Delete
@@ -71,7 +71,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 
-const { randomPrice } = useRandomDefaults()
+const { randomStock, randomPrice } = useRandomDefaults()
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useFirestoreCRUD()
 
 const savingId = ref(null)
@@ -106,6 +106,23 @@ const filteredRecords = computed(() => {
 async function saveAllChanges() {
   saving.value = true
   try {
+    for (const record of filteredRecords.value) {
+      // Autofill stock and price if zero or empty
+      if (!record.stock || record.stock === 0) {
+        record.stock = randomStock()
+      }
+      if (!record.price || record.price === 0) {
+        record.price = randomPrice()
+      }
+      await crudUpdateRecord(record.id, {
+        artist: record.artist,
+        album: record.album,
+        stock: record.stock,
+        price: record.price,
+        discount: record.discount,
+        tags: record.tags
+      })
+    }
     alert('All changes saved!')
   } catch (e) {
     alert('Error saving changes: ' + e.message)

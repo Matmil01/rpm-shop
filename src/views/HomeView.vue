@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <h1 class="text-3xl font-bold mb-8">Fårking Forside</h1>
+    <h1 class="text-3xl font-bold mb-8 font-main">Fårking Forside</h1>
 
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
