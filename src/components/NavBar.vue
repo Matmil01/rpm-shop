@@ -7,6 +7,7 @@
         alt="RPM Logo"
         class="h-10 w-auto transition-transform duration-200 hover:scale-110"
       />
+      <span class="ml-3 text-2xl font-headline">RPM Shop</span>
     </router-link>
 
     <!-- Center: Links -->
