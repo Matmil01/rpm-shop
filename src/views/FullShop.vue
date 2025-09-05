@@ -1,14 +1,14 @@
 <template>
-  <div class="p-10">
+  <div class="p-10 font-headline text-MyWhite">
     <h1 class="text-2xl font-bold mb-8">Full Shop</h1>
     <input
       v-model="search"
       type="text"
       placeholder="Search by artist or album..."
-      class="mb-6 w-full border rounded px-3 py-2"
+      class="mb-6 w-full border rounded px-3 py-2 text-black font-main"
     />
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-      <ProductCard
+      <RecordCard
         v-for="record in filteredRecords"
         :key="record.id"
         :id="record.id"
@@ -26,7 +26,7 @@
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
-import ProductCard from '@/components/ProductCard.vue'
+import RecordCard from '@/components/RecordCard.vue'
 
 const route = useRoute()
 const search = ref('')

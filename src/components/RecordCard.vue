@@ -1,14 +1,14 @@
 <template>
   <router-link
     :to="`/product/${id}`"
-    class="block border rounded p-4 hover:shadow w-full mx-auto bg-white transition-shadow cursor-pointer group"
+    class="block rounded p-4 shadow-lg hover:shadow-2xl w-full mx-auto bg-white bg-[url('/Texturelabs_InkPaint_368XL.jpg')] bg-cover bg-center transition-shadow cursor-pointer group font-main text-MyWhite"
   >
     <img :src="coverImage" alt="Album Cover" class="w-full aspect-square object-cover mb-2 rounded group-hover:opacity-90" />
     <h2 class="text-lg font-bold text-left">{{ album }}</h2>
-    <div class="text-left text-gray-700 mb-2">
+    <div class="text-left mb-2">
       <router-link
         :to="`/shop?search=${encodeURIComponent(artist)}`"
-        class="text-blue-600 hover:underline"
+        class="text-MyWhite underline hover:text-blue-400"
         @click.stop
       >
         {{ artist }}
@@ -23,7 +23,7 @@
         <span class="text-gray-500">{{ price }} kr.</span>
       </span>
     </div>
-    <span class="text-blue-500 hover:underline block text-left">Add to Cart 🛒</span>
+    <span class="text-MyWhite underline hover:text-blue-400 block text-left cursor-pointer">Add to Cart 🛒</span>
   </router-link>
 </template>
 

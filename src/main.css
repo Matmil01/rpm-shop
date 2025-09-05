@@ -1,9 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Revalia&family=Ribeye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
---font-headline: 'Ribeye', cursive;
---font-main: 'Revalia', cursive;
+--color-MyBlack: #000000;
+    --color-MyWhite: #FFFFFF;
+        --color-MyDark: #161616;
 
+--font-headline: 'Ribeye', cursive;
+--font-main: 'Ubuntu Mono', monospace;
+
+}
+
+html {
+  height: 100%;
+  background-color: var(--color-MyBlack) !important;
+  margin: 0;
+  padding: 0;
 }

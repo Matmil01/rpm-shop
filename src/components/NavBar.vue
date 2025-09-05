@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-black text-white px-6 py-4 flex justify-between items-center border-b-4 border-gray-600">
+  <nav class="bg-black text-MyWhite font-main px-6 py-4 flex justify-between items-center border-b-4 border-gray-600">
     <!-- Left: Logo / Home -->
     <router-link to="/" class="flex items-center">
       <img

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import FullShop from "../views/FullShop.vue"
-import SingleProduct from "../views/SingleProduct.vue"
+import SingleProduct from "../views/SingleRecord.vue"
 import AdminView from "@/views/AdminUI/AdminView.vue"
 
 const routes = [
@@ -20,12 +20,27 @@ const routes = [
       {
         path: "add",
         name: "AddProduct",
-        component: () => import("@/views/AdminUI/AddProduct.vue")
+        component: () => import("@/views/AdminUI/AddRecord.vue")
       },
       {
         path: "manage",
         name: "ManageProducts",
-        component: () => import("@/views/AdminUI/ManageProducts.vue")
+        component: () => import("@/views/AdminUI/ManageRecords.vue")
+      }
+    ]
+  },
+  {
+    path: "/user",
+    children: [
+      {
+        path: "wishlist",
+        name: "WishList",
+        component: () => import("@/views/UserUI/WishList.vue")
+      },
+      {
+        path: "cart",
+        name: "CartView",
+        component: () => import("@/views/UserUI/CartView.vue")
       }
     ]
   }
