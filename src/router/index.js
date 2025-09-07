@@ -3,10 +3,12 @@ import HomeView from "../views/HomeView.vue"
 import FullShop from "../views/FullShop.vue"
 import SingleProduct from "../views/SingleRecord.vue"
 import AdminView from "@/views/AdminUI/AdminView.vue"
+import ContactView from "@/views/ContactView.vue"
 
 const routes = [
   { path: "/", name: "home", component: HomeView },
   { path: "/shop", name: "shop", component: FullShop },
+  { path: "/contact", name: "contact", component: ContactView },
   { path: "/product/:id", name: "product", component: SingleProduct, props: true },
   {
     path: "/admin",

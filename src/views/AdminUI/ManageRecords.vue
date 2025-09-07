@@ -35,11 +35,27 @@
               <input type="number" v-model.number="record.discount" class="border border-gray-500 bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" min="0" max="100" />
             </td>
             <td class="p-2 border border-gray-500">
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                <label v-for="tag in tagsList" :key="tag" class="flex items-center gap-1">
+              <div class="flex flex-wrap gap-1">
+                <span
+                  v-for="tag in record.tags"
+                  :key="tag"
+                  class="bg-blue-700 text-white px-2 py-1 rounded text-xs"
+                >
+                  {{ tag }}
+                </span>
+                <button
+                  @click="record.showTagSelector = !record.showTagSelector"
+                  class="bg-gray-700 text-white px-2 py-1 rounded text-xs cursor-pointer"
+                >
+                  Add
+                </button>
+              </div>
+              <div v-if="record.showTagSelector" class="mt-2 bg-gray-900 p-2 rounded shadow">
+                <label v-for="tag in tagsList" :key="tag" class="flex items-center gap-1 mb-1">
                   <input type="checkbox" :value="tag" v-model="record.tags" />
                   {{ tag }}
                 </label>
+                <button @click="record.showTagSelector = false" class="mt-2 bg-blue-600 text-white px-2 py-1 rounded text-xs cursor-pointer">Done</button>
               </div>
             </td>
             <td class="p-2 border border-gray-500 align-middle">
@@ -81,15 +97,20 @@ const saving = ref(false)
 const search = ref('')
 const tagsList = [
   'Staff Favorites',
-  'Special Offers',
   'New Arrivals',
   'Rare Finds',
   'Japan Imports',
-  'Soundtracks'
+  'Soundtracks',
+  'Doom & Gloom',
+  'Shock & Awe',
+  'Dad Metal',
+  'Avant Garde'
 ]
 
 onMounted(() => {
   listenToRecords()
+  // Add showTagSelector property to each record for inline tag editing
+  records.value.forEach(r => r.showTagSelector = false)
 })
 onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()

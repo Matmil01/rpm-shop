@@ -99,10 +99,6 @@
               Staff Favorites
             </label>
             <label class="flex items-center gap-2">
-              <input type="checkbox" value="Special Offers" v-model="tags" />
-              Special Offers
-            </label>
-            <label class="flex items-center gap-2">
               <input type="checkbox" value="New Arrivals" v-model="tags" />
               New Arrivals
             </label>
@@ -117,6 +113,23 @@
             <label class="flex items-center gap-2">
               <input type="checkbox" value="Soundtracks" v-model="tags" />
               Soundtracks
+            </label>
+            <!-- Add your new tags below -->
+            <label class="flex items-center gap-2">
+              <input type="checkbox" value="Doom & Gloom" v-model="tags" />
+              Doom & Gloom
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" value="Shock & Awe" v-model="tags" />
+              Shock & Awe
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" value="Dad Metal" v-model="tags" />
+              Dad Metal
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" value="Avant Garde" v-model="tags" />
+              Avant Garde
             </label>
           </div>
         </div>

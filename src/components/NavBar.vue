@@ -7,13 +7,91 @@
         alt="RPM Logo"
         class="h-10 w-auto transition-transform duration-200 hover:scale-110"
       />
-      <span class="ml-3 text-2xl font-headline">RPM Shop</span>
+      <span class="ml-3 text-2xl font-logo">RPM Shop</span>
     </router-link>
 
-    <!-- Center: Links -->
-    <div class="space-x-6">
-      <router-link to="/shop" class="hover:text-red-500">Full Shop</router-link>
-      <router-link to="/misc" class="hover:text-red-500">Misc</router-link>
+    <!-- Center: Links + Dropdowns + Search -->
+    <div class="flex flex-row gap-8 justify-center items-center">
+      <!-- Artists Dropdown -->
+      <div class="relative group">
+        <router-link
+          to="/shop"
+          class="hover:text-red-500 font-medium cursor-pointer flex items-center"
+        >
+          Artists
+        </router-link>
+        <div
+          class="absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-MyBlack rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+        >
+          <ul class="py-2 text-MyWhite">
+            <li>
+              <router-link to="/shop?search=Black Sabbath" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Black Sabbath</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Ozzy Osbourne" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Ozzy Osbourne</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Lorna Shore" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Lorna Shore</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Marilyn Manson" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Marilyn Manson</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Nine Inch Nails" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Nine Inch Nails</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Insomnium" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Insomnium</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Rammstein" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Rammstein</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Slaughter to Prevail" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Slaughter to Prevail</router-link>
+            </li>
+            <li>
+              <router-link to="/shop?search=Tim Skold" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Tim Skold</router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Categories Dropdown -->
+      <div class="relative group">
+        <span class="hover:text-red-500 font-medium cursor-pointer flex items-center">
+          Categories
+        </span>
+        <div
+          class="absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-MyBlack rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+        >
+          <ul class="py-2 text-MyWhite">
+            <li v-for="category in categories" :key="category">
+              <router-link
+                :to="`/shop?tag=${encodeURIComponent(category)}`"
+                class="block px-4 py-2 font-main cursor-pointer hover:text-red-500"
+              >
+                {{ category }}
+              </router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <router-link to="/shop?category=misc" class="hover:text-red-500 font-medium cursor-pointer">
+        Miscellaneous
+      </router-link>
+      <router-link to="/contact" class="hover:text-red-500 font-medium cursor-pointer">
+        Contact
+      </router-link>
+
+      <!-- Search Input -->
+      <form @submit.prevent="onSearch" class="ml-4">
+        <input
+          v-model="searchInput"
+          type="text"
+          placeholder="Search by artist or album..."
+          class="border border-gray-600 rounded px-3 py-2 text-MyWhite bg-black font-main w-64"
+        />
+      </form>
     </div>
 
     <!-- Right: Icons -->
@@ -24,3 +102,32 @@
     </div>
   </nav>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const searchInput = ref('')
+
+const categories = [
+  // 'Soundtracks',
+  // 'Staff Favorites',
+  'Special Offers',
+  'New Arrivals',
+  // 'Japan Imports',
+  'Rare Finds',
+  // 'Doom & Gloom',
+  // 'Shock & Awe',
+  // 'Dad Metal',
+  // 'Avant Garde'
+]
+
+function onSearch() {
+  if (searchInput.value.trim()) {
+    router.push({ path: '/shop', query: { search: searchInput.value.trim() } })
+  } else {
+    router.push({ path: '/shop' })
+  }
+}
+</script>

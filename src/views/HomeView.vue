@@ -1,6 +1,8 @@
 <template>
-  <div class="p-6 font-headline text-MyWhite">
-
+  <div class="p-10 max-w-7xl mx-auto font-headline text-MyWhite">
+    <h1 class="text-2xl font-bold mb-8">
+      {{ tag ? tag : (search ? search : 'All Records') }}
+    </h1>
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">{{ category }}</h2>
@@ -31,15 +33,15 @@ import RecordCard from '@/components/RecordCard.vue'
 
 const categories = [
   'Soundtracks',
-  'Special Offers',
   'Staff Favorites',
-  'New Arrivals',
+  'Special Offers',
+  // 'New Arrivals',
   'Japan Imports',
-  'Rare Finds',
-  // 'Indie Stuff',
-  // 'Back to the Beginning',
-  // 'Under 100,-'
-  // 'Limited Editions'
+  // 'Rare Finds',
+  'Doom & Gloom',
+  'Shock & Awe',
+  'Dad Metal',
+  'Avant Garde'
 ]
 
 const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
@@ -52,6 +54,13 @@ onUnmounted(() => {
 })
 
 function recordsByCategory(category) {
+  if (category === 'Special Offers') {
+    // Show records with a discount
+    return records.value
+      .filter(r => Number(r.discount) > 0)
+      .slice(0, 4)
+  }
+  // Default: filter by tag
   return records.value
     .filter(r => r.tags && r.tags.includes(category))
     .slice(0, 4)
