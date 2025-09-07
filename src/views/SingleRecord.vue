@@ -7,35 +7,40 @@
     <div class="absolute inset-0 bg-black/60 rounded pointer-events-none"></div>
     <div class="flex flex-col md:flex-row gap-12 md:gap-16 relative z-10">
       <!-- Left: Main Info & Cover -->
-      <div class="flex-shrink-0 flex flex-col items-center md:items-start gap-4">
-        <h1 class="text-2xl font-bold">{{ record.album }}</h1>
-        <div class="text-lg">
-          <router-link
-            :to="`/shop?search=${encodeURIComponent(record.artist)}`"
-            class="text-MyWhite underline hover:text-blue-400"
-          >
-            {{ record.artist }}
-          </router-link>
-        </div>
-        <img
-          :src="record.coverImage"
-          alt=""
-          class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow"
-        />
-        <!-- Price and Cart Box as a full clickable button -->
-        <button
-          class="flex items-center gap-2 px-4 py-2 rounded border border-white/40 bg-black/30 backdrop-blur-sm mt-2 w-fit cursor-pointer"
+      <div
+        v-if="record && record.id"
+        class="flex-shrink-0 flex flex-col items-center md:items-start gap-4"
+      >
+        <router-link
+          :to="`/product/${record.id}`"
+          class="block"
         >
-          <span v-if="record.discount && record.discount > 0">
-            <span class="line-through text-gray-400 mr-2">{{ record.price }} kr.</span>
-            <span class="text-red-600 font-bold">{{ discountedPrice }} kr.</span>
-            <span class="ml-2 text-green-700 font-semibold">-{{ record.discount }}%</span>
-          </span>
-          <span v-else>
-            <span class="text-gray-200 font-bold">{{ record.price }} kr.</span>
-          </span>
-          <span class="text-MyWhite text-xl">🛒</span>
-        </button>
+          <img
+            :src="record.coverImage"
+            alt="Album Cover"
+            class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow"
+          />
+        </router-link>
+        <div class="text-lg font-bold text-left mb-1">
+          {{ record.album }}
+        </div>
+        <router-link
+          :to="`/shop?search=${encodeURIComponent(record.artist)}`"
+          class="text-MyWhite underline hover:text-blue-400 text-left block mb-2"
+        >
+          {{ record.artist }}
+        </router-link>
+        <div class="flex items-center justify-start mt-4">
+          <!-- Price and Cart Box as a full clickable button -->
+          <AddToCartButton :item="{
+            id: record.id,
+            album: record.album,
+            artist: record.artist,
+            coverImage: record.coverImage,
+            price: record.price,
+            discount: record.discount
+          }" />
+        </div>
       </div>
 
       <!-- Right: Details & Tracklist -->
@@ -92,9 +97,12 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useCartStore } from '@/composables/piniaStores/cartStore'
+import AddToCartButton from '@/components/AddToCartButton.vue'
 
 const route = useRoute()
 const record = ref({})
+const cart = useCartStore()
 let unsubscribe = null
 
 const { listenToRecord } = useFirestoreCRUD()

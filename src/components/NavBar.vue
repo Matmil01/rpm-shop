@@ -97,7 +97,37 @@
     <!-- Right: Icons -->
     <div class="space-x-4 flex items-center">
       <router-link to="/user/wishlist" class="hover:text-red-500">♡</router-link>
-      <router-link to="/user/cart" class="hover:text-red-500">🛒</router-link>
+      <div class="relative group">
+        <router-link to="/user/cart" class="hover:text-red-500 text-2xl">🛒</router-link>
+        <span
+          v-if="cart.items.length"
+          class="absolute -top-2 -right-3 bg-red-600 text-white rounded-full px-2 text-xs font-bold transition-all"
+        >
+          {{ cart.items.length }}
+        </span>
+        <!-- Dropdown -->
+        <div
+          v-if="cart.items.length"
+          class="absolute right-0 mt-2 w-72 bg-black/95 rounded shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+        >
+          <div class="p-4">
+            <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3">
+              <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
+              <div>
+                <div class="font-bold text-sm">{{ item.album }}</div>
+                <div class="text-xs text-gray-300">{{ item.artist }}</div>
+                <div class="text-xs text-gray-400">x{{ item.quantity }}</div>
+              </div>
+            </div>
+            <div v-if="cart.items.length > 3" class="text-xs text-gray-400 mb-2">
+              +{{ cart.items.length - 3 }} more...
+            </div>
+            <router-link to="/user/cart" class="block mt-2 text-center bg-MyRed text-white rounded px-4 py-2 hover:bg-red-700 transition">
+              Go to Cart
+            </router-link>
+          </div>
+        </div>
+      </div>
       <router-link to="/admin" class="hover:text-red-500">Login</router-link>
     </div>
   </nav>
@@ -106,9 +136,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCartStore } from '@/composables/piniaStores/cartStore'
 
 const router = useRouter()
 const searchInput = ref('')
+const cart = useCartStore()
 
 const categories = [
   // 'Soundtracks',

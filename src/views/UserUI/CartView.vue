@@ -1,111 +1,75 @@
-<!-- Mockup for cart -->
-
 <template>
-  <div class="max-w-4xl mx-auto p-8 font-main text-MyWhite">
-    <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
-    <div v-if="cart.length === 0" class="text-gray-400 text-lg">
-      Your cart is empty. Add records or items to your cart to see them here!
+  <div class="max-w-3xl mx-auto p-8 text-MyWhite">
+    <h1 class="text-2xl font-bold mb-6">Your Cart</h1>
+    <div v-if="cart.items.length">
+      <div
+        v-for="item in cart.items"
+        :key="item.id"
+        class="flex items-center justify-between mb-4 p-4 rounded bg-black/40 gap-4"
+      >
+        <img
+          v-if="item.coverImage"
+            :src="item.coverImage"
+            alt="Cover"
+            class="w-20 h-20 object-cover rounded shadow"
+        />
+        <div v-else class="w-20 h-20 flex items-center justify-center bg-gray-700 text-xs rounded">
+          No Image
+        </div>
+        <div class="flex-1">
+          <div class="font-bold truncate">{{ item.album }}</div>
+          <div class="text-sm mb-1 truncate">{{ item.artist }}</div>
+          <div class="text-sm">
+            <span v-if="item.discount && item.discount > 0">
+              <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
+              <span class="text-red-600 font-bold">{{ discounted(item) }} kr.</span>
+            </span>
+            <span v-else>
+              <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
+            </span>
+          </div>
+          <div class="text-xs mt-1">Qty: {{ item.quantity }}</div>
+        </div>
+        <button @click="cart.removeFromCart(item.id)" class="text-red-500 hover:underline shrink-0">Remove</button>
+      </div>
+      <div class="mt-6 font-bold text-lg">
+        Total: {{ totalPrice }} kr.
+      </div>
+      <button @click="checkout" class="mt-6 px-6 py-2 bg-MyRed text-white rounded hover:bg-red-700">
+        Checkout
+      </button>
+      <button @click="cart.clearCart()" class="mt-2 px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-900">
+        Clear Cart
+      </button>
     </div>
     <div v-else>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8">
-        <div
-          v-for="item in cart"
-          :key="item.id"
-          class="bg-[url('/Texturelabs_InkPaint_368XL.jpg')] bg-repeat bg-center rounded shadow p-4 flex flex-col items-center font-main text-MyWhite"
-        >
-          <img
-            :src="item.coverImage || item.image"
-            alt="Cover"
-            class="w-32 h-32 object-cover rounded mb-4"
-          />
-          <div class="font-semibold text-lg mb-1">
-            {{ item.album || item.name }}
-          </div>
-          <div class="mb-2 underline hover:text-blue-400">
-            {{ item.artist || item.brand }}
-          </div>
-          <div class="text-blue-700 font-bold mb-2">
-            {{ item.price }} kr.
-          </div>
-          <div class="flex items-center gap-2 mb-2">
-            <button
-              @click="decrement(item)"
-              class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 text-black"
-              :disabled="item.quantity <= 1"
-            >-</button>
-            <span>{{ item.quantity }}</span>
-            <button
-              @click="increment(item)"
-              class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 text-black"
-            >+</button>
-          </div>
-          <button
-            @click="removeFromCart(item.id)"
-            class="text-red-500 hover:underline"
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-      <div class="flex justify-end items-center mt-6">
-        <div class="text-xl font-bold mr-6">
-          Total: {{ totalPrice }} kr.
-        </div>
-        <button
-          class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 font-main"
-        >
-          Checkout
-        </button>
-      </div>
+      <p>Your cart is empty.</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { useCartStore } from '@/composables/piniaStores/cartStore'
 
-const cart = ref([
-  {
-    id: '1',
-    album: 'Album Name',
-    artist: 'Artist Name',
-    coverImage: 'https://marilynmanson.com/assets/OAUG.jpg',
-    price: 349,
-    quantity: 1
-  },
-  {
-    id: '2',
-    name: 'RPM Shop Hoodie',
-    brand: 'RPM Merch',
-    image: 'https://store.marilynmanson.com/cdn/shop/files/hoodie_f.png?v=1732236242',
-    price: 199,
-    quantity: 2
-  }
-])
+const cart = useCartStore()
 
-function increment(item) {
-  item.quantity++
-}
-
-function decrement(item) {
-  if (item.quantity > 1) item.quantity--
-}
-
-function removeFromCart(id) {
-  cart.value = cart.value.filter(item => item.id !== id)
+function discounted(item) {
+  if (!item.discount || item.discount <= 0) return item.price
+  return Math.round(item.price * (1 - item.discount / 100))
 }
 
 const totalPrice = computed(() =>
-  cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  cart.items.reduce((sum, item) => {
+    const price = item.discount && item.discount > 0
+      ? Math.round(item.price * (1 - item.discount / 100))
+      : item.price
+    return sum + price * item.quantity
+  }, 0)
 )
+
+function checkout() {
+  alert('Purchase complete! (Fake checkout)')
+  cart.clearCart()
+}
 </script>
-
-<style>
-.font-main {
-  font-family: 'MainFont', sans-serif;
-}
-
-.text-MyWhite {
-  color: #f8fafc;
-}
-</style>

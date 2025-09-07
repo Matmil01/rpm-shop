@@ -27,9 +27,12 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import RecordCard from '@/components/RecordCard.vue'
+
+const tag = ref('')
+const search = ref('')
 
 const categories = [
   'Soundtracks',
