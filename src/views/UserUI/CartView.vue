@@ -35,10 +35,10 @@
       <div class="mt-6 font-bold text-lg">
         Total: {{ totalPrice }} kr.
       </div>
-      <button @click="checkout" class="mt-6 px-6 py-2 bg-MyRed text-white rounded hover:bg-red-700">
+      <button @click="checkout" class="mt-6 px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-900">
         Checkout
       </button>
-      <button @click="cart.clearCart()" class="mt-2 px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-900">
+      <button @click="cart.clearCart()" class="mt-2 px-6 py-2 bg-MyRed text-white rounded hover:bg-red-700">
         Clear Cart
       </button>
     </div>

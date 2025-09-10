@@ -76,9 +76,6 @@
         </div>
       </div>
 
-      <router-link to="/shop?category=misc" class="hover:text-red-500 font-medium cursor-pointer">
-        Miscellaneous
-      </router-link>
       <router-link to="/contact" class="hover:text-red-500 font-medium cursor-pointer">
         Contact
       </router-link>

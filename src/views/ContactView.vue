@@ -2,7 +2,7 @@
   <div class="relative">
     <div class="container mx-auto px-4 relative z-10">
       <div class="flex justify-center pt-10 sm:pt-16">
-        <div class="p-6 sm:p-10 rounded-lg shadow-lg w-full max-w-4xl bg-MyBlack">
+        <div class="p-6 sm:p-10 rounded-lg shadow-lg w-full max-w-4xl">
           <div class="text-center mb-10">
             <h1 class="text-white font-headline text-5xl md:text-6xl mb-2">
               No Refunds
@@ -25,7 +25,7 @@
               class="w-full p-3 rounded font-main bg-MyBlack text-white border border-white/30"></textarea>
 
             <button type="submit"
-              class="px-6 py-3 rounded-2xl bg-MyRed text-white font-main shadow-lg hover:opacity-90 transition">
+              class="px-6 py-3 rounded-2xl bg-red-600 text-white font-main shadow-lg transition-colors duration-150 ease-in-out hover:bg-red-700 cursor-pointer">
               Submit
             </button>
           </form>

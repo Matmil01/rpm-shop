@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded p-4 shadow-lg hover:shadow-2xl w-full mx-auto bg-[url('/Texturelabs_InkPaint_368XL.jpg')] bg-cover bg-center transition-shadow font-main text-MyWhite">
+  <div class="rounded p-4 w-full mx-auto bg-[url('/Texturelabs_InkPaint_368XL.jpg')] bg-cover bg-center font-main text-MyWhite">
     <router-link
       :to="`/product/${props.id}`"
       class="block"
@@ -7,22 +7,20 @@
       <img
         :src="props.coverImage"
         alt="Album Cover"
-        class="w-full aspect-square object-cover mb-2 rounded shadow-xl group-hover:opacity-90"
+        class="w-full aspect-square object-cover mb-2 rounded hover:opacity-75 transition-opacity"
       />
     </router-link>
-    <router-link
-      :to="`/product/${props.id}`"
-      class="text-lg font-bold text-left block hover:underline mb-1"
+    <div
+      class="text-lg font-bold text-left block mb-1"
     >
       {{ props.album }}
-    </router-link>
+    </div>
     <router-link
       :to="`/shop?search=${encodeURIComponent(props.artist)}`"
-      class="text-MyWhite underline hover:text-blue-400 text-left block mb-2"
+      class="text-MyWhite underline text-left inline mb-2"
     >
       {{ props.artist }}
     </router-link>
-    <!-- Price and Cart Box aligned left -->
     <div class="flex items-center justify-start mt-4">
       <AddToCartButton :item="{
         id: props.id,

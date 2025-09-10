@@ -1,11 +1,8 @@
 <template>
   <div
     class="p-6 font-main text-MyWhite rounded shadow-lg relative"
-    style="background-image: url('/Texturelabs_InkPaint_368XL.jpg'); background-repeat: repeat; background-position: center;"
   >
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-black/60 rounded pointer-events-none"></div>
-    <div class="flex flex-col md:flex-row gap-12 md:gap-16 relative z-10">
+    <div class="flex flex-col md:flex-row gap-12 md:gap-16">
       <!-- Left: Main Info & Cover -->
       <div
         v-if="record && record.id"

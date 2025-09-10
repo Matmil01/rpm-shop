@@ -1,5 +1,6 @@
 <template>
-  <div class="p-10 max-w-7xl mx-auto font-headline text-MyWhite">
+  <div class="pt-10"></div>
+  <div class="container mx-auto px-4 font-headline text-MyWhite">
     <h1 class="text-2xl font-bold mb-8">
       {{ tag ? tag : (search ? search : 'All Records') }}
     </h1>
@@ -24,6 +25,7 @@
       </div>
     </div>
   </div>
+  <div class="pt-10"></div>
 </template>
 
 <script setup>

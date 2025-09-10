@@ -9,7 +9,7 @@
         class="flex-1 border border-gray-500 bg-MyBlack rounded px-3 py-2 font-main text-MyWhite placeholder-gray-400"
         placeholder="Search Discogs for album..."
       />
-      <button type="submit" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 font-main border border-white">
+      <button type="submit" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 font-main border border-white cursor-pointer">
         Search
       </button>
     </form>
@@ -94,46 +94,46 @@
         <div class="mb-4">
           <label class="block mb-1 font-medium">Tags</label>
           <div class="grid grid-cols-2 gap-2">
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Staff Favorites" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Staff Favorites" v-model="tags" class="cursor-pointer" />
               Staff Favorites
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="New Arrivals" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="New Arrivals" v-model="tags" class="cursor-pointer" />
               New Arrivals
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Rare Finds" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Rare Finds" v-model="tags" class="cursor-pointer" />
               Rare Finds
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Japan Imports" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Japan Imports" v-model="tags" class="cursor-pointer" />
               Japan Imports
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Soundtracks" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Soundtracks" v-model="tags" class="cursor-pointer" />
               Soundtracks
             </label>
             <!-- Add your new tags below -->
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Doom & Gloom" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Doom & Gloom" v-model="tags" class="cursor-pointer" />
               Doom & Gloom
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Shock & Awe" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Shock & Awe" v-model="tags" class="cursor-pointer" />
               Shock & Awe
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Dad Metal" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Dad Metal" v-model="tags" class="cursor-pointer" />
               Dad Metal
             </label>
-            <label class="flex items-center gap-2">
-              <input type="checkbox" value="Avant Garde" v-model="tags" />
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" value="Avant Garde" v-model="tags" class="cursor-pointer" />
               Avant Garde
             </label>
           </div>
         </div>
-        <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 font-main border border-white">
+        <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 font-main border border-white cursor-pointer">
           Add to Firestore
         </button>
       </form>

@@ -5,8 +5,8 @@
 
 @theme {
 --color-MyBlack: #000000;
-    --color-MyWhite: #FFFFFF;
-        --color-MyDark: #161616;
+--color-MyWhite: #FFFFFF;
+--color-MyRed: #991E1F;
 
 --font-logo: 'Ribeye', cursive;
 --font-headline: 'Revalia', cursive;

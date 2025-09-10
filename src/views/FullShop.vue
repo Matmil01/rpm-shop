@@ -1,5 +1,6 @@
 <template>
-  <div class="p-10 max-w-7xl mx-auto font-headline text-MyWhite">
+  <div class="pt-10"></div>
+  <div class="container mx-auto px-4 font-headline text-MyWhite">
     <h1 class="text-2xl font-bold mb-8">
       {{ tag ? tag : (search ? search : 'All Records') }}
     </h1>
@@ -16,6 +17,7 @@
       />
     </div>
   </div>
+  <div class="pt-10"></div>
 </template>
 
 <script setup>
@@ -48,18 +50,26 @@ onUnmounted(() => {
 
 const tag = computed(() => route.query.tag)
 const filteredRecords = computed(() => {
-  let filtered = tag.value
-    ? records.value.filter(r => r.tags && r.tags.includes(tag.value))
-    : records.value
+  let base = records.value
+
+  if (tag.value) {
+    if (tag.value === 'Special Offers') {
+      // Derive from discount instead of tag
+      base = base.filter(r => Number(r.discount) > 0)
+    } else {
+      base = base.filter(r => r.tags && r.tags.includes(tag.value))
+    }
+  }
+
   if (search.value) {
     const s = search.value.toLowerCase()
-    filtered = filtered.filter(
+    base = base.filter(
       r =>
         r.artist?.toLowerCase().includes(s) ||
         r.album?.toLowerCase().includes(s) ||
-        r.genre?.toLowerCase().includes(s) // <-- Add this line
+        r.genre?.toLowerCase().includes(s)
     )
   }
-  return filtered
+  return base
 })
 </script>
