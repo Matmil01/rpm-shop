@@ -26,7 +26,6 @@ yarn-error.log*
 
 # Environment files (local configs)
 /.env.*
-src/firebase.js
 
 # Logs
 logs
@@ -58,4 +57,3 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-src/firebase.js
