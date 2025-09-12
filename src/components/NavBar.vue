@@ -80,7 +80,7 @@
         Contact
       </router-link>
 
-      <!-- Search Input -->
+      <!-- Search Field -->
       <form @submit.prevent="onSearch" class="ml-4">
         <input
           v-model="searchInput"
@@ -108,13 +108,20 @@
           class="absolute right-0 mt-2 w-72 bg-black/95 rounded shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
         >
           <div class="p-4">
-            <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3">
+            <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative">
               <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
-              <div>
+              <div class="flex-1">
                 <div class="font-bold text-sm">{{ item.album }}</div>
                 <div class="text-xs text-gray-300">{{ item.artist }}</div>
                 <div class="text-xs text-gray-400">x{{ item.quantity }}</div>
               </div>
+              <button
+                @click.stop="cart.removeFromCart(item.id)"
+                class="text-xs text-gray-400 hover:text-red-500 p-1 absolute top-0 right-0"
+                title="Remove from cart"
+              >
+                ✕
+              </button>
             </div>
             <div v-if="cart.items.length > 3" class="text-xs text-gray-400 mb-2">
               +{{ cart.items.length - 3 }} more...

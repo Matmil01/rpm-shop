@@ -43,9 +43,15 @@ const routes = [
         path: "cart",
         name: "CartView",
         component: () => import("@/views/UserUI/CartView.vue")
+      },
+      {
+        path: "checkout",
+        name: "CheckoutView",
+        component: () => import("@/views/UserUI/CheckoutView.vue")
       }
     ]
-  }
+  },
+  { path: "/404", name: "ThankYou", component: () => import("@/views/UserUI/ThankYouView.vue") }
 ]
 
 const router = createRouter({

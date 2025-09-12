@@ -63,7 +63,7 @@
                 <button
                   :disabled="savingId === record.id"
                   @click="confirmDelete(record.id)"
-                  class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 w-full font-main border border-gray-500"
+                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 w-full font-main border border-gray-500 cursor-pointer"
                 >
                   Delete
                 </button>
@@ -75,7 +75,7 @@
     </div>
     <button
       @click="saveAllChanges"
-      class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-main border border-gray-500"
+      class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-main border border-gray-500 cursor-pointer"
       :disabled="saving"
     >
       <span v-if="saving">Saving...</span>
@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 
@@ -95,6 +95,7 @@ const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, delet
 const savingId = ref(null)
 const saving = ref(false)
 const search = ref('')
+
 const tagsList = [
   'Staff Favorites',
   'New Arrivals',
@@ -104,13 +105,18 @@ const tagsList = [
   'Doom & Gloom',
   'Shock & Awe',
   'Dad Metal',
-  'Avant Garde'
+  'Avant Garde',
+  'Special Offers'
 ]
 
 onMounted(() => {
   listenToRecords()
   // Add showTagSelector property to each record for inline tag editing
-  records.value.forEach(r => r.showTagSelector = false)
+  records.value.forEach(r => {
+    r.showTagSelector = false
+    // Also make sure Special Offers tag is applied initially
+    applySpecialOffersTag(r)
+  })
 })
 onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
@@ -137,6 +143,24 @@ const filteredRecords = computed(() => {
   })
 })
 
+// Helper function to manage Special Offers tag
+function applySpecialOffersTag(record) {
+  if (!Array.isArray(record.tags)) record.tags = []
+  const hasSpecialTag = record.tags.includes('Special Offers')
+
+  if (Number(record.discount) > 0) {
+    // Should have the tag
+    if (!hasSpecialTag) {
+      record.tags.push('Special Offers')
+    }
+  } else {
+    // Should NOT have the tag
+    if (hasSpecialTag) {
+      record.tags = record.tags.filter(t => t !== 'Special Offers')
+    }
+  }
+}
+
 async function saveAllChanges() {
   saving.value = true
   try {
@@ -148,6 +172,10 @@ async function saveAllChanges() {
       if (!record.price || record.price === 0) {
         record.price = randomPrice()
       }
+
+      // Apply Special Offers tag based on discount
+      applySpecialOffersTag(record)
+
       await crudUpdateRecord(record.id, {
         artist: record.artist,
         album: record.album,
@@ -183,4 +211,15 @@ function confirmDelete(id) {
     deleteRecord(id)
   }
 }
+
+// Optional: Add watcher to apply tag changes in real-time when discount changes
+watch(() => records.value, (newRecords) => {
+  if (!newRecords) return
+  newRecords.forEach(record => {
+    if (record._previousDiscount !== record.discount) {
+      applySpecialOffersTag(record)
+      record._previousDiscount = record.discount
+    }
+  })
+}, { deep: true })
 </script>

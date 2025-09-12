@@ -1,7 +1,7 @@
 <template>
   <div class="pt-10"></div>
   <div class="container mx-auto px-4 font-headline text-MyWhite">
-    <h1 class="text-2xl font-bold mb-8">
+    <h1 class="text-4xl font-bold mb-8">
       {{ tag ? tag : (search ? search : 'All Records') }}
     </h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -14,6 +14,7 @@
         :coverImage="record.coverImage || ''"
         :price="Number(record.price) || 0"
         :discount="Number(record.discount) || 0"
+        :stock="record.stock"
       />
     </div>
   </div>
@@ -35,7 +36,6 @@ onMounted(() => {
   listenToRecords()
 })
 
-// Watch for route changes and update search
 watch(
   () => route.query.search,
   (newSearch) => {

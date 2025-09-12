@@ -1,13 +1,10 @@
 <template>
   <div class="pt-10"></div>
   <div class="container mx-auto px-4 font-headline text-MyWhite">
-    <h1 class="text-2xl font-bold mb-8">
-      {{ tag ? tag : (search ? search : 'All Records') }}
-    </h1>
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">{{ category }}</h2>
-        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="text-blue-600 hover:underline">
+        <h2 class="text-4xl font-headline">{{ category }}</h2>
+        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="hover:text-red-500">
           See all
         </router-link>
       </div>
@@ -21,6 +18,7 @@
           :coverImage="record.coverImage || ''"
           :price="Number(record.price) || 0"
           :discount="Number(record.discount) || 0"
+          :stock="record.stock"
         />
       </div>
     </div>
@@ -41,11 +39,11 @@ const categories = [
   'Staff Favorites',
   'Special Offers',
   // 'New Arrivals',
-  'Japan Imports',
   // 'Rare Finds',
   'Doom & Gloom',
   'Shock & Awe',
   'Dad Metal',
+  'Japan Imports',
   'Avant Garde'
 ]
 

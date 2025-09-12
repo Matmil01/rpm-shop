@@ -22,24 +22,50 @@
           <div class="text-sm">
             <span v-if="item.discount && item.discount > 0">
               <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
-              <span class="text-red-600 font-bold">{{ discounted(item) }} kr.</span>
+              <span class="text-red-600 font-bold">{{ calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
             </span>
             <span v-else>
               <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
             </span>
           </div>
-          <div class="text-xs mt-1">Qty: {{ item.quantity }}</div>
+
+          <!-- Quantity Controls -->
+          <div class="flex items-center mt-2">
+            <button
+              @click="decrementQuantity(item)"
+              class="w-6 h-6 bg-gray-700 text-white rounded-l flex items-center justify-center hover:bg-gray-600 cursor-pointer"
+              :disabled="item.quantity <= 1"
+            >
+              -
+            </button>
+            <div class="px-2 py-1 bg-gray-800 text-center text-xs w-8">
+              {{ item.quantity }}
+            </div>
+            <button
+              @click="incrementQuantity(item)"
+              class="w-6 h-6 bg-gray-700 text-white rounded-r flex items-center justify-center hover:bg-gray-600 cursor-pointer"
+            >
+              +
+            </button>
+          </div>
         </div>
-        <button @click="cart.removeFromCart(item.id)" class="text-red-500 hover:underline shrink-0">Remove</button>
+
+        <!-- Remove Button with Icon -->
+        <button
+          @click="cart.removeFromCart(item.id)"
+          class="text-red-500 hover:text-red-400 hover:underline shrink-0 flex items-center cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          Remove
+        </button>
       </div>
       <div class="mt-6 font-bold text-lg">
         Total: {{ totalPrice }} kr.
       </div>
-      <button @click="checkout" class="mt-6 px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-900">
+      <button @click="checkout" class="mt-6 px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-900 cursor-pointer">
         Checkout
-      </button>
-      <button @click="cart.clearCart()" class="mt-2 px-6 py-2 bg-MyRed text-white rounded hover:bg-red-700">
-        Clear Cart
       </button>
     </div>
     <div v-else>
@@ -50,26 +76,36 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
+import { usePriceCalculator } from '@/composables/usePriceCalculator'
 
+const router = useRouter()
 const cart = useCartStore()
+const { calculateDiscountedPrice, calculateTotalPrice } = usePriceCalculator()
 
-function discounted(item) {
-  if (!item.discount || item.discount <= 0) return item.price
-  return Math.round(item.price * (1 - item.discount / 100))
+const totalPrice = computed(() => calculateTotalPrice(cart.items))
+
+// Quantity control functions
+function incrementQuantity(item) {
+  // Find the item in the cart and update its quantity
+  const cartItem = cart.items.find(i => i.id === item.id)
+  if (cartItem) {
+    cartItem.quantity += 1
+    cart.saveToLocalStorage()
+  }
 }
 
-const totalPrice = computed(() =>
-  cart.items.reduce((sum, item) => {
-    const price = item.discount && item.discount > 0
-      ? Math.round(item.price * (1 - item.discount / 100))
-      : item.price
-    return sum + price * item.quantity
-  }, 0)
-)
+function decrementQuantity(item) {
+  // Find the item in the cart and update its quantity
+  const cartItem = cart.items.find(i => i.id === item.id)
+  if (cartItem && cartItem.quantity > 1) {
+    cartItem.quantity -= 1
+    cart.saveToLocalStorage()
+  }
+}
 
 function checkout() {
-  alert('Purchase complete! (Fake checkout)')
-  cart.clearCart()
+  router.push('/user/checkout')
 }
 </script>

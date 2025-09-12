@@ -21,8 +21,9 @@
     >
       {{ props.artist }}
     </router-link>
+
     <div class="flex items-center justify-start mt-4">
-      <AddToCartButton :item="{
+      <AddToCartButton v-if="props.stock > 0" :item="{
         id: props.id,
         album: props.album,
         artist: props.artist,
@@ -30,6 +31,9 @@
         price: props.price,
         discount: props.discount
       }" />
+      <div v-else class="px-6 py-3 bg-gray-500 text-white rounded opacity-75 cursor-not-allowed">
+        Out of Stock
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +41,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
+import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 
 const props = defineProps({
@@ -45,13 +50,15 @@ const props = defineProps({
   artist: String,
   coverImage: String,
   price: [Number, String],
-  discount: { type: [Number, String], default: 0 }
+  discount: { type: [Number, String], default: 0 },
+  stock: { type: [Number, String], default: 1 }
 })
 
-const discountedPrice = computed(() => {
-  if (!props.discount || props.discount <= 0) return props.price
-  return Math.round(props.price * (1 - props.discount / 100))
-})
+const { calculateDiscountedPrice } = usePriceCalculator()
+
+const discountedPrice = computed(() =>
+  calculateDiscountedPrice(props.price, props.discount)
+)
 
 const cart = useCartStore()
 </script>

@@ -40,7 +40,14 @@ export function useFirestoreCRUD() {
   }
 
   async function updateRecord(id, data) {
-    await updateDoc(doc(db, 'records', id), data)
+    try {
+      const recordRef = doc(db, 'records', id)
+      await updateDoc(recordRef, data)
+      return true
+    } catch (error) {
+      console.error('Error updating record:', error)
+      throw error
+    }
   }
 
   async function deleteRecord(id) {
@@ -58,6 +65,18 @@ export function useFirestoreCRUD() {
     })
   }
 
+  async function addOrder(order) {
+    try {
+      return await addDoc(collection(db, 'orders'), {
+        ...order,
+        createdAt: new Date()
+      })
+    } catch (error) {
+      console.error('Error adding order:', error)
+      throw error
+    }
+  }
+
   return {
     records,
     loading,
@@ -68,6 +87,7 @@ export function useFirestoreCRUD() {
     addRecord,
     updateRecord,
     deleteRecord,
-    listenToRecord
+    listenToRecord,
+    addOrder
   }
 }

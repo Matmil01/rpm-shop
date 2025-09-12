@@ -23,13 +23,13 @@
         </div>
         <router-link
           :to="`/shop?search=${encodeURIComponent(record.artist)}`"
-          class="text-MyWhite underline hover:text-blue-400 text-left block mb-2"
+          class="text-MyWhite underline hover:text-red-500 text-left block mb-2"
         >
           {{ record.artist }}
         </router-link>
         <div class="flex items-center justify-start mt-4">
-          <!-- Price and Cart Box as a full clickable button -->
-          <AddToCartButton :item="{
+
+          <AddToCartButton v-if="record.stock > 0" :item="{
             id: record.id,
             album: record.album,
             artist: record.artist,
@@ -37,6 +37,9 @@
             price: record.price,
             discount: record.discount
           }" />
+          <div v-else class="px-6 py-3 bg-gray-500 text-white rounded opacity-75 cursor-not-allowed">
+            Out of Stock
+          </div>
         </div>
       </div>
 
@@ -50,7 +53,7 @@
                 <span v-for="(genre, idx) in record.genre.split(',').map(s => s.trim())" :key="genre">
                   <router-link
                     :to="`/shop?search=${encodeURIComponent(genre)}`"
-                    class="text-blue-400 underline hover:text-blue-600"
+                    class="underline hover:text-red-500"
                   >
                     {{ genre }}
                   </router-link>
@@ -68,6 +71,9 @@
               <span v-if="record.stock > 0 && record.stock < 5" class="text-red-600 font-semibold">
                 Only {{ record.stock }} left, order now!
               </span>
+              <span v-else-if="record.stock === 0" class="text-red-600 font-semibold">
+                Out of Stock
+              </span>
               <span v-else>
                 {{ record.stock }}
               </span>
@@ -84,7 +90,7 @@
             </li>
           </ol>
         </div>
-        <router-link to="/shop" class="text-MyWhite underline hover:text-blue-400">← Back to Shop</router-link>
+        <router-link to="/shop" class="text-MyWhite underline hover:text-red-500">← Back to Shop</router-link>
       </div>
     </div>
   </div>
@@ -95,11 +101,13 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
+import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 
 const route = useRoute()
 const record = ref({})
 const cart = useCartStore()
+const { calculateDiscountedPrice } = usePriceCalculator()
 let unsubscribe = null
 
 const { listenToRecord } = useFirestoreCRUD()
@@ -114,7 +122,9 @@ onUnmounted(() => {
 })
 
 const discountedPrice = computed(() => {
-  if (!record.value.discount || record.value.discount <= 0) return record.value.price
-  return Math.round(record.value.price * (1 - record.value.discount / 100))
+  if (record.value && record.value.price) {
+    return calculateDiscountedPrice(record.value.price, record.value.discount || 0)
+  }
+  return 0
 })
 </script>
