@@ -16,7 +16,7 @@
             <th class="p-2 border border-gray-500 min-w-[120px]">Album</th>
             <th class="p-2 border border-gray-500 min-w-[80px]">Stock</th>
             <th class="p-2 border border-gray-500 min-w-[80px]">Price</th>
-            <th class="p-2 border border-gray-500 min-w-[100px]">Discount</th>
+            <th class="p-2 border border-gray-500 min-w-[100px]">Discount %</th>
             <th class="p-2 border border-gray-500 min-w-[260px]">Tags</th>
             <th class="p-2 border border-gray-500 min-w-[120px]">Actions</th>
           </tr>
@@ -88,13 +88,23 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
+import { useRecordSearch } from '@/composables/useRecordSearch'
+import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
 
 const { randomStock, randomPrice } = useRandomDefaults()
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useFirestoreCRUD()
+const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
+
+const search = ref('')
+const { filteredRecords } = useRecordSearch(records, {
+  searchRef: search,
+  fields: ['artist', 'album'],
+  sortBy: 'artist', // or 'album' if you prefer
+  sortDirection: 'asc'
+})
 
 const savingId = ref(null)
 const saving = ref(false)
-const search = ref('')
 
 const tagsList = [
   'Staff Favorites',
@@ -106,7 +116,6 @@ const tagsList = [
   'Shock & Awe',
   'Dad Metal',
   'Avant Garde',
-  'Special Offers'
 ]
 
 onMounted(() => {
@@ -122,44 +131,16 @@ onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
 })
 
-const filteredRecords = computed(() => {
-  let filtered = !search.value
-    ? records.value
-    : records.value.filter(
-        r =>
-          r.artist?.toLowerCase().includes(search.value.toLowerCase()) ||
-          r.album?.toLowerCase().includes(search.value.toLowerCase())
-      )
-  // Sort alphabetically by artist, then album
-  return filtered.slice().sort((a, b) => {
-    const artistA = a.artist?.toLowerCase() || ''
-    const artistB = b.artist?.toLowerCase() || ''
-    if (artistA < artistB) return -1
-    if (artistA > artistB) return 1
-    // If artists are the same, sort by album
-    const albumA = a.album?.toLowerCase() || ''
-    const albumB = b.album?.toLowerCase() || ''
-    return albumA.localeCompare(albumB)
+// Optional: Add watcher to apply tag changes in real-time when discount changes
+watch(() => records.value, (newRecords) => {
+  if (!newRecords) return
+  newRecords.forEach(record => {
+    if (record._previousDiscount !== record.discount) {
+      applySpecialOffersTag(record)
+      record._previousDiscount = record.discount
+    }
   })
-})
-
-// Helper function to manage Special Offers tag
-function applySpecialOffersTag(record) {
-  if (!Array.isArray(record.tags)) record.tags = []
-  const hasSpecialTag = record.tags.includes('Special Offers')
-
-  if (Number(record.discount) > 0) {
-    // Should have the tag
-    if (!hasSpecialTag) {
-      record.tags.push('Special Offers')
-    }
-  } else {
-    // Should NOT have the tag
-    if (hasSpecialTag) {
-      record.tags = record.tags.filter(t => t !== 'Special Offers')
-    }
-  }
-}
+}, { deep: true })
 
 async function saveAllChanges() {
   saving.value = true
@@ -211,15 +192,4 @@ function confirmDelete(id) {
     deleteRecord(id)
   }
 }
-
-// Optional: Add watcher to apply tag changes in real-time when discount changes
-watch(() => records.value, (newRecords) => {
-  if (!newRecords) return
-  newRecords.forEach(record => {
-    if (record._previousDiscount !== record.discount) {
-      applySpecialOffersTag(record)
-      record._previousDiscount = record.discount
-    }
-  })
-}, { deep: true })
 </script>

@@ -25,12 +25,15 @@
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
 
 const route = useRoute()
 const search = ref('')
-
 const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
+
+const tag = computed(() => route.query.tag)
+const { filteredRecords } = useRecordSearch(records, { tagRef: tag, searchRef: search, sortBy: 'artist', sortDirection: 'asc' })
 
 onMounted(() => {
   listenToRecords()
@@ -46,30 +49,5 @@ watch(
 
 onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
-})
-
-const tag = computed(() => route.query.tag)
-const filteredRecords = computed(() => {
-  let base = records.value
-
-  if (tag.value) {
-    if (tag.value === 'Special Offers') {
-      // Derive from discount instead of tag
-      base = base.filter(r => Number(r.discount) > 0)
-    } else {
-      base = base.filter(r => r.tags && r.tags.includes(tag.value))
-    }
-  }
-
-  if (search.value) {
-    const s = search.value.toLowerCase()
-    base = base.filter(
-      r =>
-        r.artist?.toLowerCase().includes(s) ||
-        r.album?.toLowerCase().includes(s) ||
-        r.genre?.toLowerCase().includes(s)
-    )
-  }
-  return base
 })
 </script>

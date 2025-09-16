@@ -1,11 +1,10 @@
 <template>
   <NavBar />
 
-    <router-view />
+  <router-view />
 
   <FooterView />
 </template>
-
 
 <script setup>
 import './main.css'
@@ -19,5 +18,4 @@ body {
   background-repeat: repeat;
   margin: 0;
 }
-
 </style>

@@ -29,6 +29,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
 
 const tag = ref('')
@@ -48,6 +49,7 @@ const categories = [
 ]
 
 const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
+const { recordsByCategory } = useRecordSearch(records)
 
 onMounted(() => {
   listenToRecords()
@@ -55,17 +57,4 @@ onMounted(() => {
 onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
 })
-
-function recordsByCategory(category) {
-  if (category === 'Special Offers') {
-    // Show records with a discount
-    return records.value
-      .filter(r => Number(r.discount) > 0)
-      .slice(0, 4)
-  }
-  // Default: filter by tag
-  return records.value
-    .filter(r => r.tags && r.tags.includes(category))
-    .slice(0, 4)
-}
 </script>

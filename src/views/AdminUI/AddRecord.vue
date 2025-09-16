@@ -146,6 +146,9 @@ import { ref } from 'vue'
 import { useDiscogsSearch } from '@/composables/useDiscogsSearch.js'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
+import { useReleaseMapper } from '@/composables/useReleaseMapper.js'
+import { useRecordBuilder } from '@/composables/useRecordBuilder.js'
+import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
 
 const artist = ref('')
 const album = ref('')
@@ -154,19 +157,20 @@ const rpm = ref('')
 const coverImage = ref('')
 const format = ref('')
 const genre = ref('')
-
 const price = ref(0)
 const discount = ref(0)
 const stock = ref(0)
 const tags = ref([])
+const tracklist = ref([])
+const numRecords = ref('')
 
 const searchQuery = ref('')
 const { results, loading, error, searchAlbums, fetchReleaseDetails, clearResults } = useDiscogsSearch()
 const { randomStock, randomPrice } = useRandomDefaults()
 const { addRecord } = useFirestoreCRUD()
-
-const tracklist = ref([])
-const numRecords = ref('')
+const { mapReleaseToForm } = useReleaseMapper()
+const { buildRecord } = useRecordBuilder()
+const { applySpecialOffersTag } = useSpecialOffersTag()
 
 function onSearch() {
   if (searchQuery.value.trim()) {
@@ -175,52 +179,21 @@ function onSearch() {
 }
 
 async function fillForm(release) {
-  if (release.title && release.title.includes(' - ')) {
-    const [artistName, albumTitle] = release.title.split(' - ')
-    artist.value = artistName
-    album.value = albumTitle
-  } else {
-    album.value = release.title || ''
-    artist.value = release.artist || ''
-  }
-  year.value = release.year || ''
-  coverImage.value = release.cover_image || ''
-  format.value = release.format ? release.format.join(', ') : ''
-  genre.value = release.genre ? release.genre.join(', ') : ''
-  rpm.value = ''
-
-  // Fetch full release details for tracklist, number of records, and RPM
-  const details = await fetchReleaseDetails(release.id)
-  if (details) {
-    tracklist.value = details.tracklist || []
-    const vinylFormat = details.formats?.find(f => f.name === 'Vinyl')
-    numRecords.value = vinylFormat?.qty || '1'
-    // Try to extract RPM from format descriptions
-    if (vinylFormat && Array.isArray(vinylFormat.descriptions)) {
-      const rpmDesc = vinylFormat.descriptions.find(desc => desc.includes('RPM'))
-      rpm.value = rpmDesc ? rpmDesc.replace(' RPM', '') : ''
-    } else {
-      rpm.value = ''
-    }
-  } else {
-    tracklist.value = []
-    numRecords.value = ''
-    rpm.value = ''
-  }
-
+  const mapped = await mapReleaseToForm(release, fetchReleaseDetails)
+  artist.value = mapped.artist
+  album.value = mapped.album
+  year.value = mapped.year
+  coverImage.value = mapped.coverImage
+  format.value = mapped.format
+  genre.value = mapped.genre
+  rpm.value = mapped.rpm
+  tracklist.value = mapped.tracklist
+  numRecords.value = mapped.numRecords
   clearResults()
 }
 
 async function onSubmit() {
-  if (!stock.value || stock.value === '') {
-    stock.value = randomStock()
-  }
-  if (!price.value || price.value === '') {
-    price.value = randomPrice()
-  }
-
-  // Build the record object
-  const record = {
+  const record = buildRecord({
     artist: artist.value,
     album: album.value,
     year: year.value,
@@ -228,13 +201,15 @@ async function onSubmit() {
     coverImage: coverImage.value,
     format: format.value,
     genre: genre.value,
-    price: Number(price.value) || 0,
-    discount: Number(discount.value) || 0,
-    stock: Number(stock.value) || 0,
-    tags: Array.isArray(tags.value) ? tags.value : [],
-    tracklist: Array.isArray(tracklist.value) ? tracklist.value : [],
+    price: price.value,
+    discount: discount.value,
+    stock: stock.value,
+    tags: tags.value,
+    tracklist: tracklist.value,
     numRecords: numRecords.value,
-  }
+  }, randomStock, randomPrice)
+
+  applySpecialOffersTag(record)
 
   try {
     await addRecord(record)

@@ -20,6 +20,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
+import { usePriceCalculator } from '@/composables/usePriceCalculator'
 
 const props = defineProps({
   item: {
@@ -32,10 +33,11 @@ const cart = useCartStore()
 const loading = ref(false)
 const showAdded = ref(false)
 
-const discountedPrice = computed(() => {
-  if (!props.item.discount || props.item.discount <= 0) return props.item.price
-  return Math.round(props.item.price * (1 - props.item.discount / 100))
-})
+// Use the composable for price calculation
+const { calculateDiscountedPrice } = usePriceCalculator()
+const discountedPrice = computed(() =>
+  calculateDiscountedPrice(props.item.price, props.item.discount)
+)
 
 function handleAdd() {
   loading.value = true
