@@ -4,11 +4,23 @@
       :to="`/product/${props.id}`"
       class="block"
     >
-      <img
-        :src="props.coverImage"
-        alt="Album Cover"
-        class="w-full aspect-square object-cover mb-2 rounded hover:opacity-75 transition-opacity"
-      />
+      <div class="relative group">
+        <!-- Spinning vinyl PNG (slides right and spins on hover) -->
+        <img
+          src="/vinyl_PNG18.png"
+          alt=""
+          class="absolute inset-0 w-full h-full z-0 opacity-80 transition-all duration-300
+            group-hover:translate-x-6 group-hover:animate-spin"
+          style="object-fit: contain;"
+        />
+        <!-- Album cover image (slides left on hover) -->
+        <img
+          :src="props.coverImage"
+          alt="Album Cover"
+          class="w-full aspect-square object-cover mb-2 rounded relative z-10 transition-all duration-300
+            group-hover:-translate-x-6"
+        />
+      </div>
     </router-link>
     <div
       class="text-lg font-bold text-left block mb-1"

@@ -46,7 +46,7 @@
       </div>
 
       <div class="mt-8">
-        <router-link to="/shop" class="px-6 py-3 bg-gray-700 text-white rounded hover:bg-gray-900 inline-block">
+        <router-link to="/" class="px-6 py-3 bg-gray-700 text-white rounded hover:bg-gray-900 inline-block">
           Continue Shopping
         </router-link>
       </div>
@@ -57,10 +57,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { collection, query, where, getDocs } from 'firebase/firestore'
-import { db } from '@/firebase'
+import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 
 const route = useRoute()
+const { fetchOrderByNumber } = useFirestoreCRUD()
+
 const orderNumber = computed(() =>
   route.query.orderNumber || `RPM-${Math.floor(100000 + Math.random() * 900000)}`
 )
@@ -72,14 +73,8 @@ const isLoading = ref(true)
 onMounted(async () => {
   if (orderNumber.value) {
     try {
-      // Query Firestore for the order
-      const ordersRef = collection(db, 'orders')
-      const q = query(ordersRef, where('orderNumber', '==', orderNumber.value))
-      const querySnapshot = await getDocs(q)
-
-      if (!querySnapshot.empty) {
-        // Get first matching order
-        const orderData = querySnapshot.docs[0].data()
+      const orderData = await fetchOrderByNumber(orderNumber.value)
+      if (orderData) {
         orderItems.value = orderData.items || []
         orderTotal.value = orderData.totalAmount || 0
       }

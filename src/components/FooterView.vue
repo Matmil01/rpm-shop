@@ -1,6 +1,6 @@
 <template>
   <footer class="bg-black py-4 border-t-4 border-gray-600 font-main text-MyWhite">
-    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
       <p>
         © {{ new Date().getFullYear() }} | RPM Shop | Rights and whatnot.
       </p>

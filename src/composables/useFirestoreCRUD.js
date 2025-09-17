@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { db } from '@/firebase'
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc as getSingleDoc, onSnapshot } from 'firebase/firestore'
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc as getSingleDoc, onSnapshot, query, where, orderBy } from 'firebase/firestore'
 
 export function useFirestoreCRUD() {
   const records = ref([])
@@ -77,6 +77,35 @@ export function useFirestoreCRUD() {
     }
   }
 
+  async function fetchOrderByNumber(orderNumber) {
+    const ordersRef = collection(db, 'orders')
+    const q = query(ordersRef, where('orderNumber', '==', orderNumber))
+    const querySnapshot = await getDocs(q)
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].data()
+    }
+    return null
+  }
+
+  async function fetchAllOrders() {
+    const ordersRef = collection(db, 'orders')
+    const snapshot = await getDocs(ordersRef)
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  }
+
+  function listenToOrders(callback) {
+    const ordersRef = collection(db, 'orders')
+    const q = query(ordersRef, orderBy('orderDate', 'desc'))
+    return onSnapshot(q, (snapshot) => {
+      callback(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+    })
+  }
+
+  async function updateOrderStatus(orderId, newStatus) {
+    const orderRef = doc(db, 'orders', orderId)
+    await updateDoc(orderRef, { status: newStatus })
+  }
+
   return {
     records,
     loading,
@@ -88,6 +117,10 @@ export function useFirestoreCRUD() {
     updateRecord,
     deleteRecord,
     listenToRecord,
-    addOrder
+    addOrder,
+    fetchOrderByNumber,
+    fetchAllOrders,
+    listenToOrders,
+    updateOrderStatus,
   }
 }

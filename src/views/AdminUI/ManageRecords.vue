@@ -99,7 +99,7 @@ const search = ref('')
 const { filteredRecords } = useRecordSearch(records, {
   searchRef: search,
   fields: ['artist', 'album'],
-  sortBy: 'artist', // or 'album' if you prefer
+  sortBy: 'artist',
   sortDirection: 'asc'
 })
 

@@ -20,7 +20,7 @@
       <div
         v-for="release in results"
         :key="release.id"
-        class="flex items-center gap-3 border rounded p-2 hover:bg-gray-100 cursor-pointer font-main text-MyWhite"
+        class="flex items-center gap-3 border rounded p-2 hover:bg-gray-700/60 cursor-pointer font-main text-MyWhite transition-colors duration-200"
         @click="fillForm(release)"
       >
         <img :src="release.cover_image" alt="" class="w-12 h-12 object-cover rounded" />
