@@ -4,6 +4,9 @@ import FullShop from "../views/FullShop.vue"
 import SingleProduct from "../views/SingleRecord.vue"
 import AdminView from "@/views/AdminUI/AdminView.vue"
 import ContactView from "@/views/ContactView.vue"
+import { auth, db } from '@/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const routes = [
   { path: "/", name: "home", component: HomeView },
@@ -28,6 +31,21 @@ const routes = [
         path: "manage",
         name: "ManageProducts",
         component: () => import("@/views/AdminUI/ManageRecords.vue")
+      },
+      {
+        path: "profile",
+        name: "AdminProfile",
+        component: () => import("@/views/UserUI/UserProfile.vue")
+      },
+      {
+        path: "users",
+        name: "ManageUsers",
+        component: () => import("@/views/AdminUI/ManageUsers.vue")
+      },
+      {
+        path: '/admin/wishlist',
+        name: 'AdminWishlist',
+        component: () => import('@/views/UserUI/WishList.vue')
       }
     ]
   },
@@ -48,15 +66,50 @@ const routes = [
         path: "checkout",
         name: "CheckoutView",
         component: () => import("@/views/UserUI/CheckOutView.vue")
+      },
+      {
+        path: "profile",
+        name: "UserProfile",
+        component: () => import("@/views/UserUI/UserProfile.vue")
       }
     ]
   },
-  { path: "/404", name: "ThankYou", component: () => import("@/views/UserUI/ThankYouView.vue") }
+  { path: "/thankyou", name: "ThankYou", component: () => import("@/views/UserUI/ThankYouView.vue") },
+  { path: "/login", name: "Login", component: () => import("@/views/LoginView.vue") }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+let isAuthResolved = false
+
+function waitForAuth() {
+  return new Promise(resolve => {
+    if (isAuthResolved && auth.currentUser !== null) {
+      resolve(auth.currentUser)
+    } else {
+      const unsubscribe = onAuthStateChanged(auth, user => {
+        isAuthResolved = true
+        unsubscribe()
+        resolve(user)
+      })
+    }
+  })
+}
+
+router.beforeEach(async (to, from, next) => {
+  const user = await waitForAuth()
+  if (to.path.startsWith('/admin')) {
+    if (!user) return next('/login')
+    const userDoc = await getDoc(doc(db, 'users', user.uid))
+    if (!userDoc.exists() || userDoc.data().role !== 'admin') return next('/')
+  }
+  if (to.path.startsWith('/user')) {
+    if (!user) return next('/login')
+  }
+  next()
 })
 
 export default router

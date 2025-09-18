@@ -1,7 +1,9 @@
 <template>
   <div class="max-w-3xl mx-auto p-8 text-center text-MyWhite font-main">
     <div class="mb-8 p-8 bg-black/40 rounded">
-      <h1 class="text-4xl font-bold mb-8">Thank You For Your Order!</h1>
+      <h1 class="text-4xl font-bold mb-8">
+        Thank You{{ orderData?.customer?.name ? `, ${orderData.customer.name}` : '' }}!
+      </h1>
 
       <div class="text-5xl mb-6">🎸</div>
       <p class="text-xl mb-6">If this was a real webshop, now is when I'd be taking your money.</p>
@@ -9,6 +11,11 @@
       <div class="mb-8 p-4 bg-gray-800/50 rounded inline-block">
         <div class="text-left">
           <div class="mb-2">Order #: {{ orderNumber }}</div>
+          <div class="mb-2">
+            Name: {{ orderData?.customer?.name }}
+            <span v-if="orderData?.customer?.username" class="text-xs text-gray-400">({{ orderData.customer.username }})</span>
+          </div>
+          <div class="mb-2">Address: {{ orderData?.customer?.address }}</div>
           <div class="text-sm text-gray-400">Date: {{ new Date().toLocaleDateString() }}</div>
         </div>
       </div>
@@ -66,6 +73,7 @@ const orderNumber = computed(() =>
   route.query.orderNumber || `RPM-${Math.floor(100000 + Math.random() * 900000)}`
 )
 
+const orderData = ref(null) // <-- Add this
 const orderItems = ref([])
 const orderTotal = ref(0)
 const isLoading = ref(true)
@@ -73,10 +81,11 @@ const isLoading = ref(true)
 onMounted(async () => {
   if (orderNumber.value) {
     try {
-      const orderData = await fetchOrderByNumber(orderNumber.value)
-      if (orderData) {
-        orderItems.value = orderData.items || []
-        orderTotal.value = orderData.totalAmount || 0
+      const fetchedOrder = await fetchOrderByNumber(orderNumber.value)
+      if (fetchedOrder) {
+        orderData.value = fetchedOrder // <-- Store the whole order
+        orderItems.value = fetchedOrder.items || []
+        orderTotal.value = fetchedOrder.totalAmount || 0
       }
     } catch (error) {
       console.error('Error fetching order:', error)

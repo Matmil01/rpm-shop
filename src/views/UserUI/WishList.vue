@@ -1,65 +1,98 @@
-<!-- Mockup for wishlist -->
-
 <template>
-  <div class="max-w-4xl mx-auto p-8 font-main text-MyWhite">
-    <h1 class="text-3xl font-bold mb-8">Your Wishlist</h1>
-    <div v-if="wishlist.length === 0" class="text-gray-400 text-lg">
-      Your wishlist is empty. Click the ♡ icon on any record or item to add it here!
-    </div>
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  <div class="container mx-auto px-4 max-w-5xl p-8 text-MyWhite font-main">
+    <h1 class="text-3xl font-bold mb-8 text-center">Your Wishlist</h1>
+    <div v-if="loading" class="text-center text-lg text-gray-400">Loading wishlist...</div>
+    <div v-else-if="wishlist.items.length">
       <div
-        v-for="item in wishlist"
+        v-for="item in wishlist.items"
         :key="item.id"
-        class="bg-[url('/Texturelabs_InkPaint_368XL.jpg')] bg-repeat bg-center rounded shadow p-4 flex flex-col items-center font-main text-MyWhite"
+        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded bg-black/40 gap-6 shadow"
       >
-        <img
-          :src="item.coverImage || item.image"
-          alt="Cover"
-          class="w-32 h-32 object-cover rounded mb-4"
-        />
-        <div class="font-semibold text-lg mb-1">
-          {{ item.album || item.name }}
-        </div>
-        <div class="mb-2">
-          <span class="underline hover:text-blue-400">
-            {{ item.artist || item.brand }}
-          </span>
-        </div>
-        <div class="text-blue-700 font-bold mb-2">
-          {{ item.price }} kr.
-        </div>
-        <button
-          @click="removeFromWishlist(item.id)"
-          class="text-red-500 hover:underline"
+        <router-link
+          :to="`/shop/${item.id}`"
+          class="w-32 h-32 block"
         >
-          Remove
-        </button>
+          <img
+            v-if="item.coverImage"
+            :src="item.coverImage"
+            alt="Cover"
+            class="w-32 h-32 object-cover rounded shadow hover:opacity-80 transition"
+          />
+          <div v-else class="w-32 h-32 flex items-center justify-center bg-gray-700 text-xs rounded">
+            No Image
+          </div>
+        </router-link>
+        <div class="flex-1 flex flex-col md:ml-6">
+          <router-link
+            :to="`/shop/${item.id}`"
+            class="font-bold text-xl mb-1 truncate hover:text-red-500 transition"
+          >
+            {{ item.album }}
+          </router-link>
+          <div class="text-base mb-2 truncate">{{ item.artist }}</div>
+          <div class="text-base mb-2">
+            <span v-if="item.discount && item.discount > 0">
+              <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
+              <span class="text-red-600 font-bold">{{ calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
+            </span>
+            <span v-else>
+              <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-col items-center gap-2 md:ml-6">
+          <AddToCartButton :item="item" />
+          <button
+            @click="wishlist.removeFromWishlist(item.id)"
+            class="text-red-500 hover:text-red-400 hover:underline shrink-0 flex items-center cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Remove
+          </button>
+        </div>
       </div>
+    </div>
+    <div v-else>
+      <p class="text-center text-lg text-gray-400">Your wishlist is empty.</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import AddToCartButton from '@/components/AddToCartButton.vue'
+import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
+import { useUserStore } from '@/composables/piniaStores/userStore'
 
-const wishlist = ref([
-  {
-    id: '1',
-    album: 'Album Name',
-    artist: 'Artist Name',
-    coverImage: 'https://marilynmanson.com/assets/OAUG.jpg',
-    price: 349
-  },
-  {
-    id: '2',
-    name: 'RPM Shop Hoodie',
-    brand: 'RPM Merch',
-    image: 'https://store.marilynmanson.com/cdn/shop/files/hoodie_f.png?v=1732236242',
-    price: 199
+const wishlist = useWishlistStore()
+const userStore = useUserStore()
+const { calculateDiscountedPrice } = usePriceCalculator()
+const loading = ref(true)
+
+async function tryLoadWishlist() {
+  if (userStore.uid) {
+    await wishlist.loadWishlist()
+    loading.value = false
   }
-])
-
-function removeFromWishlist(id) {
-  wishlist.value = wishlist.value.filter(item => item.id !== id)
 }
+
+onMounted(() => {
+  console.log('Current UID:', userStore.uid)
+  tryLoadWishlist()
+})
+
+// Watch for uid changes (e.g. after login or refresh)
+watch(
+  () => userStore.uid,
+  async (newUid) => {
+    if (newUid) {
+      loading.value = true
+      await wishlist.loadWishlist()
+      loading.value = false
+    }
+  }
+)
 </script>

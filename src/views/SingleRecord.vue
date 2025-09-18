@@ -1,19 +1,17 @@
 <template>
   <div class="container mx-auto px-4">
-    <div
-      class="p-6 font-main text-MyWhite rounded shadow-lg relative"
-    >
+    <div class="p-6 font-main text-MyWhite rounded shadow-lg relative">
       <div class="flex flex-col md:flex-row gap-12 md:gap-16">
         <!-- Left: Main Info & Cover -->
         <div
           v-if="record && record.id"
           class="flex-shrink-0 flex flex-col items-center md:items-start gap-4"
         >
-<img
-  :src="record.coverImage"
-  alt="Album Cover"
-  class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow"
-/>
+          <img
+            :src="record.coverImage"
+            alt="Album Cover"
+            class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow"
+          />
           <div class="text-lg font-bold text-left mb-1">
             {{ record.album }}
           </div>
@@ -23,16 +21,27 @@
           >
             {{ record.artist }}
           </router-link>
-          <div class="flex items-center justify-start mt-4">
-
-            <AddToCartButton v-if="record.stock > 0" :item="{
-              id: record.id,
-              album: record.album,
-              artist: record.artist,
-              coverImage: record.coverImage,
-              price: record.price,
-              discount: record.discount
-            }" />
+          <div class="flex items-center justify-start mt-4 gap-4">
+            <AddToCartButton
+              v-if="record.stock > 0"
+              :item="{
+                id: record.id,
+                album: record.album,
+                artist: record.artist,
+                coverImage: record.coverImage,
+                price: record.price,
+                discount: record.discount
+              }"
+            />
+            <button
+              v-if="record.id"
+              @click="addToWishlist"
+              class="px-6 py-3 bg-gray-700 text-white rounded hover:bg-gray-900 transition font-main ml-2"
+              :disabled="wishlistHasRecord"
+            >
+              <span v-if="wishlistHasRecord">In Wishlist</span>
+              <span v-else>Add to Wishlist</span>
+            </button>
             <div v-else class="px-6 py-3 bg-gray-500 text-white rounded opacity-75 cursor-not-allowed">
               Out of Stock
             </div>
@@ -100,10 +109,12 @@ import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
+import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
 
 const route = useRoute()
 const record = ref({})
 const cart = useCartStore()
+const wishlist = useWishlistStore()
 const { calculateDiscountedPrice } = usePriceCalculator()
 let unsubscribe = null
 
@@ -124,4 +135,19 @@ const discountedPrice = computed(() => {
   }
   return 0
 })
+
+const wishlistHasRecord = computed(() =>
+  wishlist.items.some(item => item.id === record.value.id)
+)
+async function addToWishlist() {
+  if (!record.value.id || wishlistHasRecord.value) return
+  await wishlist.addToWishlist({
+    id: record.value.id,
+    album: record.value.album,
+    artist: record.value.artist,
+    coverImage: record.value.coverImage,
+    price: record.value.price,
+    discount: record.value.discount
+  })
+}
 </script>

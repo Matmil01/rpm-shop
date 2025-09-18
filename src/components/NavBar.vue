@@ -97,7 +97,6 @@
 
       <!-- Right: Icons -->
       <div class="space-x-4 flex items-center">
-        <router-link to="/user/wishlist" class="hover:text-red-500">♡</router-link>
         <div class="relative group">
           <router-link to="/user/cart" class="hover:text-red-500 text-2xl">🛒</router-link>
           <span
@@ -140,7 +139,74 @@
             </div>
           </div>
         </div>
-        <router-link to="/admin" class="hover:text-red-500">Login</router-link>
+        <div v-if="userStore.loggedIn" class="flex items-center gap-2">
+          <div class="relative group">
+            <router-link
+              v-if="userStore.role === 'admin'"
+              to="/admin"
+              class="flex items-center"
+            >
+              <img
+                v-if="userStore.profilePic"
+                :src="userStore.profilePic"
+                alt="Profile"
+                class="w-10 h-10 rounded-full object-cover border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-80"
+              />
+              <svg
+                v-else
+                class="w-10 h-10 rounded-full bg-gray-700 text-gray-300 border-2 border-gray-600 p-2 cursor-pointer transition-opacity hover:opacity-80"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5.121 17.804A9.001 9.001 0 0112 15c2.21 0 4.21.805 5.879 2.146M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </router-link>
+            <template v-else>
+              <img
+                v-if="userStore.profilePic"
+                :src="userStore.profilePic"
+                alt="Profile"
+                class="w-10 h-10 rounded-full object-cover border-2 border-gray-600 cursor-default transition-opacity"
+              />
+              <svg
+                v-else
+                class="w-10 h-10 rounded-full bg-gray-700 text-gray-300 border-2 border-gray-600 p-2 cursor-default transition-opacity"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5.121 17.804A9.001 9.001 0 0112 15c2.21 0 4.21.805 5.879 2.146M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </template>
+            <!-- Dropdown for profile, wishlist, and logout -->
+            <div class="absolute right-0 mt-2 w-40 bg-black/95 rounded shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <div class="p-4 flex flex-col items-center">
+                <span class="font-bold text-MyWhite mb-2">{{ userStore.username }}</span>
+                <router-link
+                  :to="userStore.role === 'admin' ? '/admin/profile' : '/user/profile'"
+                  class="block w-full text-center bg-gray-800 text-MyWhite rounded px-4 py-2 mb-2 hover:bg-gray-700 transition font-main cursor-pointer"
+                >
+                  Edit Profile
+                </router-link>
+                <router-link
+                  :to="userStore.role === 'admin' ? '/admin/wishlist' : '/user/wishlist'"
+                  class="block w-full text-center bg-gray-800 text-MyWhite rounded px-4 py-2 mb-2 hover:bg-gray-700 transition font-main cursor-pointer"
+                >
+                  Wishlist
+                </router-link>
+                <button @click="logout" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-900 transition font-main cursor-pointer w-full">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <router-link to="/login" class="hover:text-red-500">Login</router-link>
+        </div>
       </div>
     </div>
   </nav>
@@ -151,11 +217,15 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { useUserStore } from '@/composables/piniaStores/userStore'
+import { signOut } from 'firebase/auth'
+import { auth } from '@/firebase'
 
 const router = useRouter()
 const searchInput = ref('')
 const cart = useCartStore()
 const { calculateTotalPrice } = usePriceCalculator()
+const userStore = useUserStore()
 
 const categories = [
   // 'Soundtracks',
@@ -207,5 +277,11 @@ function stopSpin() {
   if (frameId) cancelAnimationFrame(frameId)
   frameId = null
   lastTimestamp = null
+}
+
+function logout() {
+  signOut(auth)
+  userStore.clearUser()
+  router.push('/login')
 }
 </script>

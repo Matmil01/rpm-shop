@@ -129,16 +129,20 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useUserStore } from '@/composables/piniaStores/userStore'
+import { db } from '@/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
 const router = useRouter()
 const cart = useCartStore()
 const priceCalculator = usePriceCalculator()
 const { addOrder, fetchRecord, updateRecord } = useFirestoreCRUD()
+const userStore = useUserStore()
 
 const customerName = ref('')
 const customerAddress = ref('')
@@ -149,6 +153,16 @@ const submitError = ref('')
 const orderSubmitted = ref(false)
 
 const totalPrice = computed(() => priceCalculator.calculateTotalPrice(cart.items))
+
+onMounted(async () => {
+  if (userStore.uid) {
+    const userDoc = await getDoc(doc(db, 'users', userStore.uid))
+    if (userDoc.exists()) {
+      customerName.value = userDoc.data().name || ''
+      customerAddress.value = userDoc.data().address || ''
+    }
+  }
+})
 
 // Quantity control functions
 function incrementQuantity(item) {
@@ -212,9 +226,12 @@ async function submitOrder() {
     const orderData = {
       orderNumber: orderNumber.value,
       customer: {
+        uid: userStore.uid,
+        username: userStore.username,
+        email: userStore.email,
         name: customerName.value,
         address: customerAddress.value,
-        sensitiveInfo: sensitivePurchaseInfo.value // 3rd input field, change later
+        sensitiveInfo: sensitivePurchaseInfo.value
       },
       items: cart.items.map(item => ({
         id: item.id,
@@ -248,9 +265,9 @@ async function submitOrder() {
     // Clear cart
     cart.clearCart()
 
-    // Redirect til thank you page
+    // Redirect to thank you page
     router.push({
-      path: '/404',
+      path: '/thankyou',
       query: { orderNumber: orderNumber.value }
     })
 
