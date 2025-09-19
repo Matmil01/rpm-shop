@@ -4,9 +4,8 @@
       <h1 class="text-4xl font-bold mb-8">
         Thank You{{ orderData?.customer?.name ? `, ${orderData.customer.name}` : '' }}!
       </h1>
-
-      <div class="text-5xl mb-6">🎸</div>
-      <p class="text-xl mb-6">If this was a real webshop, now is when I'd be taking your money.</p>
+<br />
+      <p class="text-xl mb-6">If this was a real webshop, now is when I'd have your money.</p>
 
       <div class="mb-8 p-4 bg-gray-800/50 rounded inline-block">
         <div class="text-left">
@@ -73,7 +72,7 @@ const orderNumber = computed(() =>
   route.query.orderNumber || `RPM-${Math.floor(100000 + Math.random() * 900000)}`
 )
 
-const orderData = ref(null) // <-- Add this
+const orderData = ref(null)
 const orderItems = ref([])
 const orderTotal = ref(0)
 const isLoading = ref(true)
@@ -83,7 +82,7 @@ onMounted(async () => {
     try {
       const fetchedOrder = await fetchOrderByNumber(orderNumber.value)
       if (fetchedOrder) {
-        orderData.value = fetchedOrder // <-- Store the whole order
+        orderData.value = fetchedOrder
         orderItems.value = fetchedOrder.items || []
         orderTotal.value = fetchedOrder.totalAmount || 0
       }

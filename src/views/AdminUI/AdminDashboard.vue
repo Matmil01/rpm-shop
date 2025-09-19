@@ -14,6 +14,7 @@
               <th class="p-2">Total</th>
               <th class="p-2">Date</th>
               <th class="p-2">Status</th>
+              <th class="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -27,7 +28,44 @@
               </td>
               <td class="p-2">{{ order.totalAmount }} kr.</td>
               <td class="p-2">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
-              <td class="p-2">{{ order.status }}</td>
+              <td class="p-2">
+                <span
+                  class="px-2 py-1 rounded text-xs"
+                  :class="{
+                    'bg-yellow-600': order.status === 'new',
+                    'bg-blue-600': order.status === 'processing',
+                    'bg-green-600': order.status === 'shipped'
+                  }"
+                >
+                  {{ order.status }}
+                </span>
+              </td>
+              <td class="p-2">
+                <select
+                  @change="handleStatusChange(order.id, $event.target.value)"
+                  class="bg-gray-800 text-white rounded px-2 py-1 text-xs"
+                >
+                  <option
+                    value=""
+                    :selected="order.status === 'new'"
+                    disabled
+                  >
+                    Select action
+                  </option>
+                  <option
+                    value="processing"
+                    :selected="order.status === 'processing'"
+                  >
+                    Processing
+                  </option>
+                  <option
+                    value="shipped"
+                    :selected="order.status === 'shipped'"
+                  >
+                    Shipped
+                  </option>
+                </select>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -41,7 +79,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 
-const { listenToOrders } = useFirestoreCRUD()
+const { listenToOrders, updateOrder } = useFirestoreCRUD()
 const orders = ref([])
 let unsubscribe = null
 
@@ -54,4 +92,14 @@ onMounted(() => {
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
+
+async function handleStatusChange(orderId, newStatus) {
+  if (!newStatus) return // Don't update if empty value selected
+  try {
+    await updateOrder(orderId, { status: newStatus })
+    console.log(`Order ${orderId} status updated to ${newStatus}`)
+  } catch (error) {
+    console.error('Error updating order status:', error)
+  }
+}
 </script>

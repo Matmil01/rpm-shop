@@ -2,11 +2,8 @@
   <div class="max-w-3xl mx-auto p-8 text-MyWhite font-main">
     <h1 class="text-2xl font-bold mb-6">Checkout</h1>
 
-    <div v-if="!cart.items.length" class="text-center p-6">
+    <div v-if="!cart.items.length">
       <p>Your cart is empty.</p>
-      <router-link to="/shop" class="text-blue-400 underline mt-4 block">
-        Continue Shopping
-      </router-link>
     </div>
 
     <div v-else>
@@ -37,26 +34,7 @@
                 <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
               </span>
             </div>
-
-            <!-- Quantity Controls -->
-            <div class="flex items-center mt-2">
-              <button
-                @click="decrementQuantity(item)"
-                class="w-6 h-6 bg-gray-700 text-white rounded-l flex items-center justify-center hover:bg-gray-600 cursor-pointer"
-                :disabled="item.quantity <= 1"
-              >
-                -
-              </button>
-              <div class="px-2 py-1 bg-gray-800 text-center text-xs w-8">
-                {{ item.quantity }}
-              </div>
-              <button
-                @click="incrementQuantity(item)"
-                class="w-6 h-6 bg-gray-700 text-white rounded-r flex items-center justify-center hover:bg-gray-600 cursor-pointer"
-              >
-                +
-              </button>
-            </div>
+            <div class="text-xs mt-1">Qty: {{ item.quantity }}</div>
           </div>
 
           <!-- Remove Button -->
@@ -119,7 +97,7 @@
               :disabled="processing"
             >
               <span v-if="processing">Processing...</span>
-              <span v-else>Place Order</span>
+              <span v-else">Place Order</span>
             </button>
           </div>
         </form>
@@ -164,25 +142,6 @@ onMounted(async () => {
   }
 })
 
-// Quantity control functions
-function incrementQuantity(item) {
-  // Find the item in the cart and update its quantity
-  const cartItem = cart.items.find(i => i.id === item.id)
-  if (cartItem) {
-    cartItem.quantity += 1
-    cart.saveToLocalStorage()
-  }
-}
-
-function decrementQuantity(item) {
-  // Find the item in the cart and update its quantity
-  const cartItem = cart.items.find(i => i.id === item.id)
-  if (cartItem && cartItem.quantity > 1) {
-    cartItem.quantity -= 1
-    cart.saveToLocalStorage()
-  }
-}
-
 async function submitOrder() {
   if (processing.value) return
 
@@ -190,7 +149,6 @@ async function submitOrder() {
   submitError.value = ''
 
   try {
-    // Tjekker stock quantity
     const stockCheckResults = await Promise.all(
       cart.items.map(async (item) => {
         const record = await fetchRecord(item.id)
@@ -222,7 +180,6 @@ async function submitOrder() {
       return
     }
 
-    // Opretter ordre data/struktur som sendes til Firestore
     const orderData = {
       orderNumber: orderNumber.value,
       customer: {
@@ -248,10 +205,8 @@ async function submitOrder() {
       status: 'new'
     }
 
-    // Gemmer til Firestore
     await addOrder(orderData)
 
-    // Updatatere quantity i database
     await Promise.all(
       cart.items.map(async (item) => {
         const stockInfo = stockCheckResults.find(r => r.id === item.id)
@@ -262,10 +217,8 @@ async function submitOrder() {
       })
     )
 
-    // Clear cart
     cart.clearCart()
 
-    // Redirect to thank you page
     router.push({
       path: '/thankyou',
       query: { orderNumber: orderNumber.value }

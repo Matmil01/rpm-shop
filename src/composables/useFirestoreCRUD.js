@@ -106,6 +106,11 @@ export function useFirestoreCRUD() {
     await updateDoc(orderRef, { status: newStatus })
   }
 
+  async function updateOrder(orderId, updates) {
+    const orderRef = doc(db, 'orders', orderId)
+    await updateDoc(orderRef, updates)
+  }
+
   function listenToUsers(callback) {
     const usersRef = collection(db, 'users')
     return onSnapshot(usersRef, (snapshot) => {
@@ -131,6 +136,7 @@ export function useFirestoreCRUD() {
     fetchOrderByNumber,
     fetchAllOrders,
     listenToOrders,
+    updateOrder,
     updateOrderStatus,
     listenToUsers,
   }
