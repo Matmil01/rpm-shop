@@ -17,8 +17,8 @@
             <th class="p-2 border border-gray-500 min-w-[80px]">Stock</th>
             <th class="p-2 border border-gray-500 min-w-[80px]">Price</th>
             <th class="p-2 border border-gray-500 min-w-[100px]">Discount %</th>
-            <th class="p-2 border border-gray-500 min-w-[260px]">Tags</th>
-            <th class="p-2 border border-gray-500 min-w-[120px]">Actions</th>
+            <th class="p-2 border border-gray-500 min-w-[260px]">Category tags</th>
+            <th class="p-2 border border-gray-500 min-w-[60px]">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -58,16 +58,15 @@
                 <button @click="record.showTagSelector = false" class="mt-2 bg-blue-600 text-white px-2 py-1 rounded text-xs cursor-pointer">Done</button>
               </div>
             </td>
-            <td class="p-2 border border-gray-500 align-middle">
-              <div class="flex flex-col justify-between h-full gap-4">
-                <button
-                  :disabled="savingId === record.id"
-                  @click="confirmDelete(record.id)"
-                  class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 disabled:opacity-50 w-full font-main border border-gray-500 cursor-pointer"
-                >
-                  Delete
-                </button>
-              </div>
+            <td class="p-2 border border-gray-500 align-middle text-center">
+              <img
+                src="/Icons/trashIcon.svg"
+                alt="Delete"
+                class="w-6 h-6 cursor-pointer hover:brightness-75 transition-all inline-block"
+                :class="{ 'opacity-50 cursor-not-allowed': savingId === record.id }"
+                @click="savingId === record.id ? null : confirmDelete(record.id)"
+                title="Delete record"
+              />
             </td>
           </tr>
         </tbody>
@@ -120,10 +119,8 @@ const tagsList = [
 
 onMounted(() => {
   listenToRecords()
-  // Add showTagSelector property to each record for inline tag editing
   records.value.forEach(r => {
     r.showTagSelector = false
-    // Also make sure Special Offers tag is applied initially
     applySpecialOffersTag(r)
   })
 })
@@ -131,7 +128,6 @@ onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
 })
 
-// Optional: Add watcher to apply tag changes in real-time when discount changes
 watch(() => records.value, (newRecords) => {
   if (!newRecords) return
   newRecords.forEach(record => {
@@ -146,7 +142,6 @@ async function saveAllChanges() {
   saving.value = true
   try {
     for (const record of filteredRecords.value) {
-      // Autofill stock and price if zero or empty
       if (!record.stock || record.stock === 0) {
         record.stock = randomStock()
       }
@@ -154,7 +149,6 @@ async function saveAllChanges() {
         record.price = randomPrice()
       }
 
-      // Apply Special Offers tag based on discount
       applySpecialOffersTag(record)
 
       await crudUpdateRecord(record.id, {

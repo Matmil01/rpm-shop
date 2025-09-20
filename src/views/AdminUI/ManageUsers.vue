@@ -22,11 +22,11 @@
             <button
               v-if="user.uid !== currentAdminUid"
               @click="deleteUser(user.uid)"
-              class="bg-red-700 text-white px-3 py-1 rounded hover:bg-red-900 transition font-main"
+              class="bg-red-700 text-white px-3 py-1 rounded hover:bg-red-900 transition font-main cursor-pointer"
               :disabled="deleting === user.uid"
             >
               <span v-if="deleting === user.uid">Deleting...</span>
-              <span v-else>Delete</span>
+              <span v-else>Ban</span>
             </button>
           </td>
         </tr>

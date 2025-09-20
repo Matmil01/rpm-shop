@@ -1,17 +1,12 @@
 <template>
-  <div class="max-w-lg mx-auto mt-10 bg-black/80 rounded shadow-lg p-8 font-main">
+  <div class="max-w-lg mx-auto mt-10 bg-MyBlack/80 rounded shadow-lg p-8 font-main">
     <h2 class="text-2xl font-bold mb-6 text-MyWhite">Edit Profile</h2>
     <div class="flex flex-col items-center mb-6">
-      <svg
-        class="w-24 h-24 rounded-full bg-gray-700 text-gray-300 border-2 border-gray-600 p-4 mb-2"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M5.121 17.804A9.001 9.001 0 0112 15c2.21 0 4.21.805 5.879 2.146M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      <!-- Profile picture upload removed for now -->
+      <img
+        src="/Icons/userDefault.svg"
+        alt="Profile Picture"
+        class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 mb-2"
+      />
     </div>
     <div class="text-center text-MyWhite">
       <div class="mb-2"><strong>Username:</strong> {{ userStore.username }}</div>
@@ -27,8 +22,8 @@
       <button @click="saveProfile" class="bg-MyRed text-white px-4 py-2 rounded cursor-pointer font-main">
         Save Profile
       </button>
-      <div v-if="success" class="text-green-400 mt-2 font-main">{{ success }}</div>
-      <div v-if="error" class="text-red-500 mt-2 font-main">{{ error }}</div>
+      <div v-if="success" class="text-MyGreen mt-2 font-main">{{ success }}</div>
+      <div v-if="error" class="text-MyRed mt-2 font-main">{{ error }}</div>
     </div>
   </div>
 </template>

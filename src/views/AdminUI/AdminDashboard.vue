@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-[300px] font-main text-MyWhite">
     <h2 class="text-3xl font-bold mb-4 pt-10">Hello, Admin</h2>
-    <p class="mb-6 text-lg text-gray-300">Use this interface to add new records, manage the storefront, and steal people's money. Hail Satan.</p>
+    <p class="mb-6 text-lg text-MyWhite">Use this interface to add new records, manage the storefront, and steal people's money. Hail Satan.</p>
 
     <div class="w-full max-w-4xl mt-12">
       <h3 class="text-2xl font-bold mb-4">Recent Orders</h3>
@@ -34,7 +34,8 @@
                   :class="{
                     'bg-yellow-600': order.status === 'new',
                     'bg-blue-600': order.status === 'processing',
-                    'bg-green-600': order.status === 'shipped'
+                    'bg-green-600': order.status === 'shipped',
+                    'bg-red-600': order.status === 'cancelled'
                   }"
                 >
                   {{ order.status }}
@@ -43,7 +44,7 @@
               <td class="p-2">
                 <select
                   @change="handleStatusChange(order.id, $event.target.value)"
-                  class="bg-gray-800 text-white rounded px-2 py-1 text-xs"
+                  class="bg-gray-800 text-MyWhite rounded px-2 py-1 text-xs cursor-pointer"
                 >
                   <option
                     value=""
@@ -63,6 +64,12 @@
                     :selected="order.status === 'shipped'"
                   >
                     Shipped
+                  </option>
+                  <option
+                    value="cancelled"
+                    :selected="order.status === 'cancelled'"
+                  >
+                    Cancelled
                   </option>
                 </select>
               </td>

@@ -5,7 +5,7 @@
       class="block"
     >
       <div class="relative group">
-        <!-- Spinning vinyl PNG (slides right and spins on hover) -->
+
         <img
           src="/vinyl_PNG18.png"
           alt=""
@@ -13,7 +13,7 @@
             group-hover:translate-x-6 group-hover:animate-spin"
           style="object-fit: contain;"
         />
-        <!-- Album cover image (slides left on hover) -->
+
         <img
           :src="props.coverImage"
           alt="Album Cover"
@@ -29,7 +29,7 @@
     </div>
     <router-link
       :to="`/shop?search=${encodeURIComponent(props.artist)}`"
-      class="text-MyWhite underline text-left inline mb-2"
+      class="text-MyWhite underline text-left inline mb-2 hover:opacity-70 transition-opacity"
     >
       {{ props.artist }}
     </router-link>
@@ -43,7 +43,7 @@
         price: props.price,
         discount: props.discount
       }" />
-      <div v-else class="px-6 py-3 bg-gray-500 text-white rounded opacity-75 cursor-not-allowed">
+      <div v-else class="px-6 py-3 bg-MyDark text-MyWhite rounded opacity-75 cursor-not-allowed">
         Out of Stock
       </div>
     </div>

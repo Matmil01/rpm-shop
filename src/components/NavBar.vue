@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-black text-MyWhite font-main border-b-4 border-gray-600">
+  <nav class="bg-MyBlack text-MyWhite font-main border-b-1 border-MyDark">
     <div class="container mx-auto px-4 flex justify-between items-center py-4">
       <!-- Left: Logo / Home -->
       <router-link to="/" class="flex items-center group">
@@ -20,7 +20,7 @@
         <div class="relative group">
           <router-link
             to="/shop"
-            class="hover:text-red-500 font-medium cursor-pointer flex items-center"
+            class="hover:opacity-70 font-medium cursor-pointer flex items-center transition-opacity"
           >
             Artists
           </router-link>
@@ -29,31 +29,31 @@
           >
             <ul class="py-2 text-MyWhite">
               <li>
-                <router-link to="/shop?search=Black Sabbath" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Black Sabbath</router-link>
+                <router-link to="/shop?search=Black Sabbath" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Black Sabbath</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Ozzy Osbourne" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Ozzy Osbourne</router-link>
+                <router-link to="/shop?search=Ozzy Osbourne" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Ozzy Osbourne</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Lorna Shore" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Lorna Shore</router-link>
+                <router-link to="/shop?search=Lorna Shore" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Lorna Shore</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Marilyn Manson" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Marilyn Manson</router-link>
+                <router-link to="/shop?search=Marilyn Manson" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Marilyn Manson</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Nine Inch Nails" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Nine Inch Nails</router-link>
+                <router-link to="/shop?search=Nine Inch Nails" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Nine Inch Nails</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Insomnium" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Insomnium</router-link>
+                <router-link to="/shop?search=Insomnium" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Insomnium</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Rammstein" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Rammstein</router-link>
+                <router-link to="/shop?search=Rammstein" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Rammstein</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Slaughter to Prevail" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Slaughter to Prevail</router-link>
+                <router-link to="/shop?search=Slaughter to Prevail" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Slaughter to Prevail</router-link>
               </li>
               <li>
-                <router-link to="/shop?search=Tim Skold" class="block px-4 py-2 font-main cursor-pointer hover:text-red-500">Tim Skold</router-link>
+                <router-link to="/shop?search=Tim Skold" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Tim Skold</router-link>
               </li>
             </ul>
           </div>
@@ -61,7 +61,7 @@
 
         <!-- Categories Dropdown -->
         <div class="relative group">
-          <span class="hover:text-red-500 font-medium cursor-pointer flex items-center">
+          <span class="hover:opacity-70 font-medium cursor-pointer flex items-center transition-opacity">
             Categories
           </span>
           <div
@@ -71,7 +71,7 @@
               <li v-for="category in categories" :key="category">
                 <router-link
                   :to="`/shop?tag=${encodeURIComponent(category)}`"
-                  class="block px-4 py-2 font-main cursor-pointer hover:text-red-500"
+                  class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity"
                 >
                   {{ category }}
                 </router-link>
@@ -80,7 +80,7 @@
           </div>
         </div>
 
-        <router-link to="/contact" class="hover:text-red-500 font-medium cursor-pointer">
+        <router-link to="/contact" class="hover:opacity-70 font-medium cursor-pointer transition-opacity">
           Contact
         </router-link>
 
@@ -90,7 +90,7 @@
             v-model="searchInput"
             type="text"
             placeholder="Search by artist or album..."
-            class="border border-gray-600 rounded px-3 py-2 text-MyWhite bg-black font-main w-64"
+            class="border border-MyDark rounded px-3 py-2 text-MyWhite bg-MyBlack font-main w-64"
           />
         </form>
       </div>
@@ -98,42 +98,48 @@
       <!-- Right: Icons -->
       <div class="space-x-4 flex items-center">
         <div class="relative group">
-          <router-link to="/user/cart" class="hover:text-red-500 text-2xl">🛒</router-link>
+          <router-link to="/user/cart" class="hover:opacity-70 flex items-center transition-opacity">
+            <img
+              src="/Icons/cartIcon.svg"
+              alt="Cart"
+              class="w-6 h-6"
+            />
+          </router-link>
           <span
             v-if="cart.items.length"
-            class="absolute -top-2 -right-3 bg-red-600 text-white rounded-full px-2 text-xs font-bold transition-all"
+            class="absolute -top-2 -right-3 bg-MyRed text-MyWhite rounded-full px-2 text-xs font-bold transition-all"
           >
             {{ cart.items.length }}
           </span>
           <!-- Dropdown -->
           <div
             v-if="cart.items.length"
-            class="absolute right-0 mt-2 w-72 bg-black/95 rounded shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+            class="absolute right-0 mt-2 w-72 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
           >
             <div class="p-4">
               <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative">
                 <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
                 <div class="flex-1">
                   <div class="font-bold text-sm">{{ item.album }}</div>
-                  <div class="text-xs text-gray-300">{{ item.artist }}</div>
-                  <div class="text-xs text-gray-400">x{{ item.quantity }}</div>
+                  <div class="text-xs text-MyWhite">{{ item.artist }}</div>
+                  <div class="text-xs text-MyWhite">x{{ item.quantity }}</div>
                 </div>
                 <button
                   @click.stop="cart.removeFromCart(item.id)"
-                  class="text-red-500 hover:text-red-700 p-1 absolute top-0 right-0 cursor-pointer"
+                  class="text-MyRed p-1 absolute top-0 right-0 cursor-pointer"
                   title="Remove from cart"
                 >
-                  ✕
+                  x
                 </button>
               </div>
-              <div v-if="cart.items.length > 3" class="text-xs text-gray-400 mb-2">
+              <div v-if="cart.items.length > 3" class="text-xs text-MyWhite mb-2">
                 +{{ cart.items.length - 3 }} more...
               </div>
               <div class="flex justify-between items-center font-bold text-sm mb-2">
                 <span>{{ cart.items.length }} items</span>
                 <span>Total: {{ calculateTotalPrice(cart.items) }} kr.</span>
               </div>
-              <router-link to="/user/cart" class="block mt-2 text-center bg-MyRed text-white rounded px-4 py-2 hover:bg-red-700 transition">
+              <router-link to="/user/cart" class="block mt-2 text-center bg-MyDark text-MyWhite rounded px-4 py-2 hover:bg-gray-700 transition">
                 Go to Cart
               </router-link>
             </div>
@@ -152,16 +158,12 @@
                 alt="Profile"
                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-80"
               />
-              <svg
+              <img
                 v-else
-                class="w-10 h-10 rounded-full bg-gray-700 text-gray-300 border-2 border-gray-600 p-2 cursor-pointer transition-opacity hover:opacity-80"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5.121 17.804A9.001 9.001 0 0112 15c2.21 0 4.21.805 5.879 2.146M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
+                src="/Icons/userDefault.svg"
+                alt="Profile"
+                class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-80"
+              />
             </router-link>
             <template v-else>
               <img
@@ -170,16 +172,12 @@
                 alt="Profile"
                 class="w-10 h-10 rounded-full object-cover border-2 border-gray-600 cursor-default transition-opacity"
               />
-              <svg
+              <img
                 v-else
-                class="w-10 h-10 rounded-full bg-gray-700 text-gray-300 border-2 border-gray-600 p-2 cursor-default transition-opacity"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5.121 17.804A9.001 9.001 0 0112 15c2.21 0 4.21.805 5.879 2.146M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
+                src="/Icons/userDefault.svg"
+                alt="Profile"
+                class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-default transition-opacity"
+              />
             </template>
             <!-- Dropdown for profile, wishlist, and logout -->
             <div class="absolute right-0 mt-2 w-40 bg-black/95 rounded shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
@@ -205,7 +203,7 @@
           </div>
         </div>
         <div v-else>
-          <router-link to="/login" class="hover:text-red-500">Login</router-link>
+          <router-link to="/login" class="hover:text-MyRed">Login</router-link>
         </div>
       </div>
     </div>
@@ -253,7 +251,7 @@ let spinning = false
 let frameId = null
 let lastTimestamp = null
 
-const SPIN_SPEED = 180 // degrees per second
+const SPIN_SPEED = 180
 
 function spinStep(timestamp) {
   if (!lastTimestamp) lastTimestamp = timestamp

@@ -6,7 +6,9 @@
 @theme {
 --color-MyBlack: #000000;
 --color-MyWhite: #FFFFFF;
---color-MyRed: #991E1F;
+--color-MyDark: #4B5563;
+--color-MyRed: #dc2626;
+--color-MyGreen: #16a34a;
 
 --font-logo: 'Ribeye', cursive;
 --font-headline: 'Revalia', cursive;

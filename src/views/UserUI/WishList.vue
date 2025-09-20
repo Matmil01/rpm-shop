@@ -84,7 +84,6 @@ onMounted(() => {
   tryLoadWishlist()
 })
 
-// Watch for uid changes (e.g. after login or refresh)
 watch(
   () => userStore.uid,
   async (newUid) => {

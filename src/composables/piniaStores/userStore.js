@@ -6,7 +6,7 @@ export const useUserStore = defineStore('user', {
     username: null,
     email: null,
     role: null,
-    profilePic: null, // <-- Add this
+    profilePic: null,
     loggedIn: false,
   }),
   actions: {

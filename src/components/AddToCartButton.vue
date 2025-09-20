@@ -3,17 +3,20 @@
     type="button"
     @click="handleAdd"
     :disabled="loading"
-    class="flex items-center gap-2 px-3 py-2 rounded border border-white/40 bg-black/30 backdrop-blur-sm cursor-pointer relative transition-opacity duration-150 hover:opacity-80"
+    class="flex items-center gap-2 px-3 py-2 rounded border border-MyDark bg-MyBlack/30 backdrop-blur-sm cursor-pointer relative transition-opacity duration-150 hover:opacity-80"
   >
     <span v-if="item.discount && item.discount > 0">
       <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
-      <span class="text-red-600 font-bold">{{ discountedPrice }} kr.</span>
+      <span class="text-MyRed font-bold">{{ discountedPrice }} kr.</span>
     </span>
     <span v-else>
-      <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
+      <span class="text-MyWhite font-bold">{{ item.price }} kr.</span>
     </span>
-    <span class="text-MyWhite text-xl">🛒</span>
-    <span v-if="showAdded" class="absolute right-2 top-2 text-green-400 text-xs font-bold animate-pulse">✓</span>
+    <img
+      src="/Icons/cartIcon.svg"
+      alt="Add to Cart"
+      class="w-5 h-5 opacity-60"
+    />
   </button>
 </template>
 
@@ -30,22 +33,13 @@ const props = defineProps({
 })
 
 const cart = useCartStore()
-const loading = ref(false)
-const showAdded = ref(false)
 
-// Use the composable for price calculation
 const { calculateDiscountedPrice } = usePriceCalculator()
 const discountedPrice = computed(() =>
   calculateDiscountedPrice(props.item.price, props.item.discount)
 )
 
 function handleAdd() {
-  loading.value = true
   cart.addToCart(props.item)
-  showAdded.value = true
-  setTimeout(() => {
-    showAdded.value = false
-    loading.value = false
-  }, 1000)
 }
 </script>

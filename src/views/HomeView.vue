@@ -4,7 +4,7 @@
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-4xl font-headline">{{ category }}</h2>
-        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="hover:text-red-500">
+        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="hover:opacity-70 transition-opacity">
           See all
         </router-link>
       </div>

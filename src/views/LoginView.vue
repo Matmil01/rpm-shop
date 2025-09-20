@@ -14,7 +14,7 @@
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
         </svg>
       </button>
-      <div v-if="error" class="text-red-500 mt-2 font-main">{{ error }}</div>
+      <div v-if="error" class="text-MyRed mt-2 font-main">{{ error }}</div>
       <div v-if="success" class="text-green-400 mt-2 font-main">{{ success }}</div>
     </form>
   </div>
