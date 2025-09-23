@@ -13,7 +13,7 @@
             alt="Cover"
             class="w-20 h-20 object-cover rounded shadow"
         />
-        <div v-else class="w-20 h-20 flex items-center justify-center bg-gray-700 text-xs rounded">
+        <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
           No Image
         </div>
         <div class="flex-1">
@@ -33,7 +33,7 @@
           <div class="flex items-center mt-2">
             <button
               @click="decrementQuantity(item)"
-              class="w-6 h-6 bg-gray-700 text-white rounded-l flex items-center justify-center hover:bg-gray-600 cursor-pointer"
+              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-l flex items-center justify-center hover:bg-gray-600 cursor-pointer"
               :disabled="item.quantity <= 1"
             >
               -
@@ -63,7 +63,7 @@
       <div class="mt-6 font-bold text-lg">
         Total: {{ totalPrice }} kr.
       </div>
-      <button @click="checkout" class="mt-6 px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-900 cursor-pointer">
+      <button @click="checkout" class="mt-6 px-6 py-2 bg-gray-700 text-MyWhite rounded hover:bg-gray-900 cursor-pointer">
         Checkout
       </button>
     </div>

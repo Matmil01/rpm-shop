@@ -22,7 +22,6 @@ export function useReleaseMapper() {
     genre = release.genre ? release.genre.join(', ') : ''
     rpm = ''
 
-    // Fetch full release details for tracklist, number of records, and RPM
     const details = await fetchReleaseDetails(release.id)
     if (details) {
       tracklist = details.tracklist || []

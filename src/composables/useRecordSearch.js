@@ -3,7 +3,6 @@ import { computed } from 'vue'
 export function useRecordSearch(records, options = {}) {
   const { tagRef, searchRef, fields = ['artist', 'album', 'genre'], sortBy = 'artist', sortDirection = 'asc' } = options
 
-  // Filter by tag and/or search
   const filteredRecords = computed(() => {
     let base = records.value
 
@@ -24,7 +23,6 @@ export function useRecordSearch(records, options = {}) {
       )
     }
 
-    // Alphabetical sorting by artist
     base = [...base].sort((a, b) => {
       const aVal = (a.artist || '').toLowerCase()
       const bVal = (b.artist || '').toLowerCase()
@@ -36,7 +34,6 @@ export function useRecordSearch(records, options = {}) {
     return base
   })
 
-  // Helper for category filtering (for HomeView)
   function recordsByCategory(category) {
     let filtered = []
     if (category === 'Special Offers') {
@@ -44,7 +41,6 @@ export function useRecordSearch(records, options = {}) {
     } else {
       filtered = records.value.filter(r => r.tags && r.tags.includes(category))
     }
-    // Sort alphabetically by artist
     filtered = [...filtered].sort((a, b) => {
       const aVal = (a.artist || '').toLowerCase()
       const bVal = (b.artist || '').toLowerCase()

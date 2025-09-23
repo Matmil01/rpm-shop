@@ -1,7 +1,7 @@
 <template>
-  <div class="rounded p-4 w-full mx-auto bg-[url('/Texturelabs_InkPaint_368XL.jpg')] bg-cover bg-center font-main text-MyWhite">
+  <div class="rounded p-4 w-full mx-auto bg-gradient-to-b from-MyDark to-gray-800 font-main text-MyWhite">
     <router-link
-      :to="`/product/${props.id}`"
+      :to="`/record/${props.id}`"
       class="block"
     >
       <div class="relative group">
@@ -9,6 +9,7 @@
         <img
           src="/vinyl_PNG18.png"
           alt=""
+          loading="lazy"
           class="absolute inset-0 w-full h-full z-0 opacity-80 transition-all duration-300
             group-hover:translate-x-6 group-hover:animate-spin"
           style="object-fit: contain;"
@@ -17,6 +18,7 @@
         <img
           :src="props.coverImage"
           alt="Album Cover"
+          loading="lazy"
           class="w-full aspect-square object-cover mb-2 rounded relative z-10 transition-all duration-300
             group-hover:-translate-x-6"
         />

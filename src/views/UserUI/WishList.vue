@@ -1,15 +1,15 @@
 <template>
   <div class="container mx-auto px-4 max-w-5xl p-8 text-MyWhite font-main">
     <h1 class="text-3xl font-bold mb-8 text-center">Your Wishlist</h1>
-    <div v-if="loading" class="text-center text-lg text-gray-400">Loading wishlist...</div>
+    <div v-if="loading" class="text-center text-lg text-MyWhite">Loading wishlist...</div>
     <div v-else-if="wishlist.items.length">
       <div
         v-for="item in wishlist.items"
         :key="item.id"
-        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded bg-black/40 gap-6 shadow"
+        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded bg-MyBlack/40 gap-6 shadow"
       >
         <router-link
-          :to="`/shop/${item.id}`"
+          :to="`/record/${item.id}`"
           class="w-32 h-32 block"
         >
           <img
@@ -18,22 +18,24 @@
             alt="Cover"
             class="w-32 h-32 object-cover rounded shadow hover:opacity-80 transition"
           />
-          <div v-else class="w-32 h-32 flex items-center justify-center bg-gray-700 text-xs rounded">
+          <div v-else class="w-32 h-32 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
         </router-link>
         <div class="flex-1 flex flex-col md:ml-6">
-          <router-link
-            :to="`/shop/${item.id}`"
-            class="font-bold text-xl mb-1 truncate hover:text-red-500 transition"
-          >
+          <div class="font-bold text-xl mb-1 truncate">
             {{ item.album }}
+          </div>
+          <router-link
+            :to="`/shop?search=${encodeURIComponent(item.artist)}`"
+            class="text-MyWhite underline text-base mb-2 truncate hover:opacity-70 transition-opacity"
+          >
+            {{ item.artist }}
           </router-link>
-          <div class="text-base mb-2 truncate">{{ item.artist }}</div>
           <div class="text-base mb-2">
             <span v-if="item.discount && item.discount > 0">
               <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
-              <span class="text-red-600 font-bold">{{ calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
+              <span class="text-MyRed font-bold">{{ calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
             </span>
             <span v-else>
               <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>

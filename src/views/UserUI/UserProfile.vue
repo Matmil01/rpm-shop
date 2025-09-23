@@ -19,7 +19,7 @@
       <label class="block mb-1 text-MyWhite">Address</label>
       <input v-model="address" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 mb-4" />
 
-      <button @click="saveProfile" class="bg-MyRed text-white px-4 py-2 rounded cursor-pointer font-main">
+      <button @click="saveProfile" class="bg-gray-700 text-MyWhite rounded hover:bg-gray-900 px-4 py-2 cursor-pointer font-main">
         Save Profile
       </button>
       <div v-if="success" class="text-MyGreen mt-2 font-main">{{ success }}</div>
@@ -58,7 +58,7 @@ async function saveProfile() {
     })
     success.value = 'Profile updated!'
     error.value = ''
-  } catch (e) {
+  } catch (error) {
     error.value = 'Failed to save profile.'
     success.value = ''
   }

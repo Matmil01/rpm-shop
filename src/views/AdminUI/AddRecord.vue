@@ -7,15 +7,15 @@
         v-model="searchQuery"
         type="text"
         class="flex-1 border border-gray-500 bg-MyBlack rounded px-3 py-2 font-main text-MyWhite placeholder-gray-400"
-        placeholder="Search Discogs for album..."
+        placeholder="Search Discogs..."
       />
-      <button type="submit" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 font-main border border-white cursor-pointer">
+      <button type="submit" class="bg-MyBlack text-MyWhite px-4 py-2 rounded hover:bg-gray-800 font-main border border-MyWhite cursor-pointer">
         Search
       </button>
     </form>
     <!-- Results List -->
     <div v-if="loading" class="mb-4 text-gray-500">Searching...</div>
-    <div v-if="error" class="mb-4 text-red-500">{{ error }}</div>
+    <div v-if="error" class="mb-4 text-MyRed">{{ error }}</div>
     <div v-if="results.length" class="mb-6 space-y-2">
       <div
         v-for="release in results"
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <!-- Storefront-Specific Section -->
+    <!-- Storefront Section -->
     <div>
       <h2 class="text-xl font-semibold mb-4">Storefront Settings</h2>
       <form @submit.prevent="onSubmit">
@@ -114,7 +114,6 @@
               <input type="checkbox" value="Soundtracks" v-model="tags" class="cursor-pointer" />
               Soundtracks
             </label>
-            <!-- Add your new tags below -->
             <label class="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" value="Doom & Gloom" v-model="tags" class="cursor-pointer" />
               Doom & Gloom
@@ -133,7 +132,7 @@
             </label>
           </div>
         </div>
-        <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 font-main border border-white cursor-pointer">
+        <button type="submit" class="bg-MyBlack text-MyWhite px-6 py-2 rounded hover:bg-gray-800 font-main border border-MyWhite cursor-pointer">
           Add to Firestore
         </button>
       </form>
@@ -214,8 +213,8 @@ async function onSubmit() {
   try {
     await addRecord(record)
     alert('Added to Firestore!')
-  } catch (e) {
-    alert('Error adding record: ' + e.message)
+  } catch (error) {
+    alert('Error adding record: ' + error.message)
   }
 }
 </script>

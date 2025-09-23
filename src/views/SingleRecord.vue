@@ -17,7 +17,7 @@
           </div>
           <router-link
             :to="`/shop?search=${encodeURIComponent(record.artist)}`"
-            class="text-MyWhite underline hover:text-red-500 text-left block mb-2"
+            class="text-MyWhite underline hover:opacity-70 transition text-left block mb-2"
           >
             {{ record.artist }}
           </router-link>
@@ -36,13 +36,13 @@
             <button
               v-if="record.id"
               @click="addToWishlist"
-              class="px-6 py-3 bg-gray-700 text-white rounded hover:bg-gray-900 transition font-main ml-2"
+              class="px-6 py-3 bg-gray-700 text-MyWhite rounded hover:bg-gray-900 transition font-main ml-2 cursor-pointer"
               :disabled="wishlistHasRecord"
             >
               <span v-if="wishlistHasRecord">In Wishlist</span>
               <span v-else>Add to Wishlist</span>
             </button>
-            <div v-else class="px-6 py-3 bg-gray-500 text-white rounded opacity-75 cursor-not-allowed">
+            <div v-else class="px-6 py-3 bg-gray-500 text-MyWhite rounded opacity-75 cursor-not-allowed">
               Out of Stock
             </div>
           </div>
@@ -58,7 +58,7 @@
                   <span v-for="(genre, idx) in record.genre.split(',').map(s => s.trim())" :key="genre">
                     <router-link
                       :to="`/shop?search=${encodeURIComponent(genre)}`"
-                      class="underline hover:text-red-500"
+                      class="underline hover:opacity-70 transition"
                     >
                       {{ genre }}
                     </router-link>
@@ -95,7 +95,7 @@
               </li>
             </ol>
           </div>
-          <router-link to="/shop" class="text-MyWhite underline hover:text-red-500">← Back to Shop</router-link>
+          <router-link to="/shop" class="text-MyWhite underline hover:opacity-70 transition">← Back to Shop</router-link>
         </div>
       </div>
     </div>

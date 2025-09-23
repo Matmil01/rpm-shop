@@ -5,30 +5,30 @@
 
     <div class="w-full max-w-4xl mt-12">
       <h3 class="text-2xl font-bold mb-4">Recent Orders</h3>
-      <div v-if="orders.length">
-        <table class="w-full text-left bg-black/40 rounded">
+      <div v-if="orders.length" class="rounded overflow-hidden">
+        <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
           <thead>
-            <tr>
-              <th class="p-2">Order #</th>
-              <th class="p-2">Customer</th>
-              <th class="p-2">Total</th>
-              <th class="p-2">Date</th>
-              <th class="p-2">Status</th>
-              <th class="p-2">Actions</th>
+            <tr class="bg-gray-900 text-left text-MyWhite font-main">
+              <th class="p-2 border border-MyDark">Order #</th>
+              <th class="p-2 border border-MyDark">Customer</th>
+              <th class="p-2 border border-MyDark">Total</th>
+              <th class="p-2 border border-MyDark">Date</th>
+              <th class="p-2 border border-MyDark">Status</th>
+              <th class="p-2 border border-MyDark">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="order in orders" :key="order.id">
-              <td class="p-2">{{ order.orderNumber }}</td>
-              <td class="p-2">
+            <tr v-for="order in orders" :key="order.id" class="border-t border-MyDark">
+              <td class="p-2 border border-MyDark">{{ order.orderNumber }}</td>
+              <td class="p-2 border border-MyDark">
                 {{ order.customer?.name }}
                 <span v-if="order.customer?.username" class="text-xs text-gray-400">
                   ({{ order.customer.username }})
                 </span>
               </td>
-              <td class="p-2">{{ order.totalAmount }} kr.</td>
-              <td class="p-2">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
-              <td class="p-2">
+              <td class="p-2 border border-MyDark">{{ order.totalAmount }} kr.</td>
+              <td class="p-2 border border-MyDark">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
+              <td class="p-2 border border-MyDark">
                 <span
                   class="px-2 py-1 rounded text-xs"
                   :class="{
@@ -41,7 +41,7 @@
                   {{ order.status }}
                 </span>
               </td>
-              <td class="p-2">
+              <td class="p-2 border border-MyDark">
                 <select
                   @change="handleStatusChange(order.id, $event.target.value)"
                   class="bg-gray-800 text-MyWhite rounded px-2 py-1 text-xs cursor-pointer"
@@ -77,7 +77,7 @@
           </tbody>
         </table>
       </div>
-      <div v-else class="text-gray-400">No orders yet.</div>
+      <div v-else class="text-MyWhite">No orders yet.</div>
     </div>
   </div>
 </template>
@@ -101,7 +101,7 @@ onUnmounted(() => {
 })
 
 async function handleStatusChange(orderId, newStatus) {
-  if (!newStatus) return // Don't update if empty value selected
+  if (!newStatus) return
   try {
     await updateOrder(orderId, { status: newStatus })
     console.log(`Order ${orderId} status updated to ${newStatus}`)

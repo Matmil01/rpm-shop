@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto p-8 text-center text-MyWhite font-main">
-    <div class="mb-8 p-8 bg-black/40 rounded">
+    <div class="mb-8 p-8 bg-MyBlack/40 rounded">
       <h1 class="text-4xl font-bold mb-8">
         Thank You{{ orderData?.customer?.name ? `, ${orderData.customer.name}` : '' }}!
       </h1>
@@ -21,14 +21,14 @@
 
       <div v-if="orderItems.length" class="mb-8 text-left">
         <h2 class="font-bold mb-4 text-xl">Order Summary</h2>
-        <div v-for="item in orderItems" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-black/40 gap-4">
+        <div v-for="item in orderItems" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack/40 gap-4">
           <img
             v-if="item.coverImage"
             :src="item.coverImage"
             alt="Cover"
             class="w-20 h-20 object-cover rounded shadow"
           />
-          <div v-else class="w-20 h-20 flex items-center justify-center bg-gray-700 text-xs rounded">
+          <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
           <div class="flex-1">
@@ -52,7 +52,7 @@
       </div>
 
       <div class="mt-8">
-        <router-link to="/" class="px-6 py-3 bg-gray-700 text-white rounded hover:bg-gray-900 inline-block">
+        <router-link to="/" class="px-6 py-3 bg-gray-700 text-MyWhite rounded hover:bg-gray-900 inline-block">
           Continue Shopping
         </router-link>
       </div>

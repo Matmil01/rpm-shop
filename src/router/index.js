@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import FullShop from "../views/FullShop.vue"
-import SingleProduct from "../views/SingleRecord.vue"
+import SingleRecord from "../views/SingleRecord.vue"
 import AdminView from "@/views/AdminUI/AdminView.vue"
 import ContactView from "@/views/ContactView.vue"
 import { auth, db } from '@/firebase'
@@ -12,7 +12,7 @@ const routes = [
   { path: "/", name: "home", component: HomeView },
   { path: "/shop", name: "shop", component: FullShop },
   { path: "/contact", name: "contact", component: ContactView },
-  { path: "/product/:id", name: "product", component: SingleProduct, props: true },
+  { path: "/record/:id", name: "record", component: SingleRecord, props: true },
   {
     path: "/admin",
     component: AdminView,
@@ -24,12 +24,12 @@ const routes = [
       },
       {
         path: "add",
-        name: "AddProduct",
+        name: "AddRecord",
         component: () => import("@/views/AdminUI/AddRecord.vue")
       },
       {
         path: "manage",
-        name: "ManageProducts",
+        name: "ManageRecords",
         component: () => import("@/views/AdminUI/ManageRecords.vue")
       },
       {

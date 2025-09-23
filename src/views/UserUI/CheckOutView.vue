@@ -7,9 +7,9 @@
     </div>
 
     <div v-else>
-      <div class="mb-6 p-4 rounded bg-black/40">
+      <div class="mb-6 p-4 rounded bg-MyBlack/40">
         <h2 class="font-bold mb-2">Order Summary</h2>
-        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-black/40 gap-4">
+        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack/40 gap-4">
           <!-- Image -->
           <img
             v-if="item.coverImage"
@@ -17,7 +17,7 @@
             alt="Cover"
             class="w-20 h-20 object-cover rounded shadow"
           />
-          <div v-else class="w-20 h-20 flex items-center justify-center bg-gray-700 text-xs rounded">
+          <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
 
@@ -28,7 +28,7 @@
             <div class="text-sm">
               <span v-if="item.discount && item.discount > 0">
                 <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
-                <span class="text-red-600 font-bold">{{ priceCalculator.calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
+                <span class="text-MyRed font-bold">{{ priceCalculator.calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
               </span>
               <span v-else>
                 <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
@@ -56,7 +56,7 @@
       <!-- Customer input fields -->
       <div v-if="!orderSubmitted">
         <h2 class="font-bold mb-4">Customer Information</h2>
-        <div v-if="submitError" class="bg-red-800 p-3 rounded mb-4 text-white">
+        <div v-if="submitError" class="bg-MyRed p-3 rounded mb-4 text-MyWhite">
           {{ submitError }}
         </div>
 
@@ -67,26 +67,17 @@
               type="text"
               v-model="customerName"
               required
-              class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700"
+              class="w-full p-2 rounded bg-gray-800 text-MyWhite border border-gray-700"
             />
           </div>
 
           <div>
             <label class="block mb-1">Address</label>
-            <input
-              type="text"
+            <textarea
               v-model="customerAddress"
               required
-              class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700"
-            />
-          </div>
-
-          <div>
-            <label class="block mb-1">More of your super sensitive information</label>
-            <input
-              type="text"
-              v-model="sensitivePurchaseInfo"
-              class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700"
+              rows="3"
+              class="w-full p-2 rounded bg-gray-800 text-MyWhite border border-gray-700 resize-none"
             />
           </div>
 
@@ -124,7 +115,6 @@ const userStore = useUserStore()
 
 const customerName = ref('')
 const customerAddress = ref('')
-const sensitivePurchaseInfo = ref('')
 const orderNumber = ref(`RPM-${Math.floor(100000 + Math.random() * 900000)}`)
 const processing = ref(false)
 const submitError = ref('')
@@ -187,8 +177,7 @@ async function submitOrder() {
         username: userStore.username,
         email: userStore.email,
         name: customerName.value,
-        address: customerAddress.value,
-        sensitiveInfo: sensitivePurchaseInfo.value
+        address: customerAddress.value
       },
       items: cart.items.map(item => ({
         id: item.id,

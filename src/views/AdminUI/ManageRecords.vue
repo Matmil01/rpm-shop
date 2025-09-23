@@ -5,57 +5,78 @@
       v-model="search"
       type="text"
       placeholder="Search by artist or album..."
-      class="mb-4 w-full border border-gray-500 bg-MyBlack rounded px-3 py-2 text-MyWhite font-main placeholder-gray-400"
+      class="mb-4 w-full border border-MyDark bg-MyBlack rounded px-3 py-2 text-MyWhite font-main"
     />
     <div v-if="loading" class="mb-4">Loading...</div>
     <div class="rounded overflow-hidden">
-      <table class="w-full border-collapse border border-gray-500 table-auto font-main text-MyWhite bg-MyBlack">
+      <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
         <thead>
           <tr class="bg-gray-900 text-left text-MyWhite font-main">
-            <th class="p-2 border border-gray-500 min-w-[120px]">Artist</th>
-            <th class="p-2 border border-gray-500 min-w-[120px]">Album</th>
-            <th class="p-2 border border-gray-500 min-w-[80px]">Stock</th>
-            <th class="p-2 border border-gray-500 min-w-[80px]">Price</th>
-            <th class="p-2 border border-gray-500 min-w-[100px]">Discount %</th>
-            <th class="p-2 border border-gray-500 min-w-[260px]">Category tags</th>
-            <th class="p-2 border border-gray-500 min-w-[60px]">Actions</th>
+            <th class="p-2 border border-MyDark min-w-[120px]">Artist</th>
+            <th class="p-2 border border-MyDark min-w-[120px]">Album</th>
+            <th class="p-2 border border-MyDark min-w-[80px]">Stock</th>
+            <th class="p-2 border border-MyDark min-w-[80px]">Price</th>
+            <th class="p-2 border border-MyDark min-w-[100px]">Discount %</th>
+            <th class="p-2 border border-MyDark min-w-[260px]">Category tags</th>
+            <th class="p-2 border border-MyDark min-w-[60px]">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="record in filteredRecords" :key="record.id" class="border-t border-gray-500">
-            <td class="p-2 border border-gray-500">{{ record.artist }}</td>
-            <td class="p-2 border border-gray-500">{{ record.album }}</td>
-            <td class="p-2 border border-gray-500">
-              <input type="number" v-model.number="record.stock" class="border border-gray-500 bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" />
+          <tr v-for="record in filteredRecords" :key="record.id" class="border-t border-MyDark">
+            <td class="p-2 border border-MyDark">{{ record.artist }}</td>
+            <td class="p-2 border border-MyDark">{{ record.album }}</td>
+            <td class="p-2 border border-MyDark">
+              <input
+                type="number"
+                v-model.number="record.stock"
+                @change="autoSave(record, 'stock', record.stock)"
+                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400"
+              />
             </td>
-            <td class="p-2 border border-gray-500">
-              <input type="number" v-model.number="record.price" class="border border-gray-500 bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" />
+            <td class="p-2 border border-MyDark">
+              <input
+                type="number"
+                v-model.number="record.price"
+                @change="autoSave(record, 'price', record.price)"
+                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400"
+              />
             </td>
-            <td class="p-2 border border-gray-500">
-              <input type="number" v-model.number="record.discount" class="border border-gray-500 bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" min="0" max="100" />
+            <td class="p-2 border border-MyDark">
+              <input
+                type="number"
+                v-model.number="record.discount"
+                @change="autoSave(record, 'discount', record.discount)"
+                min="0" max="100"
+                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400"
+              />
             </td>
-            <td class="p-2 border border-gray-500">
+            <td class="p-2 border border-MyDark">
               <div class="flex flex-wrap gap-1">
                 <span
                   v-for="tag in record.tags"
                   :key="tag"
-                  class="bg-blue-700 text-white px-2 py-1 rounded text-xs"
+                  class="bg-blue-700 text-MyWhite px-2 py-1 rounded text-xs"
                 >
                   {{ tag }}
                 </span>
                 <button
                   @click="record.showTagSelector = !record.showTagSelector"
-                  class="bg-gray-700 text-white px-2 py-1 rounded text-xs cursor-pointer"
+                  class="bg-gray-700 text-MyWhite px-2 py-1 rounded text-xs cursor-pointer"
                 >
                   Add
                 </button>
               </div>
-              <div v-if="record.showTagSelector" class="mt-2 bg-gray-900 p-2 rounded shadow">
+              <div v-if="record.showTagSelector" class="mt-2 bg-MyDark p-2 rounded shadow">
                 <label v-for="tag in tagsList" :key="tag" class="flex items-center gap-1 mb-1">
                   <input type="checkbox" :value="tag" v-model="record.tags" />
                   {{ tag }}
                 </label>
-                <button @click="record.showTagSelector = false" class="mt-2 bg-blue-600 text-white px-2 py-1 rounded text-xs cursor-pointer">Done</button>
+                <button
+                  @click="record.showTagSelector = false; autoSave(record, 'tags', record.tags)"
+                  class="mt-2 bg-blue-600 text-MyWhite px-2 py-1 rounded text-xs cursor-pointer"
+                >
+                  Done
+                </button>
               </div>
             </td>
             <td class="p-2 border border-gray-500 align-middle text-center">
@@ -72,14 +93,6 @@
         </tbody>
       </table>
     </div>
-    <button
-      @click="saveAllChanges"
-      class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-main border border-gray-500 cursor-pointer"
-      :disabled="saving"
-    >
-      <span v-if="saving">Saving...</span>
-      <span v-else>Save All Changes</span>
-    </button>
   </div>
 </template>
 
@@ -103,7 +116,6 @@ const { filteredRecords } = useRecordSearch(records, {
 })
 
 const savingId = ref(null)
-const saving = ref(false)
 
 const tagsList = [
   'Staff Favorites',
@@ -138,33 +150,11 @@ watch(() => records.value, (newRecords) => {
   })
 }, { deep: true })
 
-async function saveAllChanges() {
-  saving.value = true
+async function autoSave(record, field, value) {
   try {
-    for (const record of filteredRecords.value) {
-      if (!record.stock || record.stock === 0) {
-        record.stock = randomStock()
-      }
-      if (!record.price || record.price === 0) {
-        record.price = randomPrice()
-      }
-
-      applySpecialOffersTag(record)
-
-      await crudUpdateRecord(record.id, {
-        artist: record.artist,
-        album: record.album,
-        stock: record.stock,
-        price: record.price,
-        discount: record.discount,
-        tags: record.tags
-      })
-    }
-    alert('All changes saved!')
-  } catch (e) {
-    alert('Error saving changes: ' + e.message)
-  } finally {
-    saving.value = false
+    await crudUpdateRecord(record.id, { [field]: value })
+  } catch (error) {
+    alert('Error saving change: ' + error.message)
   }
 }
 
@@ -174,8 +164,8 @@ async function deleteRecord(id) {
     await crudDeleteRecord(id)
     const idx = records.value.findIndex(r => r.id === id)
     if (idx !== -1) records.value.splice(idx, 1)
-  } catch (e) {
-    alert('Error deleting record: ' + e.message)
+  } catch (error) {
+    alert('Error deleting record: ' + error.message)
   } finally {
     savingId.value = null
   }

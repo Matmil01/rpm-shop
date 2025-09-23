@@ -20,7 +20,7 @@
         <div class="relative group">
           <router-link
             to="/shop"
-            class="hover:opacity-70 font-medium cursor-pointer flex items-center transition-opacity"
+            class="hover:opacity-70 font-medium text-xl cursor-pointer flex items-center transition-opacity"
           >
             Artists
           </router-link>
@@ -61,7 +61,7 @@
 
         <!-- Categories Dropdown -->
         <div class="relative group">
-          <span class="hover:opacity-70 font-medium cursor-pointer flex items-center transition-opacity">
+          <span class="hover:opacity-70 font-medium text-xl cursor-pointer flex items-center transition-opacity">
             Categories
           </span>
           <div
@@ -80,7 +80,7 @@
           </div>
         </div>
 
-        <router-link to="/contact" class="hover:opacity-70 font-medium cursor-pointer transition-opacity">
+        <router-link to="/contact" class="hover:opacity-70 font-medium text-xl cursor-pointer transition-opacity">
           Contact
         </router-link>
 

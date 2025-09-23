@@ -14,8 +14,8 @@ export function useDiscogsSearch() {
       )
       const data = await res.json()
       results.value = data.results
-    } catch (err) {
-      error.value = err.message || "Error occurred while searching Discogs."
+    } catch (error) {
+      error.value = error.message || "Error occurred while searching Discogs."
     } finally {
       loading.value = false
     }
@@ -28,8 +28,8 @@ export function useDiscogsSearch() {
       )
       if (!res.ok) throw new Error("Failed to fetch release details")
       return await res.json()
-    } catch (err) {
-      error.value = err.message || "An error occurred while fetching release details."
+    } catch (error) {
+      error.value = error.message || "An error occurred while fetching release details."
       return null
     }
   }
