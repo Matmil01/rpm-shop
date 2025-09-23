@@ -16,66 +16,78 @@ const routes = [
   {
     path: "/admin",
     component: AdminView,
+    meta: { requiresAuth: true, requiresAdmin: true },
     children: [
       {
         path: "",
         name: "AdminDashboard",
-        component: () => import("@/views/AdminUI/AdminDashboard.vue")
+        component: () => import("@/views/AdminUI/AdminDashboard.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
         path: "add",
         name: "AddRecord",
-        component: () => import("@/views/AdminUI/AddRecord.vue")
+        component: () => import("@/views/AdminUI/AddRecord.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
         path: "manage",
         name: "ManageRecords",
-        component: () => import("@/views/AdminUI/ManageRecords.vue")
+        component: () => import("@/views/AdminUI/ManageRecords.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
         path: "profile",
         name: "AdminProfile",
-        component: () => import("@/views/UserUI/UserProfile.vue")
+        component: () => import("@/views/UserUI/UserProfile.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
         path: "users",
         name: "ManageUsers",
-        component: () => import("@/views/AdminUI/ManageUsers.vue")
+        component: () => import("@/views/AdminUI/ManageUsers.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
-        path: '/admin/wishlist',
-        name: 'AdminWishlist',
-        component: () => import('@/views/UserUI/WishList.vue')
+        path: "wishlist",
+        name: "AdminWishlist",
+        component: () => import('@/views/UserUI/WishList.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
       }
     ]
   },
   {
     path: "/user",
+    meta: { requiresAuth: true },
     children: [
       {
         path: "wishlist",
         name: "WishList",
-        component: () => import("@/views/UserUI/WishList.vue")
+        component: () => import("@/views/UserUI/WishList.vue"),
+        meta: { requiresAuth: true }
       },
       {
         path: "cart",
         name: "CartView",
-        component: () => import("@/views/UserUI/CartView.vue")
+        component: () => import("@/views/UserUI/CartView.vue"),
+        meta: { requiresAuth: true }
       },
       {
         path: "checkout",
         name: "CheckoutView",
-        component: () => import("@/views/UserUI/CheckOutView.vue")
+        component: () => import("@/views/UserUI/CheckOutView.vue"),
+        meta: { requiresAuth: true }
       },
       {
         path: "profile",
         name: "UserProfile",
-        component: () => import("@/views/UserUI/UserProfile.vue")
+        component: () => import("@/views/UserUI/UserProfile.vue"),
+        meta: { requiresAuth: true }
       }
     ]
   },
   { path: "/thankyou", name: "ThankYou", component: () => import("@/views/UserUI/ThankYouView.vue") },
-  { path: "/login", name: "Login", component: () => import("@/views/LoginView.vue") }
+  { path: "/login", name: "Login", component: () => import("@/views/LoginView.vue"), meta: { requiresUnauth: true } }
 ]
 
 const router = createRouter({
@@ -84,7 +96,7 @@ const router = createRouter({
 })
 
 let isAuthResolved = false
-
+// helper that makes sure route guard only runs after Auth has finished loading the user.
 function waitForAuth() {
   return new Promise(resolve => {
     if (isAuthResolved && auth.currentUser !== null) {
@@ -99,15 +111,22 @@ function waitForAuth() {
   })
 }
 
+// Navigation Guard using meta fields
 router.beforeEach(async (to, from, next) => {
   const user = await waitForAuth()
-  if (to.path.startsWith('/admin')) {
-    if (!user) return next('/login')
-    const userDoc = await getDoc(doc(db, 'users', user.uid))
-    if (!userDoc.exists() || userDoc.data().role !== 'admin') return next('/')
+  // If route requires authentication and user is not logged in
+  if (to.matched.some(record => record.meta.requiresAuth) && !user) {
+    return next({ name: "Login" })
   }
-  if (to.path.startsWith('/user')) {
-    if (!user) return next('/login')
+  // If route requires admin and user is not admin
+  if (to.matched.some(record => record.meta.requiresAdmin)) {
+    if (!user) return next({ name: "Login" })
+    const userDoc = await getDoc(doc(db, 'users', user.uid))
+    if (!userDoc.exists() || userDoc.data().role !== 'admin') return next({ name: "home" })
+  }
+  // If route requires unauthenticated user and user is logged in
+  if (to.matched.some(record => record.meta.requiresUnauth) && user) {
+    return next({ name: "home" })
   }
   next()
 })

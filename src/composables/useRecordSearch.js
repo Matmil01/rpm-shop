@@ -1,54 +1,64 @@
 import { computed } from 'vue'
 
 export function useRecordSearch(records, options = {}) {
-  const { tagRef, searchRef, fields = ['artist', 'album', 'genre'], sortBy = 'artist', sortDirection = 'asc' } = options
+  const {
+    tagRef,
+    searchRef,
+    fields = ['artist', 'album', 'genre'],
+    sortBy = 'artist',
+    sortDirection = 'asc'
+  } = options
 
   const filteredRecords = computed(() => {
-    let base = records.value
+    let baseRecords = records.value
 
     if (tagRef?.value) {
       if (tagRef.value === 'Special Offers') {
-        base = base.filter(r => Number(r.discount) > 0)
+        baseRecords = baseRecords.filter(record => Number(record.discount) > 0)
       } else {
-        base = base.filter(r => r.tags && r.tags.includes(tagRef.value))
+        baseRecords = baseRecords.filter(
+          record => record.tags && record.tags.includes(tagRef.value)
+        )
       }
     }
 
     if (searchRef?.value) {
-      const s = searchRef.value.toLowerCase()
-      base = base.filter(r =>
+      const searchString = searchRef.value.toLowerCase()
+      baseRecords = baseRecords.filter(record =>
         fields.some(field =>
-          r[field]?.toLowerCase().includes(s)
+          record[field]?.toLowerCase().includes(searchString)
         )
       )
     }
 
-    base = [...base].sort((a, b) => {
-      const aVal = (a.artist || '').toLowerCase()
-      const bVal = (b.artist || '').toLowerCase()
-      if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1
-      if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1
+    baseRecords = [...baseRecords].sort((recordA, recordB) => {
+      const artistA = (recordA.artist || '').toLowerCase()
+      const artistB = (recordB.artist || '').toLowerCase()
+      if (artistA < artistB) return sortDirection === 'asc' ? -1 : 1
+      if (artistA > artistB) return sortDirection === 'asc' ? 1 : -1
       return 0
     })
 
-    return base
+    return baseRecords
   })
 
   function recordsByCategory(category) {
-    let filtered = []
+    let filteredRecordsByCategory = []
     if (category === 'Special Offers') {
-      filtered = records.value.filter(r => Number(r.discount) > 0)
+      filteredRecordsByCategory = records.value.filter(record => Number(record.discount) > 0)
     } else {
-      filtered = records.value.filter(r => r.tags && r.tags.includes(category))
+      filteredRecordsByCategory = records.value.filter(
+        record => record.tags && record.tags.includes(category)
+      )
     }
-    filtered = [...filtered].sort((a, b) => {
-      const aVal = (a.artist || '').toLowerCase()
-      const bVal = (b.artist || '').toLowerCase()
-      if (aVal < bVal) return -1
-      if (aVal > bVal) return 1
+    filteredRecordsByCategory = [...filteredRecordsByCategory].sort((recordA, recordB) => {
+      const artistA = (recordA.artist || '').toLowerCase()
+      const artistB = (recordB.artist || '').toLowerCase()
+      if (artistA < artistB) return -1
+      if (artistA > artistB) return 1
       return 0
     })
-    return filtered.slice(0, 4)
+    return filteredRecordsByCategory.slice(0, 4)
   }
 
   return { filteredRecords, recordsByCategory }

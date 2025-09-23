@@ -198,7 +198,7 @@ async function submitOrder() {
 
     await Promise.all(
       cart.items.map(async (item) => {
-        const stockInfo = stockCheckResults.find(r => r.id === item.id)
+        const stockInfo = stockCheckResults.find(record => record.id === item.id)
         if (stockInfo && stockInfo.available) {
           const newStock = stockInfo.currentStock - item.quantity
           await updateRecord(item.id, { stock: newStock })

@@ -86,7 +86,7 @@ const { calculateDiscountedPrice, calculateTotalPrice } = usePriceCalculator()
 const totalPrice = computed(() => calculateTotalPrice(cart.items))
 
 function incrementQuantity(item) {
-  const cartItem = cart.items.find(i => i.id === item.id)
+  const cartItem = cart.items.find(cartItem => cartItem.id === item.id)
   if (cartItem) {
     cartItem.quantity += 1
     cart.saveToLocalStorage()
@@ -94,7 +94,7 @@ function incrementQuantity(item) {
 }
 
 function decrementQuantity(item) {
-  const cartItem = cart.items.find(i => i.id === item.id)
+  const cartItem = cart.items.find(cartItem => cartItem.id === item.id)
   if (cartItem && cartItem.quantity > 1) {
     cartItem.quantity -= 1
     cart.saveToLocalStorage()

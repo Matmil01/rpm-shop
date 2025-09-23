@@ -131,9 +131,9 @@ const tagsList = [
 
 onMounted(() => {
   listenToRecords()
-  records.value.forEach(r => {
-    r.showTagSelector = false
-    applySpecialOffersTag(r)
+  records.value.forEach(record => {
+    record.showTagSelector = false
+    applySpecialOffersTag(record)
   })
 })
 onUnmounted(() => {
@@ -162,7 +162,7 @@ async function deleteRecord(id) {
   savingId.value = id
   try {
     await crudDeleteRecord(id)
-    const idx = records.value.findIndex(r => r.id === id)
+    const idx = records.value.findIndex(record => record.id === id)
     if (idx !== -1) records.value.splice(idx, 1)
   } catch (error) {
     alert('Error deleting record: ' + error.message)
