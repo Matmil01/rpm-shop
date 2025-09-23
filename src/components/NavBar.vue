@@ -80,10 +80,6 @@
           </div>
         </div>
 
-        <router-link to="/contact" class="hover:opacity-70 font-medium text-xl cursor-pointer transition-opacity">
-          Contact
-        </router-link>
-
         <!-- Search Field -->
         <form @submit.prevent="onSearch" class="ml-4">
           <input

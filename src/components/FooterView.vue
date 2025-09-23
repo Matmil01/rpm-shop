@@ -2,7 +2,7 @@
   <footer class="bg-black py-4 border-t-1 border-MyDark font-main text-MyWhite">
     <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
       <p>
-        © {{ new Date().getFullYear() }} | RPM Shop | Rights and whatnot.
+        © {{ new Date().getFullYear() }} | RPM Shop | No Refunds
       </p>
       <div class="flex gap-4 mt-3 md:mt-0">
         <a href="https://smashthewalls.com/" target="_blank" rel="noopener" aria-label="Facebook">

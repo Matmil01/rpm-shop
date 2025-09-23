@@ -3,7 +3,6 @@ import HomeView from "../views/HomeView.vue"
 import FullShop from "../views/FullShop.vue"
 import SingleRecord from "../views/SingleRecord.vue"
 import AdminView from "@/views/AdminUI/AdminView.vue"
-import ContactView from "@/views/ContactView.vue"
 import { auth, db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -11,7 +10,6 @@ import { onAuthStateChanged } from 'firebase/auth'
 const routes = [
   { path: "/", name: "home", component: HomeView },
   { path: "/shop", name: "shop", component: FullShop },
-  { path: "/contact", name: "contact", component: ContactView },
   { path: "/record/:id", name: "record", component: SingleRecord, props: true },
   {
     path: "/admin",
