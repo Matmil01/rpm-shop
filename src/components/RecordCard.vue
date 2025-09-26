@@ -11,7 +11,7 @@
           src="/vinyl_PNG18.png"
           alt=""
           loading="lazy"
-          class="absolute inset-0 w-full h-full z-0 opacity-80 transition-all duration-300
+          class="absolute inset-0 w-full h-full z-0 opacity-100 transition-all duration-300
             group-hover:translate-x-6 group-hover:animate-spin"
           style="object-fit: contain;"
         />

@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import HomeView from "../views/HomeView.vue"
 import FullShop from "../views/FullShop.vue"
 import SingleRecord from "../views/SingleRecord.vue"
-import AdminView from "@/views/AdminUI/AdminView.vue"
+import AdminNav from "@/views/AdminUI/AdminNav.vue"
 import { auth, db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -13,13 +13,13 @@ const routes = [
   { path: "/record/:id", name: "record", component: SingleRecord, props: true },
   {
     path: "/admin",
-    component: AdminView,
+    component: AdminNav,
     meta: { requiresAuth: true, requiresAdmin: true },
     children: [
       {
         path: "",
-        name: "AdminDashboard",
-        component: () => import("@/views/AdminUI/AdminDashboard.vue"),
+        name: "ProcessOrders",
+        component: () => import("@/views/AdminUI/ProcessOrders.vue"),
         meta: { requiresAuth: true, requiresAdmin: true }
       },
       {
