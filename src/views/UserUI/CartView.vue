@@ -5,13 +5,13 @@
       <div
         v-for="item in cart.items"
         :key="item.id"
-        class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack/40 gap-4"
+        class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack gap-4"
       >
         <img
           v-if="item.coverImage"
-            :src="item.coverImage"
-            alt="Cover"
-            class="w-20 h-20 object-cover rounded shadow"
+          :src="item.coverImage"
+          alt="Cover"
+          class="w-20 h-20 object-cover rounded shadow"
         />
         <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
           No Image
@@ -52,18 +52,18 @@
 
         <button
           @click="cart.removeFromCart(item.id)"
-          class="text-MyRed flex items-center cursor-pointer"
+          class="text-MyRed flex items-center cursor-pointer hover:opacity-70 transition duration-200 ease-in-out"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-          Remove
+          <img src="/icons/trashIcon.svg" alt="Remove" class="w-5 h-5" />
         </button>
       </div>
       <div class="mt-6 font-bold text-lg">
         Total: {{ totalPrice }} kr.
       </div>
-      <button @click="checkout" class="mt-6 px-6 py-2 bg-gray-700 text-MyWhite rounded hover:bg-gray-900 cursor-pointer">
+      <button
+        @click="checkout"
+        class="mt-6 px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
+      >
         Checkout
       </button>
     </div>

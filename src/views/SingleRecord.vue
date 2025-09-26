@@ -36,7 +36,7 @@
             <button
               v-if="record.id"
               @click="addToWishlist"
-              class="px-6 py-3 bg-gray-700 text-MyWhite rounded hover:bg-gray-900 transition font-main ml-2 cursor-pointer"
+              class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark ml-2"
               :disabled="wishlistHasRecord"
             >
               <span v-if="wishlistHasRecord">In Wishlist</span>

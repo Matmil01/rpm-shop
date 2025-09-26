@@ -30,11 +30,3 @@ onMounted(() => {
   })
 })
 </script>
-
-<style>
-body {
-  background-image: url('/DE-Background-Temp.jpg');
-  background-repeat: repeat;
-  margin: 0;
-}
-</style>

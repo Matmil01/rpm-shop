@@ -5,10 +5,10 @@
 
 @theme {
 --color-MyBlack: #000000;
---color-MyWhite: #FFFFFF;
+--color-MyWhite: #E0E0E0;
 --color-MyDark: #4B5563;
---color-MyRed: #dc2626;
---color-MyGreen: #16a34a;
+--color-MyRed: #dC2626;
+--color-MyGreen: #16A34A;
 
 --font-logo: 'Ribeye', cursive;
 --font-headline: 'Revalia', cursive;
@@ -21,4 +21,10 @@ html {
   background-color: var(--color-MyBlack) !important;
   margin: 0;
   padding: 0;
+}
+
+body {
+  background-image: url('/DE-Background-Temp.jpg');
+  background-repeat: repeat;
+  margin: 0;
 }

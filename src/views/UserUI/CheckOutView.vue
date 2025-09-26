@@ -7,9 +7,9 @@
     </div>
 
     <div v-else>
-      <div class="mb-6 p-4 rounded bg-MyBlack/40">
+      <div class="mb-6 p-4 rounded bg-MyBlack">
         <h2 class="font-bold mb-2">Order Summary</h2>
-        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack/40 gap-4">
+        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack gap-4">
           <!-- Image -->
           <img
             v-if="item.coverImage"
@@ -36,17 +36,6 @@
             </div>
             <div class="text-xs mt-1">Qty: {{ item.quantity }}</div>
           </div>
-
-          <!-- Remove Button -->
-          <button
-            @click="cart.removeFromCart(item.id)"
-            class="text-red-500 hover:text-red-400 hover:underline shrink-0 flex items-center cursor-pointer"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-            Remove
-          </button>
         </div>
         <div class="mt-4 text-xl font-bold">
           Total: {{ totalPrice }} kr.
@@ -84,11 +73,11 @@
           <div class="pt-4">
             <button
               type="submit"
-              class="w-full py-3 bg-green-700 text-white rounded hover:bg-green-800 transition cursor-pointer"
+              class="w-full py-3 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
               :disabled="processing"
             >
               <span v-if="processing">Processing...</span>
-              <span v-else">Place Order</span>
+              <span v-else>Place Order</span>
             </button>
           </div>
         </form>

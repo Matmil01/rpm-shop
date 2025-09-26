@@ -1,5 +1,6 @@
 <template>
-  <div class="rounded p-4 w-full mx-auto bg-gradient-to-b from-MyDark to-gray-800 font-main text-MyWhite">
+
+  <div class="rounded p-4 w-full mx-auto font-main text-MyWhite">
     <router-link
       :to="`/record/${props.id}`"
       class="block"
@@ -31,7 +32,7 @@
     </div>
     <router-link
       :to="`/shop?search=${encodeURIComponent(props.artist)}`"
-      class="text-MyWhite underline text-left inline mb-2 hover:opacity-70 transition-opacity"
+      class="text-MyWhite underline text-left inline mb-2 hover:opacity-70 transition duration-200 ease-in-out"
     >
       {{ props.artist }}
     </router-link>

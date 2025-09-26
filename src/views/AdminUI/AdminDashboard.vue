@@ -1,20 +1,17 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-[300px] font-main text-MyWhite">
-    <h2 class="text-3xl font-bold mb-4 pt-10">Hello, Admin</h2>
-    <p class="mb-6 text-lg text-MyWhite">Use this interface to add new records, manage the storefront, and steal people's money. Hail Satan.</p>
-
-    <div class="w-full max-w-4xl mt-12">
+  <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
+    <div class="w-full mt-12">
       <h3 class="text-2xl font-bold mb-4">Recent Orders</h3>
       <div v-if="orders.length" class="rounded overflow-hidden">
-        <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
+        <table class="w-full table-fixed border-collapse border border-MyDark font-main text-MyWhite bg-MyBlack">
           <thead>
             <tr class="bg-gray-900 text-left text-MyWhite font-main">
-              <th class="p-2 border border-MyDark">Order #</th>
-              <th class="p-2 border border-MyDark">Customer</th>
-              <th class="p-2 border border-MyDark">Total</th>
-              <th class="p-2 border border-MyDark">Date</th>
-              <th class="p-2 border border-MyDark">Status</th>
-              <th class="p-2 border border-MyDark">Actions</th>
+              <th class="p-2 border border-MyDark min-w-0">Order #</th>
+              <th class="p-2 border border-MyDark min-w-0">Customer</th>
+              <th class="p-2 border border-MyDark min-w-0">Total</th>
+              <th class="p-2 border border-MyDark min-w-0">Date</th>
+              <th class="p-2 border border-MyDark min-w-0">Status</th>
+              <th class="p-2 border border-MyDark min-w-0">Actions</th>
             </tr>
           </thead>
           <tbody>

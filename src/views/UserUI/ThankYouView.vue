@@ -1,13 +1,13 @@
 <template>
   <div class="max-w-3xl mx-auto p-8 text-center text-MyWhite font-main">
-    <div class="mb-8 p-8 bg-MyBlack/40 rounded">
+    <div class="mb-8 p-8 bg-MyBlack rounded">
       <h1 class="text-4xl font-bold mb-8">
         Thank You{{ orderData?.customer?.name ? `, ${orderData.customer.name}` : '' }}!
       </h1>
-<br />
+      <br />
       <p class="text-xl mb-6">If this was a real webshop, now is when I'd have your money.</p>
 
-      <div class="mb-8 p-4 bg-gray-800/50 rounded inline-block">
+      <div class="mb-8 p-4 bg-gray-800 rounded inline-block">
         <div class="text-left">
           <div class="mb-2">Order #: {{ orderNumber }}</div>
           <div class="mb-2">
@@ -21,7 +21,7 @@
 
       <div v-if="orderItems.length" class="mb-8 text-left">
         <h2 class="font-bold mb-4 text-xl">Order Summary</h2>
-        <div v-for="item in orderItems" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack/40 gap-4">
+        <div v-for="item in orderItems" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack gap-4">
           <img
             v-if="item.coverImage"
             :src="item.coverImage"
@@ -52,7 +52,10 @@
       </div>
 
       <div class="mt-8">
-        <router-link to="/" class="px-6 py-3 bg-gray-700 text-MyWhite rounded hover:bg-gray-900 inline-block">
+        <router-link
+          to="/"
+          class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark inline-block"
+        >
           Continue Shopping
         </router-link>
       </div>

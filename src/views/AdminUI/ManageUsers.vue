@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-3xl mx-auto p-8 text-center text-MyWhite font-main">
+  <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
     <h2 class="text-2xl font-bold mb-8">Registered Users</h2>
     <div v-if="loading" class="text-MyWhite mb-4">Loading users...</div>
 

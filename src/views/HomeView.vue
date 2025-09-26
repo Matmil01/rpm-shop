@@ -4,11 +4,11 @@
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-4xl font-headline">{{ category }}</h2>
-        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="hover:opacity-70 transition-opacity">
+        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="hover:opacity-70 transition-opacity duration-200 ease-in-out">
           See all
         </router-link>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rounded bg-gradient-to-b from-MyDark to-gray-800 p-6">
         <RecordCard
           v-for="record in recordsByCategory(category)"
           :key="record.id"
@@ -39,13 +39,11 @@ const categories = [
   'Soundtracks',
   'Staff Favorites',
   'Special Offers',
-  // 'New Arrivals',
-  // 'Rare Finds',
   'Doom & Gloom',
   'Shock & Awe',
   'Dad Metal',
   'Japan Imports',
-  'Avant Garde'
+  '7-Inch Singles'
 ]
 
 const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()

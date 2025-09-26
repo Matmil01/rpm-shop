@@ -5,7 +5,7 @@
       <input v-model="username" placeholder="Username" class="mb-4 w-full p-2 rounded bg-gray-900 text-MyWhite font-main" />
       <input v-model="password" type="password" placeholder="Password" class="mb-4 w-full p-2 rounded bg-gray-900 text-MyWhite font-main" />
       <button
-        class="bg-MyRed text-white px-4 py-2 rounded w-full cursor-pointer transition-opacity duration-200 hover:opacity-80 flex items-center justify-center font-main"
+        class="bg-MyRed text-white px-4 py-2 rounded w-full cursor-pointer hover:opacity-70 transition duration-200 ease-in-out flex items-center justify-center font-main"
         :disabled="loading"
       >
         <span v-if="!loading" class="font-main">Login</span>

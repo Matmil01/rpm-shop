@@ -84,8 +84,13 @@ const routes = [
       }
     ]
   },
-  { path: "/thankyou", name: "ThankYou", component: () => import("@/views/UserUI/ThankYouView.vue") },
-  { path: "/login", name: "Login", component: () => import("@/views/LoginView.vue"), meta: { requiresUnauth: true } }
+  { path: "/thankyou",
+    name: "ThankYou",
+    component: () => import("@/views/UserUI/ThankYouView.vue") },
+  { path: "/login",
+    name: "Login",
+    component: () => import("@/views/LoginView.vue"),
+    meta: { requiresUnauth: true } }
 ]
 
 const router = createRouter({

@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold mb-6 text-MyWhite">Edit Profile</h2>
     <div class="flex flex-col items-center mb-6">
       <img
-        src="/Icons/userDefault.svg"
+        src="/avatars/userDefault.svg"
         alt="Profile Picture"
         class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 mb-2"
       />
@@ -19,7 +19,10 @@
       <label class="block mb-1 text-MyWhite">Address</label>
       <input v-model="address" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 mb-4" />
 
-      <button @click="saveProfile" class="bg-gray-700 text-MyWhite rounded hover:bg-gray-900 px-4 py-2 cursor-pointer font-main">
+      <button
+        @click="saveProfile"
+        class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
+      >
         Save Profile
       </button>
       <div v-if="success" class="text-MyGreen mt-2 font-main">{{ success }}</div>

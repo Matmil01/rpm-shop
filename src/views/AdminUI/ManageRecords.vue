@@ -81,9 +81,9 @@
             </td>
             <td class="p-2 border border-gray-500 align-middle text-center">
               <img
-                src="/Icons/trashIcon.svg"
+                src="/icons/trashIcon.svg"
                 alt="Delete"
-                class="w-6 h-6 cursor-pointer hover:brightness-75 transition-all inline-block"
+                class="w-6 h-6 cursor-pointer hover:opacity-70 transition duration-200 ease-in-out inline-block"
                 :class="{ 'opacity-50 cursor-not-allowed': savingId === record.id }"
                 @click="savingId === record.id ? null : confirmDelete(record.id)"
                 title="Delete record"
@@ -99,11 +99,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
-import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
 
-const { randomStock, randomPrice } = useRandomDefaults()
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useFirestoreCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
 
@@ -119,14 +117,12 @@ const savingId = ref(null)
 
 const tagsList = [
   'Staff Favorites',
-  'New Arrivals',
-  'Rare Finds',
   'Japan Imports',
   'Soundtracks',
   'Doom & Gloom',
   'Shock & Awe',
   'Dad Metal',
-  'Avant Garde',
+  '7-Inch Singles',
 ]
 
 onMounted(() => {

@@ -14,89 +14,22 @@
         <span class="ml-3 text-2xl font-logo">RPM Shop</span>
       </router-link>
 
-      <!-- Center: Links + Dropdowns + Search -->
-      <div class="flex flex-row gap-8 justify-center items-center">
-        <!-- Artists Dropdown -->
-        <div class="relative group">
-          <router-link
-            to="/shop"
-            class="hover:opacity-70 font-medium text-xl cursor-pointer flex items-center transition-opacity"
-          >
-            Artists
-          </router-link>
-          <div
-            class="absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-MyBlack rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
-          >
-            <ul class="py-2 text-MyWhite">
-              <li>
-                <router-link to="/shop?search=Black Sabbath" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Black Sabbath</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Ozzy Osbourne" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Ozzy Osbourne</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Lorna Shore" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Lorna Shore</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Marilyn Manson" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Marilyn Manson</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Nine Inch Nails" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Nine Inch Nails</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Insomnium" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Insomnium</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Rammstein" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Rammstein</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Slaughter to Prevail" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Slaughter to Prevail</router-link>
-              </li>
-              <li>
-                <router-link to="/shop?search=Tim Skold" class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity">Tim Skold</router-link>
-              </li>
-            </ul>
-          </div>
-        </div>
+      <!-- Center: Expanded Search Field -->
+      <form @submit.prevent="onSearch" class="flex-1 mx-8">
+        <input
+          v-model="searchInput"
+          type="text"
+          placeholder="Search by artist or album..."
+          class="border border-MyDark rounded px-3 py-2 text-MyWhite bg-MyBlack font-main w-full"
+        />
+      </form>
 
-        <!-- Categories Dropdown -->
-        <div class="relative group">
-          <span class="hover:opacity-70 font-medium text-xl cursor-pointer flex items-center transition-opacity">
-            Categories
-          </span>
-          <div
-            class="absolute left-1/2 -translate-x-1/2 mt-2 w-56 bg-MyBlack rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
-          >
-            <ul class="py-2 text-MyWhite">
-              <li v-for="category in categories" :key="category">
-                <router-link
-                  :to="`/shop?tag=${encodeURIComponent(category)}`"
-                  class="block px-4 py-2 font-main cursor-pointer hover:opacity-70 transition-opacity"
-                >
-                  {{ category }}
-                </router-link>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Search Field -->
-        <form @submit.prevent="onSearch" class="ml-4">
-          <input
-            v-model="searchInput"
-            type="text"
-            placeholder="Search by artist or album..."
-            class="border border-MyDark rounded px-3 py-2 text-MyWhite bg-MyBlack font-main w-64"
-          />
-        </form>
-      </div>
-
-      <!-- Right: Icons -->
+      <!-- Right: icons and user dropdown -->
       <div class="space-x-4 flex items-center">
         <div class="relative group">
-          <router-link to="/user/cart" class="hover:opacity-70 flex items-center transition-opacity">
+          <router-link to="/user/cart" class="hover:opacity-70 flex items-center transition duration-200 ease-in-out">
             <img
-              src="/Icons/cartIcon.svg"
+              src="/icons/cartIcon.svg"
               alt="Cart"
               class="w-6 h-6"
             />
@@ -113,7 +46,7 @@
             class="absolute right-0 mt-2 w-72 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
           >
             <div class="p-4">
-              <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative">
+              <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
                 <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
                 <div class="flex-1">
                   <div class="font-bold text-sm">{{ item.album }}</div>
@@ -122,10 +55,10 @@
                 </div>
                 <button
                   @click.stop="cart.removeFromCart(item.id)"
-                  class="text-MyRed p-1 absolute top-0 right-0 cursor-pointer"
+                  class="text-MyRed hover:opacity-70 transition ease-in-out p-1 absolute top-0 right-0 cursor-pointer"
                   title="Remove from cart"
                 >
-                  x
+                  <img src="/icons/trashIcon.svg" alt="Remove" class="w-4 h-4" />
                 </button>
               </div>
               <div v-if="cart.items.length > 3" class="text-xs text-MyWhite mb-2">
@@ -135,7 +68,10 @@
                 <span>{{ cart.items.length }} items</span>
                 <span>Total: {{ calculateTotalPrice(cart.items) }} kr.</span>
               </div>
-              <router-link to="/user/cart" class="block mt-2 text-center bg-MyDark text-MyWhite rounded px-4 py-2 hover:bg-gray-700 transition">
+              <router-link
+                to="/user/cart"
+                class="block mt-2 text-center px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
+              >
                 Go to Cart
               </router-link>
             </div>
@@ -149,49 +85,36 @@
               class="flex items-center"
             >
               <img
-                v-if="userStore.profilePic"
-                :src="userStore.profilePic"
+                src="/avatars/userDefault.svg"
                 alt="Profile"
-                class="w-10 h-10 rounded-full object-cover border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-80"
-              />
-              <img
-                v-else
-                src="/Icons/userDefault.svg"
-                alt="Profile"
-                class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-80"
+                class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-70"
               />
             </router-link>
             <template v-else>
               <img
-                v-if="userStore.profilePic"
-                :src="userStore.profilePic"
-                alt="Profile"
-                class="w-10 h-10 rounded-full object-cover border-2 border-gray-600 cursor-default transition-opacity"
-              />
-              <img
-                v-else
-                src="/Icons/userDefault.svg"
+                src="/avatars/userDefault.svg"
                 alt="Profile"
                 class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-default transition-opacity"
               />
             </template>
             <!-- Dropdown for profile, wishlist, and logout -->
-            <div class="absolute right-0 mt-2 w-40 bg-black/95 rounded shadow-lg border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <div class="absolute right-0 mt-2 w-40 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
               <div class="p-4 flex flex-col items-center">
                 <span class="font-bold text-MyWhite mb-2">{{ userStore.username }}</span>
+                <hr class="border-t border-gray-700 w-full mb-2" />
                 <router-link
                   :to="userStore.role === 'admin' ? '/admin/profile' : '/user/profile'"
-                  class="block w-full text-center bg-gray-800 text-MyWhite rounded px-4 py-2 mb-2 hover:bg-gray-700 transition font-main cursor-pointer"
+                  class="block w-full text-center text-MyWhite hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
                 >
                   Edit Profile
                 </router-link>
                 <router-link
                   :to="userStore.role === 'admin' ? '/admin/wishlist' : '/user/wishlist'"
-                  class="block w-full text-center bg-gray-800 text-MyWhite rounded px-4 py-2 mb-2 hover:bg-gray-700 transition font-main cursor-pointer"
+                  class="block w-full text-center text-MyWhite hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
                 >
                   Wishlist
                 </router-link>
-                <button @click="logout" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-900 transition font-main cursor-pointer w-full">
+                <button @click="logout" class="bg-MyRed text-MyWhite px-4 py-2 rounded hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer w-full mt-2">
                   Logout
                 </button>
               </div>
@@ -199,7 +122,7 @@
           </div>
         </div>
         <div v-else>
-          <router-link to="/login" class="hover:text-MyRed">Login</router-link>
+          <router-link to="/login" class="hover:opacity-70 transition ease-in-out duration-200">Login</router-link>
         </div>
       </div>
     </div>
@@ -220,19 +143,6 @@ const searchInput = ref('')
 const cart = useCartStore()
 const { calculateTotalPrice } = usePriceCalculator()
 const userStore = useUserStore()
-
-const categories = [
-  // 'Soundtracks',
-  // 'Staff Favorites',
-  'Special Offers',
-  'New Arrivals',
-  // 'Japan Imports',
-  'Rare Finds',
-  // 'Doom & Gloom',
-  // 'Shock & Awe',
-  // 'Dad Metal',
-  // 'Avant Garde'
-]
 
 function onSearch() {
   if (searchInput.value.trim()) {
