@@ -1,7 +1,7 @@
 <template>
   <div class="pt-10"></div>
-  <div class="container mx-auto px-4 font-headline text-MyWhite">
-    <h1 class="text-4xl font-bold mb-8">
+  <div class="container mx-auto px-4 font-headline text-MyYellow">
+    <h1 class="text-4xl font-bold mb-8 text-center">
       {{ tag ? tag : (search ? search : 'All Records') }}
     </h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -1,14 +1,16 @@
 <template>
   <div class="pt-10"></div>
-  <div class="container mx-auto px-4 font-headline text-MyWhite">
+  <div class="container mx-auto px-4 font-headline text-MyYellow">
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-4xl font-headline">{{ category }}</h2>
-        <router-link :to="`/shop?tag=${encodeURIComponent(category)}`" class="hover:opacity-70 transition-opacity duration-200 ease-in-out">
+        <h2 class="text-4xl font-headline w-full text-center">{{ category }}</h2>
+        <SimpleButton
+          :to="`/shop?tag=${encodeURIComponent(category)}`"
+        >
           See all
-        </router-link>
+        </SimpleButton>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rounded bg-gradient-to-b from-MyDark to-gray-800 p-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rounded-3xl bg-MyOrange p-6 shadow-MyBlack shadow-2xl">
         <RecordCard
           v-for="record in recordsByCategory(category)"
           :key="record.id"
@@ -31,6 +33,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
+import SimpleButton from '@/components/SimpleButton.vue'
 
 const tag = ref('')
 const search = ref('')

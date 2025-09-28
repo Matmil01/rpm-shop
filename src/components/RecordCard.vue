@@ -21,7 +21,7 @@
           alt="Album Cover"
           loading="lazy"
           class="w-full aspect-square object-cover mb-2 rounded relative z-10 transition-all duration-300
-            group-hover:-translate-x-6"
+            group-hover:-translate-x-6 shadow-MyBlack shadow"
         />
       </div>
     </router-link>
@@ -46,9 +46,7 @@
         price: props.price,
         discount: props.discount
       }" />
-      <div v-else class="px-6 py-3 bg-MyDark text-MyWhite rounded opacity-75 cursor-not-allowed">
-        Out of Stock
-      </div>
+      <OutOfStock v-else />
     </div>
   </div>
 </template>
@@ -58,6 +56,7 @@ import { computed } from 'vue'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
+import OutOfStock from '@/components/OutOfStock.vue'
 
 const props = defineProps({
   id: String,

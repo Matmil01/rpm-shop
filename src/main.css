@@ -1,30 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Revalia&family=Ribeye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&family=Ribeye&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
---color-MyBlack: #000000;
 --color-MyWhite: #E0E0E0;
---color-MyDark: #4B5563;
+--color-MyBlack: #000000;
+--color-MyDark: #171717;
 --color-MyRed: #dC2626;
 --color-MyGreen: #16A34A;
 
---font-logo: 'Ribeye', cursive;
---font-headline: 'Revalia', cursive;
---font-main: 'Ubuntu Mono', monospace;
+  --color-MyOrange: #D6533B;
+  --color-MyYellow: #FFE2A9;
 
+--font-headline: 'Ribeye', cursive;
+--font-main: 'Oxygen', sans-serif;
+--font-altmain: 'Ubuntu Mono', monospace;
 }
 
 html {
   height: 100%;
-  background-color: var(--color-MyBlack) !important;
+  background-color: var(--color-MyDark) !important;
   margin: 0;
   padding: 0;
-}
-
-body {
-  background-image: url('/DE-Background-Temp.jpg');
-  background-repeat: repeat;
-  margin: 0;
 }

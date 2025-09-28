@@ -52,12 +52,12 @@
       </div>
 
       <div class="mt-8">
-        <router-link
+        <SimpleButton
           to="/"
-          class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark inline-block"
+          class="px-6 py-2 inline-block"
         >
           Continue Shopping
-        </router-link>
+        </SimpleButton>
       </div>
     </div>
   </div>
@@ -67,6 +67,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import SimpleButton from '@/components/SimpleButton.vue'
 
 const route = useRoute()
 const { fetchOrderByNumber } = useFirestoreCRUD()

@@ -71,14 +71,14 @@
           </div>
 
           <div class="pt-4">
-            <button
+            <SimpleButton
               type="submit"
-              class="w-full py-3 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
+              class="w-full py-3"
               :disabled="processing"
             >
               <span v-if="processing">Processing...</span>
               <span v-else>Place Order</span>
-            </button>
+            </SimpleButton>
           </div>
         </form>
       </div>
@@ -95,6 +95,7 @@ import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
+import SimpleButton from '@/components/SimpleButton.vue'
 
 const router = useRouter()
 const cart = useCartStore()

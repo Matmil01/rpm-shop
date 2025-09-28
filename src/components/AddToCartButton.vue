@@ -3,14 +3,14 @@
     type="button"
     @click="handleAdd"
     :disabled="loading"
-    class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark flex items-center gap-2 relative"
+    class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow transition duration-200 ease-in-out hover:border-MyWhite flex items-center gap-2 relative bg-MyDark"
   >
     <span v-if="item.discount && item.discount > 0">
       <span class="text-MyRed font-bold">{{ discountedPrice }} kr.</span>
       <span class="line-through text-gray-400 ml-2">{{ item.price }} kr.</span>
     </span>
     <span v-else>
-      <span class="text-MyWhite font-bold">{{ item.price }} kr.</span>
+      <span class="text-MyYellow font-bold">{{ item.price }} kr.</span>
     </span>
     <img
       src="/icons/cartIcon.svg"

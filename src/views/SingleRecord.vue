@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto px-4">
-    <div class="p-6 font-main text-MyWhite rounded shadow-lg relative">
+    <div class="p-6 font-main text-MyYellow rounded shadow-lg relative">
       <div class="flex flex-col md:flex-row gap-12 md:gap-16">
         <!-- Left: Main Info & Cover -->
         <div
@@ -17,7 +17,7 @@
           </div>
           <router-link
             :to="`/shop?search=${encodeURIComponent(record.artist)}`"
-            class="text-MyWhite underline hover:opacity-70 transition text-left block mb-2"
+            class="text-MyYellow underline hover:opacity-70 transition text-left block mb-2"
           >
             {{ record.artist }}
           </router-link>
@@ -33,18 +33,16 @@
                 discount: record.discount
               }"
             />
+            <OutOfStock v-else-if="record.id && record.stock === 0" />
             <button
               v-if="record.id"
               @click="addToWishlist"
-              class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark ml-2"
+              class="px-6 py-2 rounded font-main cursor-pointer border border-MyYellow text-MyYellow bg-transparent transition duration-200 ease-in-out hover:border-MyBlack ml-2"
               :disabled="wishlistHasRecord"
             >
               <span v-if="wishlistHasRecord">In Wishlist</span>
               <span v-else>Add to Wishlist</span>
             </button>
-            <div v-else class="px-6 py-3 bg-gray-500 text-MyWhite rounded opacity-75 cursor-not-allowed">
-              Out of Stock
-            </div>
           </div>
         </div>
 
@@ -73,10 +71,10 @@
             <div><dt class="font-semibold">Format:</dt><dd>{{ record.format || '12"' }}</dd></div>
             <div><dt class="font-semibold">Stock:</dt>
               <dd>
-                <span v-if="record.stock > 0 && record.stock < 5" class="text-red-600 font-semibold">
+                <span v-if="record.stock > 0 && record.stock < 5" class="text-MyRed font-semibold">
                   Only {{ record.stock }} left, order now!
                 </span>
-                <span v-else-if="record.stock === 0" class="text-red-600 font-semibold">
+                <span v-else-if="record.stock === 0" class="text-MyRed font-semibold">
                   Out of Stock
                 </span>
                 <span v-else>
@@ -95,7 +93,7 @@
               </li>
             </ol>
           </div>
-          <router-link to="/shop" class="text-MyWhite underline hover:opacity-70 transition">← Back to Shop</router-link>
+          <router-link to="/shop" class="text-MyYellow underline hover:opacity-70 transition duration-200 ease-in-out">← Back to Shop</router-link>
         </div>
       </div>
     </div>
@@ -110,6 +108,7 @@ import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
+import OutOfStock from '@/components/OutOfStock.vue'
 
 const route = useRoute()
 const record = ref({})

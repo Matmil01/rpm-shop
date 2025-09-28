@@ -60,12 +60,12 @@
       <div class="mt-6 font-bold text-lg">
         Total: {{ totalPrice }} kr.
       </div>
-      <button
+      <SimpleButton
+        class="mt-6"
         @click="checkout"
-        class="mt-6 px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
       >
         Checkout
-      </button>
+      </SimpleButton>
     </div>
     <div v-else>
       <p>Your cart is empty.</p>
@@ -78,6 +78,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import SimpleButton from '@/components/SimpleButton.vue'
 
 const router = useRouter()
 const cart = useCartStore()

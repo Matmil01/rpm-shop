@@ -8,7 +8,6 @@
 import './main.css'
 import NavBar from './components/NavBar.vue';
 import FooterView from './components/FooterView.vue';
-
 import { onMounted } from 'vue'
 import { auth, db } from '@/firebase'
 import { onAuthStateChanged } from 'firebase/auth'

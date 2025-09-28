@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-lg mx-auto mt-10 bg-MyBlack/80 rounded shadow-lg p-8 font-main">
-    <h2 class="text-2xl font-bold mb-6 text-MyWhite">Edit Profile</h2>
+  <div class="max-w-lg mx-auto mt-10 p-8 font-main">
+    <h2 class="text-2xl font-bold mb-6 text-MyYellow">Edit Profile</h2>
     <div class="flex flex-col items-center mb-6">
       <img
         src="/avatars/userDefault.svg"
@@ -8,23 +8,22 @@
         class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 mb-2"
       />
     </div>
-    <div class="text-center text-MyWhite">
+    <div class="text-center text-MyYellow">
       <div class="mb-2"><strong>Username:</strong> {{ userStore.username }}</div>
       <div><strong>Email:</strong> {{ userStore.email }}</div>
     </div>
     <div class="w-full max-w-xs mx-auto">
-      <label class="block mb-1 text-MyWhite">Name</label>
-      <input v-model="name" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 mb-4" />
+      <label class="block mb-1 text-MyYellow">Name</label>
+      <input v-model="name" class="w-full p-2 rounded-full bg-MyBlack text-MyYellow border border-MyYellow mb-4" />
 
-      <label class="block mb-1 text-MyWhite">Address</label>
-      <input v-model="address" class="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 mb-4" />
+      <label class="block mb-1 text-MyYellow">Address</label>
+      <input v-model="address" class="w-full p-2 rounded-full bg-MyBlack text-MyYellow border border-MyYellow mb-4" />
 
-      <button
-        @click="saveProfile"
-        class="px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
+      <SimpleButton
+        :onClick="saveProfile"
       >
         Save Profile
-      </button>
+      </SimpleButton>
       <div v-if="success" class="text-MyGreen mt-2 font-main">{{ success }}</div>
       <div v-if="error" class="text-MyRed mt-2 font-main">{{ error }}</div>
     </div>
@@ -36,6 +35,7 @@ import { ref } from 'vue'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { db } from '@/firebase'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
+import SimpleButton from '@/components/SimpleButton.vue'
 const userStore = useUserStore()
 const name = ref('')
 const address = ref('')

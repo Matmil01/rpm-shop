@@ -1,128 +1,130 @@
 <template>
-  <nav class="bg-MyBlack text-MyWhite font-main border-b-1 border-MyDark">
-    <div class="container mx-auto px-4 flex justify-between items-center py-4">
-      <!-- Left: Logo / Home -->
-      <router-link to="/" class="flex items-center group">
-        <img
-          src="/rpm-logo-white.svg"
-          alt="RPM Logo"
-          :style="{ transform: `rotate(${logoAngle}deg)` }"
-          class="h-10 w-auto"
-          @mouseenter="startSpin"
-          @mouseleave="stopSpin"
-        />
-        <span class="ml-3 text-2xl font-logo">RPM Shop</span>
-      </router-link>
+  <nav class="text-MyBlack font-main">
+    <div class="container mx-auto px-4">
+      <div class="bg-MyOrange rounded-3xl shadow-MyBlack shadow-2xl flex justify-between items-center py-4 px-4">
+        <!-- Left: Logo / Home -->
+        <router-link to="/" class="flex items-center group">
+          <img
+            src="/rpm-logo-black.svg"
+            alt="RPM Logo"
+            :style="{ transform: `rotate(${logoAngle}deg)` }"
+            class="h-10 w-auto"
+            @mouseenter="startSpin"
+            @mouseleave="stopSpin"
+          />
+          <span class="ml-3 text-2xl font-headline">RPM Shop</span>
+        </router-link>
 
-      <!-- Center: Expanded Search Field -->
-      <form @submit.prevent="onSearch" class="flex-1 mx-8">
-        <input
-          v-model="searchInput"
-          type="text"
-          placeholder="Search by artist or album..."
-          class="border border-MyDark rounded px-3 py-2 text-MyWhite bg-MyBlack font-main w-full"
-        />
-      </form>
+        <!-- Center: Expanded Search Field -->
+        <form @submit.prevent="onSearch" class="flex-1 mx-8">
+          <input
+            v-model="searchInput"
+            type="text"
+            placeholder="Search by artist or album..."
+            class="border border-MyBlack rounded-3xl px-3 py-2 text-MyBlack font-main w-full"
+          />
+        </form>
 
-      <!-- Right: icons and user dropdown -->
-      <div class="space-x-4 flex items-center">
-        <div class="relative group">
-          <router-link to="/user/cart" class="hover:opacity-70 flex items-center transition duration-200 ease-in-out">
-            <img
-              src="/icons/cartIcon.svg"
-              alt="Cart"
-              class="w-6 h-6"
-            />
-          </router-link>
-          <span
-            v-if="cart.items.length"
-            class="absolute -top-2 -right-3 bg-MyRed text-MyWhite rounded-full px-2 text-xs font-bold transition-all"
-          >
-            {{ cart.items.length }}
-          </span>
-          <!-- Dropdown -->
-          <div
-            v-if="cart.items.length"
-            class="absolute right-0 mt-2 w-72 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
-          >
-            <div class="p-4">
-              <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
-                <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
-                <div class="flex-1">
-                  <div class="font-bold text-sm">{{ item.album }}</div>
-                  <div class="text-xs text-MyWhite">{{ item.artist }}</div>
-                  <div class="text-xs text-MyWhite">x{{ item.quantity }}</div>
-                </div>
-                <button
-                  @click.stop="cart.removeFromCart(item.id)"
-                  class="text-MyRed hover:opacity-70 transition ease-in-out p-1 absolute top-0 right-0 cursor-pointer"
-                  title="Remove from cart"
-                >
-                  <img src="/icons/trashIcon.svg" alt="Remove" class="w-4 h-4" />
-                </button>
-              </div>
-              <div v-if="cart.items.length > 3" class="text-xs text-MyWhite mb-2">
-                +{{ cart.items.length - 3 }} more...
-              </div>
-              <div class="flex justify-between items-center font-bold text-sm mb-2">
-                <span>{{ cart.items.length }} items</span>
-                <span>Total: {{ calculateTotalPrice(cart.items) }} kr.</span>
-              </div>
-              <router-link
-                to="/user/cart"
-                class="block mt-2 text-center px-6 py-2 rounded font-main cursor-pointer border border-MyWhite text-MyWhite bg-transparent transition duration-200 ease-in-out hover:border-MyDark"
-              >
-                Go to Cart
-              </router-link>
-            </div>
-          </div>
-        </div>
-        <div v-if="userStore.loggedIn" class="flex items-center gap-2">
+        <!-- Right: icons and user dropdown -->
+        <div class="space-x-4 flex items-center">
           <div class="relative group">
-            <router-link
-              v-if="userStore.role === 'admin'"
-              to="/admin"
-              class="flex items-center"
-            >
+            <router-link to="/user/cart" class="hover:opacity-70 flex items-center transition duration-200 ease-in-out">
               <img
-                src="/avatars/userDefault.svg"
-                alt="Profile"
-                class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-70"
+                src="/icons/cartIcon.svg"
+                alt="Cart"
+                class="w-6 h-6"
               />
             </router-link>
-            <template v-else>
-              <img
-                src="/avatars/userDefault.svg"
-                alt="Profile"
-                class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-default transition-opacity"
-              />
-            </template>
-            <!-- Dropdown for profile, wishlist, and logout -->
-            <div class="absolute right-0 mt-2 w-40 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-              <div class="p-4 flex flex-col items-center">
-                <span class="font-bold text-MyWhite mb-2">{{ userStore.username }}</span>
-                <hr class="border-t border-gray-700 w-full mb-2" />
-                <router-link
-                  :to="userStore.role === 'admin' ? '/admin/profile' : '/user/profile'"
-                  class="block w-full text-center text-MyWhite hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
+            <span
+              v-if="cart.items.length"
+              class="absolute -top-2 -right-3 bg-MyRed text-MyYellow rounded-full px-2 text-xs font-bold transition-all"
+            >
+              {{ cart.items.length }}
+            </span>
+            <!-- Dropdown -->
+            <div
+              v-if="cart.items.length"
+              class="absolute right-0 mt-2 w-72 bg-MyBlack rounded shadow-lg border border-MyYellow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+            >
+              <div class="p-4">
+                <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
+                  <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
+                  <div class="flex-1">
+                    <div class="font-bold text-sm">{{ item.album }}</div>
+                    <div class="text-xs text-MyYellow">{{ item.artist }}</div>
+                    <div class="text-xs text-MyYellow">x{{ item.quantity }}</div>
+                  </div>
+                  <button
+                    @click.stop="cart.removeFromCart(item.id)"
+                    class="hover:opacity-70 transition duration-200 ease-in-out p-1 absolute top-0 right-0 cursor-pointer"
+                    title="Remove from cart"
+                  >
+                    <img src="/icons/trashIcon.svg" alt="Remove" class="w-4 h-4" />
+                  </button>
+                </div>
+                <div v-if="cart.items.length > 3" class="text-xs text-MyYellow mb-2">
+                  +{{ cart.items.length - 3 }} more...
+                </div>
+                <div class="flex justify-between items-center font-bold text-sm mb-2">
+                  <span>{{ cart.items.length }} items</span>
+                  <span>Total: {{ calculateTotalPrice(cart.items) }} kr.</span>
+                </div>
+                <SimpleButton
+                  to="/user/cart"
+                  class="w-full mt-2"
                 >
-                  Edit Profile
-                </router-link>
-                <router-link
-                  :to="userStore.role === 'admin' ? '/admin/wishlist' : '/user/wishlist'"
-                  class="block w-full text-center text-MyWhite hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
-                >
-                  Wishlist
-                </router-link>
-                <button @click="logout" class="bg-MyRed text-MyWhite px-4 py-2 rounded hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer w-full mt-2">
-                  Logout
-                </button>
+                  Go to Cart
+                </SimpleButton>
               </div>
             </div>
           </div>
-        </div>
-        <div v-else>
-          <router-link to="/login" class="hover:opacity-70 transition ease-in-out duration-200">Login</router-link>
+          <div v-if="userStore.loggedIn" class="flex items-center gap-2">
+            <div class="relative group">
+              <router-link
+                v-if="userStore.role === 'admin'"
+                to="/admin"
+                class="flex items-center"
+              >
+                <img
+                  src="/avatars/userDefault.svg"
+                  alt="Profile"
+                  class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-70"
+                />
+              </router-link>
+              <template v-else>
+                <img
+                  src="/avatars/userDefault.svg"
+                  alt="Profile"
+                  class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-default transition-opacity"
+                />
+              </template>
+              <!-- Dropdown for profile, wishlist, and logout -->
+              <div class="absolute right-0 mt-2 w-40 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                <div class="p-4 flex flex-col items-center">
+                  <span class="font-bold text-MyYellow mb-2">{{ userStore.username }}</span>
+                  <hr class="border-t border-gray-700 w-full mb-2" />
+                  <router-link
+                    :to="userStore.role === 'admin' ? '/admin/profile' : '/user/profile'"
+                    class="block w-full text-center text-MyYellow hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
+                  >
+                    Edit Profile
+                  </router-link>
+                  <router-link
+                    :to="userStore.role === 'admin' ? '/admin/wishlist' : '/user/wishlist'"
+                    class="block w-full text-center text-MyYellow hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
+                  >
+                    Wishlist
+                  </router-link>
+                  <button @click="logout" class="bg-MyRed text-MyYellow px-4 py-2 rounded hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer w-full mt-2">
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <router-link to="/login" class="hover:opacity-70 transition ease-in-out duration-200">Login</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -135,6 +137,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import SimpleButton from '@/components/SimpleButton.vue'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/firebase'
 
