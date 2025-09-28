@@ -1,11 +1,11 @@
 <template>
-  <nav class="text-MyBlack font-main">
+  <nav class="text-MyYellow font-main">
     <div class="container mx-auto px-4">
-      <div class="bg-MyOrange rounded-3xl shadow-MyBlack shadow-2xl flex justify-between items-center py-4 px-4">
+      <div class="bg-MyDark rounded-3xl shadow-MyYellow shadow flex justify-between items-center py-4 px-4">
         <!-- Left: Logo / Home -->
         <router-link to="/" class="flex items-center group">
           <img
-            src="/rpm-logo-black.svg"
+            src="/rpm-logo-white.svg"
             alt="RPM Logo"
             :style="{ transform: `rotate(${logoAngle}deg)` }"
             class="h-10 w-auto"
@@ -21,7 +21,7 @@
             v-model="searchInput"
             type="text"
             placeholder="Search by artist or album..."
-            class="border border-MyBlack rounded-3xl px-3 py-2 text-MyBlack font-main w-full"
+            class="border border-MyYellow rounded-3xl px-3 py-2 text-MyYellow font-main w-full"
           />
         </form>
 

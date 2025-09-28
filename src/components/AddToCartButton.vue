@@ -3,7 +3,7 @@
     type="button"
     @click="handleAdd"
     :disabled="loading"
-    class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow transition duration-200 ease-in-out hover:border-MyWhite flex items-center gap-2 relative bg-MyDark"
+    class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow hover:opacity-70 transition duration-200 ease-in-out flex items-center gap-2 relative bg-MyDark"
   >
     <span v-if="item.discount && item.discount > 0">
       <span class="text-MyRed font-bold">{{ discountedPrice }} kr.</span>

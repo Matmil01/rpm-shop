@@ -14,13 +14,12 @@
   --color-MyYellow: #FFE2A9;
 
 --font-headline: 'Ribeye', cursive;
---font-main: 'Oxygen', sans-serif;
---font-altmain: 'Ubuntu Mono', monospace;
+--font-main: 'Ubuntu Mono', monospace;
 }
 
 html {
   height: 100%;
-  background-color: var(--color-MyDark) !important;
+  background-color: var(--color-MyBlack) !important;
   margin: 0;
   padding: 0;
 }

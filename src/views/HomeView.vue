@@ -10,7 +10,7 @@
           See all
         </SimpleButton>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rounded-3xl bg-MyOrange p-6 shadow-MyBlack shadow-2xl">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow">
         <RecordCard
           v-for="record in recordsByCategory(category)"
           :key="record.id"

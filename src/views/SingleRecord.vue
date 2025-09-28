@@ -1,6 +1,7 @@
 <template>
+  <div class="pt-10"></div>
   <div class="container mx-auto px-4">
-    <div class="p-6 font-main text-MyYellow rounded shadow-lg relative">
+    <div class="rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow font-main text-MyYellow relative">
       <div class="flex flex-col md:flex-row gap-12 md:gap-16">
         <!-- Left: Main Info & Cover -->
         <div
@@ -37,7 +38,7 @@
             <button
               v-if="record.id"
               @click="addToWishlist"
-              class="px-6 py-2 rounded font-main cursor-pointer border border-MyYellow text-MyYellow bg-transparent transition duration-200 ease-in-out hover:border-MyBlack ml-2"
+              class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow bg-transparent transition duration-200 ease-in-out hover:border-MyBlack ml-2"
               :disabled="wishlistHasRecord"
             >
               <span v-if="wishlistHasRecord">In Wishlist</span>
@@ -98,6 +99,7 @@
       </div>
     </div>
   </div>
+  <div class="pt-10"></div>
 </template>
 
 <script setup>
