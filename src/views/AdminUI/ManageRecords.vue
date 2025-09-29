@@ -1,15 +1,15 @@
 <template>
-  <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
+  <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-headline text-MyYellow">
     <h1 class="text-2xl font-bold mb-6">Manage Stock</h1>
     <input
       v-model="search"
       type="text"
       placeholder="Search by artist or album..."
-      class="mb-4 w-full border border-MyDark bg-MyBlack rounded px-3 py-2 text-MyWhite font-main"
+      class="mb-4 w-full border border-MyDark bg-MyBlack rounded px-3 py-2 text-MyWhite font-main shadow-MyYellow shadow"
     />
     <div v-if="loading" class="mb-4">Loading...</div>
     <div class="rounded overflow-hidden">
-      <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
+      <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack shadow-MyYellow shadow">
         <thead>
           <tr class="bg-gray-900 text-left text-MyWhite font-main">
             <th class="p-2 border border-MyDark min-w-[120px]">Artist</th>
@@ -55,7 +55,7 @@
                 <span
                   v-for="tag in record.tags"
                   :key="tag"
-                  class="bg-blue-700 text-MyWhite px-2 py-1 rounded text-xs"
+                  class="bg-MyYellow text-MyBlack px-2 py-1 rounded text-xs"
                 >
                   {{ tag }}
                 </span>
@@ -71,15 +71,15 @@
                   <input type="checkbox" :value="tag" v-model="record.tags" />
                   {{ tag }}
                 </label>
-                <button
+                <SimpleButton
+                  class="mt-2 text-xs px-2 py-1"
                   @click="record.showTagSelector = false; autoSave(record, 'tags', record.tags)"
-                  class="mt-2 bg-blue-600 text-MyWhite px-2 py-1 rounded text-xs cursor-pointer"
                 >
                   Done
-                </button>
+                </SimpleButton>
               </div>
             </td>
-            <td class="p-2 border border-gray-500 align-middle text-center">
+            <td class="p-2 border border-MyDark align-middle text-center">
               <img
                 src="/icons/trashIcon.svg"
                 alt="Delete"
@@ -101,6 +101,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
+import SimpleButton from '@/components/SimpleButton.vue'
 
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useFirestoreCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()

@@ -3,25 +3,29 @@
   <div class="container mx-auto px-4 font-headline text-MyYellow">
     <div v-for="category in categories" :key="category" class="mb-10">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-4xl font-headline w-full text-center">{{ category }}</h2>
+        <h1 class="text-4xl font-headline w-full text-center uppercase">{{ category }}</h1>
         <SimpleButton
           :to="`/shop?tag=${encodeURIComponent(category)}`"
         >
           See all
         </SimpleButton>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow">
-        <RecordCard
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div
           v-for="record in recordsByCategory(category)"
           :key="record.id"
-          :id="record.id"
-          :album="record.album || ''"
-          :artist="record.artist || ''"
-          :coverImage="record.coverImage || ''"
-          :price="Number(record.price) || 0"
-          :discount="Number(record.discount) || 0"
-          :stock="record.stock"
-        />
+          class="rounded-3xl bg-MyDark p-4 shadow-MyYellow shadow"
+        >
+          <RecordCard
+            :id="record.id"
+            :album="record.album || ''"
+            :artist="record.artist || ''"
+            :coverImage="record.coverImage || ''"
+            :price="Number(record.price) || 0"
+            :discount="Number(record.discount) || 0"
+            :stock="record.stock"
+          />
+        </div>
       </div>
     </div>
   </div>

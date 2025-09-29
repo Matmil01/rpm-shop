@@ -44,7 +44,7 @@
             <!-- Dropdown -->
             <div
               v-if="cart.items.length"
-              class="absolute right-0 mt-2 w-72 bg-MyBlack rounded shadow-lg border border-MyYellow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
+              class="absolute right-0 mt-2 w-72 bg-MyBlack rounded-3xl shadow shadow-MyYellow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
             >
               <div class="p-4">
                 <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
@@ -99,7 +99,7 @@
                 />
               </template>
               <!-- Dropdown for profile, wishlist, and logout -->
-              <div class="absolute right-0 mt-2 w-40 bg-MyBlack rounded shadow-lg border border-MyDark opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <div class="absolute right-0 mt-2 w-40 bg-MyBlack rounded-3xl shadow shadow-MyYellow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
                 <div class="p-4 flex flex-col items-center">
                   <span class="font-bold text-MyYellow mb-2">{{ userStore.username }}</span>
                   <hr class="border-t border-gray-700 w-full mb-2" />
@@ -115,9 +115,14 @@
                   >
                     Wishlist
                   </router-link>
-                  <button @click="logout" class="bg-MyRed text-MyYellow px-4 py-2 rounded hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer w-full mt-2">
+                  <hr class="border-t border-gray-700 w-full mb-2" />
+                  <span
+                    @click="logout"
+                    class="block w-full text-center text-MyYellow hover:text-MyRed transition duration-200 ease-in-out font-main cursor-pointer mb-2"
+                    style="cursor:pointer;"
+                  >
                     Logout
-                  </button>
+                  </span>
                 </div>
               </div>
             </div>

@@ -5,7 +5,7 @@
       <div
         v-for="item in cart.items"
         :key="item.id"
-        class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack gap-4"
+        class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark border border-MyYellow gap-4"
       >
         <img
           v-if="item.coverImage"

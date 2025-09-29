@@ -35,15 +35,7 @@
               }"
             />
             <OutOfStock v-else-if="record.id && record.stock === 0" />
-            <button
-              v-if="record.id"
-              @click="addToWishlist"
-              class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow bg-transparent transition duration-200 ease-in-out hover:border-MyBlack ml-2"
-              :disabled="wishlistHasRecord"
-            >
-              <span v-if="wishlistHasRecord">In Wishlist</span>
-              <span v-else>Add to Wishlist</span>
-            </button>
+            <WishlistButton v-if="record.id" :record="record" />
           </div>
         </div>
 
@@ -109,13 +101,12 @@ import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
-import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
 import OutOfStock from '@/components/OutOfStock.vue'
+import WishlistButton from '@/components/WishlistButton.vue'
 
 const route = useRoute()
 const record = ref({})
 const cart = useCartStore()
-const wishlist = useWishlistStore()
 const { calculateDiscountedPrice } = usePriceCalculator()
 let unsubscribe = null
 
@@ -136,19 +127,4 @@ const discountedPrice = computed(() => {
   }
   return 0
 })
-
-const wishlistHasRecord = computed(() =>
-  wishlist.items.some(item => item.id === record.value.id)
-)
-async function addToWishlist() {
-  if (!record.value.id || wishlistHasRecord.value) return
-  await wishlist.addToWishlist({
-    id: record.value.id,
-    album: record.value.album,
-    artist: record.value.artist,
-    coverImage: record.value.coverImage,
-    price: record.value.price,
-    discount: record.value.discount
-  })
-}
 </script>

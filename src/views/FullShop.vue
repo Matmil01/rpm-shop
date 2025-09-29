@@ -1,14 +1,16 @@
 <template>
   <div class="pt-10"></div>
   <div class="container mx-auto px-4 font-headline text-MyYellow">
-    <h1 class="text-4xl font-bold mb-8 text-center">
+    <h1 class="text-4xl font-bold mb-8 text-center uppercase">
       {{ tag ? tag : (search ? search : 'All Records') }}
     </h1>
-    <div class="bg-MyDark rounded-3xl p-6 shadow-MyYellow shadow">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div
+        v-for="record in filteredRecords"
+        :key="record.id"
+        class="rounded-3xl bg-MyDark p-4 shadow-MyYellow shadow"
+      >
         <RecordCard
-          v-for="record in filteredRecords"
-          :key="record.id"
           :id="record.id"
           :album="record.album || ''"
           :artist="record.artist || ''"

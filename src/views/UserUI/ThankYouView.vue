@@ -21,7 +21,11 @@
 
       <div v-if="orderItems.length" class="mb-8 text-left">
         <h2 class="font-bold mb-4 text-xl">Order Summary</h2>
-        <div v-for="item in orderItems" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack gap-4">
+        <div
+          v-for="item in orderItems"
+          :key="item.id"
+          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark border border-MyYellow gap-4"
+        >
           <img
             v-if="item.coverImage"
             :src="item.coverImage"

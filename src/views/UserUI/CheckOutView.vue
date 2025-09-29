@@ -9,7 +9,7 @@
     <div v-else>
       <div class="mb-6 p-4 rounded bg-MyBlack">
         <h2 class="font-bold mb-2">Order Summary</h2>
-        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyBlack gap-4">
+        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark border border-MyYellow gap-4">
           <!-- Image -->
           <img
             v-if="item.coverImage"
