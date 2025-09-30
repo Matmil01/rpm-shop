@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-lg mx-auto mt-10 p-8 font-main">
-    <h2 class="text-2xl font-bold mb-6 text-MyYellow">Edit Profile</h2>
+    <h2 class="text-2xl font-headline mb-6 text-MyWhite">Edit Profile</h2>
     <div class="flex flex-col items-center mb-6">
       <img
         src="/avatars/userDefault.svg"

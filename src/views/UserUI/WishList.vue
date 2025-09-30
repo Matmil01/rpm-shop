@@ -1,12 +1,12 @@
 <template>
   <div class="container mx-auto px-4 max-w-5xl p-8 text-MyWhite font-main">
-    <h1 class="text-3xl font-bold mb-8 text-center">Your Wishlist</h1>
+    <h1 class="text-3xl font-bold mb-8 text-center font-headline">Your Wishlist</h1>
     <div v-if="loading" class="text-center text-lg text-MyWhite">Loading wishlist...</div>
     <div v-else-if="wishlist.items.length">
       <div
         v-for="item in wishlist.items"
         :key="item.id"
-        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded bg-MyBlack gap-6 shadow"
+        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded bg-MyBlack gap-6 shadow border border-MyYellow"
       >
         <router-link
           :to="`/record/${item.id}`"

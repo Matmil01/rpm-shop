@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto p-8 text-MyWhite font-main">
-    <h1 class="text-2xl font-bold mb-6">Your Cart</h1>
+    <h1 class="text-2xl font-headline text-MyYellow mb-6">Your Cart</h1>
     <div v-if="cart.items.length">
       <div
         v-for="item in cart.items"
@@ -57,7 +57,7 @@
           <img src="/icons/trashIcon.svg" alt="Remove" class="w-5 h-5" />
         </button>
       </div>
-      <div class="mt-6 font-bold text-lg">
+      <div class="mt-6 font-bold text-lg text-MyYellow">
         Total: {{ totalPrice }} kr.
       </div>
       <SimpleButton

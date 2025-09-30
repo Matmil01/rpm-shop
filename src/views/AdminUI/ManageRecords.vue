@@ -1,17 +1,17 @@
 <template>
-  <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-headline text-MyYellow">
-    <h1 class="text-2xl font-bold mb-6">Manage Stock</h1>
+  <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow ">
+    <h1 class="text-2xl text-MyWhite font-headline mb-6">Manage Stock</h1>
     <input
       v-model="search"
       type="text"
       placeholder="Search by artist or album..."
-      class="mb-4 w-full border border-MyDark bg-MyBlack rounded px-3 py-2 text-MyWhite font-main shadow-MyYellow shadow"
+      class="mb-4 w-full border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main"
     />
     <div v-if="loading" class="mb-4">Loading...</div>
     <div class="rounded overflow-hidden">
-      <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack shadow-MyYellow shadow">
+      <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
         <thead>
-          <tr class="bg-gray-900 text-left text-MyWhite font-main">
+          <tr class="bg-MyDark text-left text-MyWhite font-main">
             <th class="p-2 border border-MyDark min-w-[120px]">Artist</th>
             <th class="p-2 border border-MyDark min-w-[120px]">Album</th>
             <th class="p-2 border border-MyDark min-w-[80px]">Stock</th>

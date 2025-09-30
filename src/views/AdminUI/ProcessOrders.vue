@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
     <div class="w-full mt-12">
-      <h3 class="text-2xl font-bold mb-4">Recent Orders</h3>
+      <h3 class="text-2xl font-headline mb-4">Recent Orders</h3>
       <div v-if="orders.length" class="rounded overflow-hidden">
-        <table class="w-full table-fixed border-collapse border border-MyDark font-main text-MyWhite bg-MyBlack">
+        <table class="w-full table-fixed border-collapse border border-MyYellow font-main text-MyWhite bg-MyBlack">
           <thead>
-            <tr class="bg-gray-900 text-left text-MyWhite font-main">
+            <tr class="bg-MyDark text-left text-MyWhite font-main">
               <th class="p-2 border border-MyDark min-w-0">Order #</th>
               <th class="p-2 border border-MyDark min-w-0">Customer</th>
               <th class="p-2 border border-MyDark min-w-0">Total</th>

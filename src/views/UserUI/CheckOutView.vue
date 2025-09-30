@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto p-8 text-MyWhite font-main">
-    <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+    <h1 class="text-2xl font-headline mb-6">Checkout</h1>
 
     <div v-if="!cart.items.length">
       <p>Your cart is empty.</p>

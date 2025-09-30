@@ -1,7 +1,7 @@
 <template>
   <button
     @click="toggleWishlist"
-    class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow bg-transparent transition duration-200 ease-in-out hover:opacity-70 ml-2"
+    class="font-main cursor-pointer text-MyYellow border border-MyYellow px-4 py-1 rounded-full shadow transition duration-200 ease-in-out whitespace-nowrap hover:bg-MyYellow hover:text-MyBlack hover:border-MyYellow"
   >
     <span v-if="inWishlist">In Wishlist</span>
     <span v-else>Add to Wishlist</span>

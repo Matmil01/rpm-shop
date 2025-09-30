@@ -128,7 +128,9 @@
             </div>
           </div>
           <div v-else>
-            <router-link to="/login" class="hover:opacity-70 transition ease-in-out duration-200">Login</router-link>
+            <router-link to="/login" class="hover:opacity-70 transition ease-in-out duration-200">
+              <img src="/icons/loginIcon.svg" alt="Login" class="w-6 h-6" />
+            </router-link>
           </div>
         </div>
       </div>

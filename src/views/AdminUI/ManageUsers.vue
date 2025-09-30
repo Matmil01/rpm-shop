@@ -1,12 +1,12 @@
 <template>
   <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
-    <h2 class="text-2xl font-bold mb-8">Registered Users</h2>
+    <h2 class="text-2xl font-headline mb-8">Registered Users</h2>
     <div v-if="loading" class="text-MyWhite mb-4">Loading users...</div>
 
     <div v-if="users.length" class="rounded overflow-hidden">
       <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
         <thead>
-          <tr class="bg-gray-900 text-left text-MyWhite font-main">
+          <tr class="bg-MyDark text-left text-MyWhite font-main">
             <th class="p-2 border border-MyDark">Username</th>
             <th class="p-2 border border-MyDark">Email</th>
             <th class="p-2 border border-MyDark">Role</th>

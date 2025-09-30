@@ -1,6 +1,7 @@
 <template>
   <div class="pt-10"></div>
   <div class="container mx-auto px-4">
+    <!-- Main Record Details Container -->
     <div class="rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow font-main text-MyYellow relative">
       <div class="flex flex-col md:flex-row gap-12 md:gap-16">
         <!-- Left: Main Info & Cover -->
@@ -90,6 +91,32 @@
         </div>
       </div>
     </div>
+
+    <!-- Commentary Section: visually consistent container -->
+    <div class="mt-10">
+      <div class="rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow font-main text-MyYellow">
+        <h2 class="text-xl font-headline mb-4 uppercase">Comments</h2>
+        <!-- Comments List -->
+        <div v-if="comments.length">
+          <div v-for="comment in comments" :key="comment.id" class="mb-4 border-b border-MyYellow pb-2">
+            <div class="font-bold">{{ comment.username }}</div>
+            <div class="text-sm">{{ comment.text }}</div>
+            <div class="text-xs text-gray-400">{{ comment.date }}</div>
+          </div>
+        </div>
+        <div v-else class="text-gray-400 mb-4">No comments yet.</div>
+        <!-- Add Comment Form -->
+        <div v-if="userStore.loggedIn">
+          <form @submit.prevent="addComment" class="flex flex-col gap-2 mt-4">
+            <textarea v-model="newComment" rows="2" placeholder="Add your (wrong) opinion..." class="rounded p-2 bg-MyBlack text-MyYellow border border-MyYellow"></textarea>
+            <SimpleButton type="submit" class="self-end">Post</SimpleButton>
+          </form>
+        </div>
+        <div v-else class="mt-4 text-gray-400 text-sm">
+          You must be logged in to post a comment.
+        </div>
+      </div>
+    </div>
   </div>
   <div class="pt-10"></div>
 </template>
@@ -103,12 +130,20 @@ import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 import OutOfStock from '@/components/OutOfStock.vue'
 import WishlistButton from '@/components/WishlistButton.vue'
+import SimpleButton from '@/components/SimpleButton.vue'
+import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { useUserStore } from '@/composables/piniaStores/userStore'
 
 const route = useRoute()
 const record = ref({})
 const cart = useCartStore()
 const { calculateDiscountedPrice } = usePriceCalculator()
+const userStore = useUserStore()
+const comments = ref([])
+const newComment = ref('')
 let unsubscribe = null
+let unsubscribeComments = null
 
 const { listenToRecord } = useFirestoreCRUD()
 
@@ -116,9 +151,13 @@ onMounted(() => {
   unsubscribe = listenToRecord(route.params.id, (result) => {
     if (result) record.value = result
   })
+  if (route.params.id) {
+    listenToComments(route.params.id)
+  }
 })
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
+  if (unsubscribeComments) unsubscribeComments()
 })
 
 const discountedPrice = computed(() => {
@@ -127,4 +166,27 @@ const discountedPrice = computed(() => {
   }
   return 0
 })
+
+function listenToComments(recordId) {
+  const commentsRef = collection(db, 'records', recordId, 'comments')
+  const q = query(commentsRef, orderBy('date', 'desc'))
+  unsubscribeComments = onSnapshot(q, snapshot => {
+    comments.value = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+  })
+}
+
+async function addComment() {
+  if (!newComment.value.trim() || !record.value.id || !userStore.uid) return
+  const commentsRef = collection(db, 'records', record.value.id, 'comments')
+  await addDoc(commentsRef, {
+    userId: userStore.uid,
+    username: userStore.username || 'Anonymous',
+    text: newComment.value,
+    date: new Date().toLocaleString()
+  })
+  newComment.value = ''
+}
 </script>

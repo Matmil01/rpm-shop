@@ -4,9 +4,9 @@
       <h1 class="text-4xl font-bold mb-8">
         Thank You{{ orderData?.customer?.name ? `, ${orderData.customer.name}` : '' }}!
       </h1>
-      <br />
-      <p class="text-xl mb-6">If this was a real webshop, now is when I'd have your money.</p>
-
+      <p class="mb-4 text-lg">
+        Your order has been placed.
+      </p>
       <div class="mb-8 p-4 bg-gray-800 rounded inline-block">
         <div class="text-left">
           <div class="mb-2">Order #: {{ orderNumber }}</div>
