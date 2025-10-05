@@ -9,7 +9,7 @@
     <div v-else>
       <div class="mb-6 p-4 rounded bg-MyBlack">
         <h2 class="font-bold mb-2">Order Summary</h2>
-        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark border border-MyYellow gap-4">
+        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
           <!-- Image -->
           <img
             v-if="item.coverImage"
@@ -45,42 +45,24 @@
       <!-- Customer input fields -->
       <div v-if="!orderSubmitted">
         <h2 class="font-bold mb-4">Customer Information</h2>
+        <div class="mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow text-MyWhite">
+          <div><span class="font-bold">Name:</span> {{ customerName }}</div>
+          <div><span class="font-bold">Address:</span> {{ customerAddress }}</div>
+          <div v-if="userStore.email"><span class="font-bold">Email:</span> {{ userStore.email }}</div>
+        </div>
         <div v-if="submitError" class="bg-MyRed p-3 rounded mb-4 text-MyWhite">
           {{ submitError }}
         </div>
-
-        <form @submit.prevent="submitOrder" class="space-y-4">
-          <div>
-            <label class="block mb-1">Name</label>
-            <input
-              type="text"
-              v-model="customerName"
-              required
-              class="w-full p-2 rounded bg-gray-800 text-MyWhite border border-gray-700"
-            />
-          </div>
-
-          <div>
-            <label class="block mb-1">Address</label>
-            <textarea
-              v-model="customerAddress"
-              required
-              rows="3"
-              class="w-full p-2 rounded bg-gray-800 text-MyWhite border border-gray-700 resize-none"
-            />
-          </div>
-
-          <div class="pt-4">
-            <SimpleButton
-              type="submit"
-              class="w-full py-3"
-              :disabled="processing"
-            >
-              <span v-if="processing">Processing...</span>
-              <span v-else>Place Order</span>
-            </SimpleButton>
-          </div>
-        </form>
+        <div class="pt-4">
+          <SimpleButton
+            @click="submitOrder"
+            class="w-full py-3"
+            :disabled="processing"
+          >
+            <span v-if="processing">Processing...</span>
+            <span v-else>Place Order</span>
+          </SimpleButton>
+        </div>
       </div>
     </div>
   </div>
@@ -91,16 +73,18 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import SimpleButton from '@/components/SimpleButton.vue'
+import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
+import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
 
 const router = useRouter()
 const cart = useCartStore()
 const priceCalculator = usePriceCalculator()
-const { addOrder, fetchRecord, updateRecord } = useFirestoreCRUD()
+const { addOrder } = useOrdersCRUD()
+const { fetchRecord, updateRecord } = useRecordsCRUD()
 const userStore = useUserStore()
 
 const customerName = ref('')

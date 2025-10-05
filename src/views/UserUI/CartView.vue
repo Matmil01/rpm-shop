@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-3xl mx-auto p-8 text-MyWhite font-main">
-    <h1 class="text-2xl font-headline text-MyYellow mb-6">Your Cart</h1>
+    <h1 class="text-2xl font-headline text-MyWhite mb-6">Your Cart</h1>
     <div v-if="cart.items.length">
       <div
         v-for="item in cart.items"
         :key="item.id"
-        class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark border border-MyYellow gap-4"
+        class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4"
       >
         <img
           v-if="item.coverImage"
@@ -57,7 +57,7 @@
           <img src="/icons/trashIcon.svg" alt="Remove" class="w-5 h-5" />
         </button>
       </div>
-      <div class="mt-6 font-bold text-lg text-MyYellow">
+      <div class="mt-6 font-bold text-lg text-MyWhite">
         Total: {{ totalPrice }} kr.
       </div>
       <SimpleButton

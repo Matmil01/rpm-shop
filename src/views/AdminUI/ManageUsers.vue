@@ -45,7 +45,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { db, } from '@/firebase'
 import { query, collection, getDocs, where, deleteDoc, doc } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useUsersCRUD } from '@/composables/useUsersCRUD'
 
 const users = ref([])
 const loading = ref(true)
@@ -54,7 +54,7 @@ const error = ref('')
 const userStore = useUserStore()
 const currentAdminUid = userStore.uid
 
-const { listenToUsers } = useFirestoreCRUD()
+const { listenToUsers } = useUsersCRUD()
 let unsubscribe = null
 
 async function addOrderCounts(userList) {

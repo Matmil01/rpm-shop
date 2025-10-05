@@ -81,9 +81,9 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
 
-const { listenToOrders, updateOrder } = useFirestoreCRUD()
+const { listenToOrders, updateOrder } = useOrdersCRUD()
 const orders = ref([])
 let unsubscribe = null
 

@@ -26,7 +26,7 @@
       </div>
     </router-link>
     <div
-      class="text-lg font-bold text-left block mb-1"
+      class="text-lg font-bold w-full block mb-1 overflow-hidden whitespace-nowrap truncate"
     >
       {{ props.album }}
     </div>
@@ -37,7 +37,7 @@
       {{ props.artist }}
     </router-link>
 
-    <div class="flex items-center justify-start mt-4">
+    <div class="flex items-center justify-center mt-4">
       <AddToCartButton v-if="props.stock > 0" :item="{
         id: props.id,
         album: props.album,

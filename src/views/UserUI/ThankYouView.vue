@@ -7,7 +7,7 @@
       <p class="mb-4 text-lg">
         Your order has been placed.
       </p>
-      <div class="mb-8 p-4 bg-gray-800 rounded inline-block">
+      <div class="mb-8 p-4 bg-MyDark inline-block shadow-MyYellow shadow rounded">
         <div class="text-left">
           <div class="mb-2">Order #: {{ orderNumber }}</div>
           <div class="mb-2">
@@ -24,7 +24,7 @@
         <div
           v-for="item in orderItems"
           :key="item.id"
-          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark border border-MyYellow gap-4"
+          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow-MyYellow shadow gap-4"
         >
           <img
             v-if="item.coverImage"
@@ -70,11 +70,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
 import SimpleButton from '@/components/SimpleButton.vue'
 
 const route = useRoute()
-const { fetchOrderByNumber } = useFirestoreCRUD()
+const { fetchOrderByNumber } = useOrdersCRUD()
 
 const orderNumber = computed(() =>
   route.query.orderNumber || `RPM-${Math.floor(100000 + Math.random() * 900000)}`

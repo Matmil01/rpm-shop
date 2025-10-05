@@ -34,7 +34,7 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
 import SimpleButton from '@/components/SimpleButton.vue'
@@ -53,7 +53,7 @@ const categories = [
   '7-Inch Singles'
 ]
 
-const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
+const { records, listenToRecords, unsubscribeRecords } = useRecordsCRUD()
 const { recordsByCategory } = useRecordSearch(records)
 
 onMounted(() => {

@@ -98,12 +98,12 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
 import SimpleButton from '@/components/SimpleButton.vue'
 
-const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useFirestoreCRUD()
+const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useRecordsCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
 
 const search = ref('')

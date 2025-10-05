@@ -28,13 +28,13 @@
 <script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
+import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
 
 const route = useRoute()
 const search = ref('')
-const { records, listenToRecords, unsubscribeRecords } = useFirestoreCRUD()
+const { records, listenToRecords, unsubscribeRecords } = useRecordsCRUD()
 
 const tag = computed(() => route.query.tag)
 const { filteredRecords } = useRecordSearch(records, { tagRef: tag, searchRef: search, sortBy: 'artist', sortDirection: 'asc' })

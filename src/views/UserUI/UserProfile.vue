@@ -14,10 +14,10 @@
     </div>
     <div class="w-full max-w-xs mx-auto">
       <label class="block mb-1 text-MyYellow">Name</label>
-      <input v-model="name" class="w-full p-2 rounded-full bg-MyBlack text-MyYellow border border-MyYellow mb-4" />
+      <input v-model="name" class="w-full p-2 rounded-full bg-MyBlack text-MyWhite border border-MyYellow mb-4" />
 
       <label class="block mb-1 text-MyYellow">Address</label>
-      <input v-model="address" class="w-full p-2 rounded-full bg-MyBlack text-MyYellow border border-MyYellow mb-4" />
+      <input v-model="address" class="w-full p-2 rounded-full bg-MyBlack text-MyWhite border border-MyYellow mb-4" />
 
       <SimpleButton
         :onClick="saveProfile"

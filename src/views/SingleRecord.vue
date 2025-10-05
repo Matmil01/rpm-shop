@@ -124,7 +124,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useFirestoreCRUD } from '@/composables/useFirestoreCRUD'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
@@ -134,6 +133,7 @@ import SimpleButton from '@/components/SimpleButton.vue'
 import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
 
 const route = useRoute()
 const record = ref({})
@@ -145,7 +145,7 @@ const newComment = ref('')
 let unsubscribe = null
 let unsubscribeComments = null
 
-const { listenToRecord } = useFirestoreCRUD()
+const { listenToRecord } = useRecordsCRUD()
 
 onMounted(() => {
   unsubscribe = listenToRecord(route.params.id, (result) => {

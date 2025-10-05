@@ -21,7 +21,7 @@
             v-model="searchInput"
             type="text"
             placeholder="Search by artist or album..."
-            class="border border-MyYellow rounded-3xl px-3 py-2 text-MyYellow font-main w-full"
+            class="border border-MyYellow rounded-3xl px-3 py-2 text-MyWhite font-main w-full"
           />
           <SimpleButton type="submit" class="ml-2">
             Search
