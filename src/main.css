@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&family=Ribeye&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ribeye&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 @import "tailwindcss";
 
@@ -9,9 +8,8 @@
 --color-MyDark: #171717;
 --color-MyRed: #dC2626;
 --color-MyGreen: #16A34A;
-
-  --color-MyOrange: #D6533B;
-  --color-MyYellow: #FFE2A9;
+--color-MyOrange: #D6533B;
+--color-MyYellow: #FFE2A9;
 
 --font-headline: 'Ribeye', cursive;
 --font-main: 'Ubuntu Mono', monospace;

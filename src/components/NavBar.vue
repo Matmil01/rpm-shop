@@ -16,13 +16,16 @@
         </router-link>
 
         <!-- Center: Expanded Search Field -->
-        <form @submit.prevent="onSearch" class="flex-1 mx-8">
+        <form @submit.prevent="onSearch" class="flex-1 mx-8 flex items-center gap-2">
           <input
             v-model="searchInput"
             type="text"
             placeholder="Search by artist or album..."
             class="border border-MyYellow rounded-3xl px-3 py-2 text-MyYellow font-main w-full"
           />
+          <SimpleButton type="submit" class="ml-2">
+            Search
+          </SimpleButton>
         </form>
 
         <!-- Right: icons and user dropdown -->
