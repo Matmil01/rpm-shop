@@ -50,12 +50,13 @@
           </div>
         </div>
 
-        <button
+        <TrashButton
+          title="Remove from cart"
+          alt="Remove"
+          class="flex items-center"
+          :disabled="false"
           @click="cart.removeFromCart(item.id)"
-          class="text-MyRed flex items-center cursor-pointer hover:opacity-70 transition duration-200 ease-in-out"
-        >
-          <img src="/icons/trashIcon.svg" alt="Remove" class="w-5 h-5" />
-        </button>
+        />
       </div>
       <div class="mt-6 font-bold text-xl text-right text-MyWhite">
         Total: {{ totalPrice }} kr.
@@ -80,6 +81,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import SimpleButton from '@/components/SimpleButton.vue'
+import TrashButton from '@/components/TrashButton.vue'
 
 const router = useRouter()
 const cart = useCartStore()

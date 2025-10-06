@@ -44,13 +44,13 @@
         </div>
         <div class="flex flex-row items-center gap-2 md:ml-6">
           <AddToCartButton :item="item" />
-          <button
-            @click="wishlist.removeFromWishlist(item.id)"
-            class="shrink-0 flex items-center cursor-pointer hover:opacity-70 transition duration-200 ease-in-out"
+          <TrashButton
             title="Remove from wishlist"
-          >
-            <img src="/icons/trashIcon.svg" alt="Remove" class="w-5 h-5" />
-          </button>
+            alt="Remove"
+            class="shrink-0 flex items-center"
+            :disabled="false"
+            @click="wishlist.removeFromWishlist(item.id)"
+          />
         </div>
       </div>
     </div>
@@ -64,6 +64,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { usePriceCalculator } from '@/composables/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
+import TrashButton from '@/components/TrashButton.vue'
 import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 

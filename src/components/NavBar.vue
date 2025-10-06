@@ -57,13 +57,13 @@
                     <div class="text-xs text-MyWhite">{{ item.artist }}</div>
                     <div class="text-xs text-MyWhite">x{{ item.quantity }}</div>
                   </div>
-                  <button
-                    @click.stop="cart.removeFromCart(item.id)"
-                    class="hover:opacity-70 transition duration-200 ease-in-out p-1 absolute top-0 right-0 cursor-pointer"
+                  <TrashButton
                     title="Remove from cart"
-                  >
-                    <img src="/icons/trashIcon.svg" alt="Remove" class="w-4 h-4" />
-                  </button>
+                    alt="Remove"
+                    class="absolute top-0 right-0 p-1"
+                    :disabled="false"
+                    @click.stop="cart.removeFromCart(item.id)"
+                  />
                 </div>
                 <div v-if="cart.items.length > 3" class="text-xs text-MyWhite mb-2">
                   +{{ cart.items.length - 3 }} more...
@@ -142,6 +142,7 @@
 </template>
 
 <script setup>
+import TrashButton from '@/components/TrashButton.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'

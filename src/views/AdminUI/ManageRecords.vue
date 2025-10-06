@@ -80,13 +80,10 @@
               </div>
             </td>
             <td class="p-2 border border-MyDark align-middle text-center">
-              <img
-                src="/icons/trashIcon.svg"
-                alt="Delete"
-                class="w-6 h-6 cursor-pointer hover:opacity-70 transition duration-200 ease-in-out inline-block"
-                :class="{ 'opacity-50 cursor-not-allowed': savingId === record.id }"
-                @click="savingId === record.id ? null : confirmDelete(record.id)"
+              <TrashButton
                 title="Delete record"
+                :disabled="savingId === record.id"
+                @click="() => savingId === record.id ? null : confirmDelete(record.id)"
               />
             </td>
           </tr>
@@ -102,6 +99,7 @@ import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
 import SimpleButton from '@/components/SimpleButton.vue'
+import TrashButton from '@/components/TrashButton.vue'
 
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useRecordsCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()

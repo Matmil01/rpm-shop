@@ -78,12 +78,10 @@
                 </select>
               </td>
               <td class="p-2 border border-MyDark align-middle text-center">
-                <img
-                  src="/icons/trashIcon.svg"
-                  alt="Delete"
-                  class="w-6 h-6 cursor-pointer hover:opacity-70 transition duration-200 ease-in-out inline-block"
-                  @click="confirmDelete(order.id)"
+                <TrashButton
                   title="Delete order"
+                  :disabled="false"
+                  @click="() => confirmDelete(order.id)"
                 />
               </td>
             </tr>
@@ -98,8 +96,9 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
+import TrashButton from '@/components/TrashButton.vue'
 
-const { listenToOrders, updateOrder } = useOrdersCRUD()
+const { listenToOrders, updateOrder, deleteOrder } = useOrdersCRUD()
 const orders = ref([])
 const search = ref('')
 let unsubscribe = null
@@ -133,9 +132,9 @@ async function handleStatusChange(orderId, newStatus) {
   }
 }
 
-async function deleteOrder(id) {
+async function handleDeleteOrder(id) {
   try {
-    await updateOrder(id, { status: 'cancelled' }) // Or implement actual delete if needed
+    await deleteOrder(id)
     // Optionally remove from local orders list:
     orders.value = orders.value.filter(order => order.id !== id)
   } catch (error) {
@@ -145,7 +144,7 @@ async function deleteOrder(id) {
 
 function confirmDelete(id) {
   if (confirm('Are you sure you want to delete this order?')) {
-    deleteOrder(id)
+    handleDeleteOrder(id)
   }
 }
 </script>

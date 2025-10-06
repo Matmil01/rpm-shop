@@ -1,5 +1,5 @@
 import { db } from '@/firebase'
-import { collection, getDocs, addDoc, updateDoc, doc, onSnapshot, query, where, orderBy } from 'firebase/firestore'
+import { collection, getDocs, addDoc, updateDoc, doc, onSnapshot, query, where, orderBy, deleteDoc } from 'firebase/firestore'
 
 export function useOrdersCRUD() {
   async function addOrder(order) {
@@ -43,6 +43,11 @@ export function useOrdersCRUD() {
     await updateDoc(orderRef, updates)
   }
 
+  async function deleteOrder(orderId) {
+    const orderRef = doc(db, 'orders', orderId)
+    await deleteDoc(orderRef)
+  }
+
   return {
     addOrder,
     fetchOrderByNumber,
@@ -50,5 +55,6 @@ export function useOrdersCRUD() {
     listenToOrders,
     updateOrder,
     updateOrderStatus,
+    deleteOrder,
   }
 }
