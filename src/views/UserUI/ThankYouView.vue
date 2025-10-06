@@ -58,7 +58,7 @@
       <div class="mt-8">
         <SimpleButton
           to="/"
-          class="px-6 py-2 inline-block"
+          class="px-6 inline-block"
         >
           Continue Shopping
         </SimpleButton>

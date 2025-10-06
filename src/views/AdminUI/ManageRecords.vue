@@ -11,7 +11,7 @@
     <div class="rounded overflow-hidden">
       <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
         <thead>
-          <tr class="bg-MyDark text-left text-MyWhite font-main">
+          <tr class="bg-MyDark text-center text-MyWhite font-main">
             <th class="p-2 border border-MyDark min-w-[120px]">Artist</th>
             <th class="p-2 border border-MyDark min-w-[120px]">Album</th>
             <th class="p-2 border border-MyDark min-w-[80px]">Stock</th>

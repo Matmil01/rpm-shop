@@ -53,9 +53,9 @@
                 <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
                   <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
                   <div class="flex-1">
-                    <div class="font-bold text-sm">{{ item.album }}</div>
-                    <div class="text-xs text-MyYellow">{{ item.artist }}</div>
-                    <div class="text-xs text-MyYellow">x{{ item.quantity }}</div>
+                    <div class="font-bold text-sm text-white">{{ item.album }}</div>
+                    <div class="text-xs text-MyWhite">{{ item.artist }}</div>
+                    <div class="text-xs text-MyWhite">x{{ item.quantity }}</div>
                   </div>
                   <button
                     @click.stop="cart.removeFromCart(item.id)"
@@ -65,10 +65,10 @@
                     <img src="/icons/trashIcon.svg" alt="Remove" class="w-4 h-4" />
                   </button>
                 </div>
-                <div v-if="cart.items.length > 3" class="text-xs text-MyYellow mb-2">
+                <div v-if="cart.items.length > 3" class="text-xs text-MyWhite mb-2">
                   +{{ cart.items.length - 3 }} more...
                 </div>
-                <div class="flex justify-between items-center font-bold text-sm mb-2">
+                <div class="flex justify-between items-center font-bold text-sm text-MyWhite mb-2">
                   <span>{{ cart.items.length }} items</span>
                   <span>Total: {{ calculateTotalPrice(cart.items) }} kr.</span>
                 </div>

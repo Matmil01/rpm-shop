@@ -37,7 +37,7 @@
             <div class="text-xs mt-1">Qty: {{ item.quantity }}</div>
           </div>
         </div>
-        <div class="mt-4 text-xl font-bold">
+        <div class="mt-4 text-xl font-bold text-right">
           Total: {{ totalPrice }} kr.
         </div>
       </div>
@@ -53,10 +53,9 @@
         <div v-if="submitError" class="bg-MyRed p-3 rounded mb-4 text-MyWhite">
           {{ submitError }}
         </div>
-        <div class="pt-4">
+        <div class="pt-4 flex justify-center">
           <SimpleButton
             @click="submitOrder"
-            class="w-full py-3"
             :disabled="processing"
           >
             <span v-if="processing">Processing...</span>

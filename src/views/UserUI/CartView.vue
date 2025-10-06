@@ -33,7 +33,7 @@
           <div class="flex items-center mt-2">
             <button
               @click="decrementQuantity(item)"
-              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-l flex items-center justify-center hover:bg-gray-600 cursor-pointer"
+              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-l flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer"
               :disabled="item.quantity <= 1"
             >
               -
@@ -43,7 +43,7 @@
             </div>
             <button
               @click="incrementQuantity(item)"
-              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-r flex items-center justify-center hover:bg-gray-600 cursor-pointer"
+              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-r flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer"
             >
               +
             </button>
@@ -57,15 +57,16 @@
           <img src="/icons/trashIcon.svg" alt="Remove" class="w-5 h-5" />
         </button>
       </div>
-      <div class="mt-6 font-bold text-lg text-MyWhite">
+      <div class="mt-6 font-bold text-xl text-right text-MyWhite">
         Total: {{ totalPrice }} kr.
       </div>
-      <SimpleButton
-        class="mt-6"
-        @click="checkout"
-      >
-        Checkout
-      </SimpleButton>
+      <div class="flex justify-center mt-6">
+        <SimpleButton
+          @click="checkout"
+        >
+          Checkout
+        </SimpleButton>
+      </div>
     </div>
     <div v-else>
       <p>Your cart is empty.</p>

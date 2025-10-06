@@ -42,7 +42,7 @@
             </span>
           </div>
         </div>
-        <div class="flex flex-col items-center gap-2 md:ml-6">
+        <div class="flex flex-row items-center gap-2 md:ml-6">
           <AddToCartButton :item="item" />
           <button
             @click="wishlist.removeFromWishlist(item.id)"
