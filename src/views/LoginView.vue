@@ -48,8 +48,9 @@ async function login() {
     const user = userCredential.user
     const userDoc = await getDoc(doc(db, 'users', user.uid))
     const role = userDoc.exists() ? userDoc.data().role : 'user'
-    userStore.setUser(user, role)
-    success.value = `Hello, ${userStore.username}!`
+    const usernameFromDoc = userDoc.exists() ? userDoc.data().username : user.email.split('@')[0]
+    userStore.setUser(user, role, null, usernameFromDoc)
+    success.value = `Hello, ${usernameFromDoc}!`
     setTimeout(() => {
       loading.value = false
       if (role === 'admin') {
