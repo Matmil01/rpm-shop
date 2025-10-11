@@ -34,7 +34,7 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
+import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
 import SimpleButton from '@/components/SimpleButton.vue'

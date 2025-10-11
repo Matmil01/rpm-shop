@@ -70,7 +70,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
+import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import SimpleButton from '@/components/SimpleButton.vue'
 
 const route = useRoute()

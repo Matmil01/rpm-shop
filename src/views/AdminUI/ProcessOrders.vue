@@ -101,7 +101,7 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
+import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import TrashButton from '@/components/TrashButton.vue'
 
 const { listenToOrders, updateOrder, deleteOrder } = useOrdersCRUD()

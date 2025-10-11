@@ -137,13 +137,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useDiscogsSearch } from '@/composables/useDiscogsSearch.js'
-import { useRandomDefaults } from '@/composables/useRandomDefaults.js'
-import { useReleaseMapper } from '@/composables/useReleaseMapper.js'
-import { useRecordBuilder } from '@/composables/useRecordBuilder.js'
-import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
+import { useDiscogsSearch } from '@/composables/API/useDiscogsSearch.js'
+import { useRandomDefaults } from '@/composables/records/useRandomDefaults.js'
+import { useReleaseMapper } from '@/composables/API/useReleaseMapper.js'
+import { useRecordBuilder } from '@/composables/records/useRecordBuilder.js'
+import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.js'
 import SimpleButton from '@/components/SimpleButton.vue'
-import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
+import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 
 const artist = ref('')
 const album = ref('')

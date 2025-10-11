@@ -95,9 +95,9 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
+import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
-import { useSpecialOffersTag } from '@/composables/useSpecialOffersTag.js'
+import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.js'
 import SimpleButton from '@/components/SimpleButton.vue'
 import TrashButton from '@/components/TrashButton.vue'
 

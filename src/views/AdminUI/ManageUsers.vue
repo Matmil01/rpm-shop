@@ -55,7 +55,7 @@ import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { db, } from '@/firebase'
 import { query, collection, getDocs, where, deleteDoc, doc } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
-import { useUsersCRUD } from '@/composables/useUsersCRUD'
+import { useUsersCRUD } from '@/composables/CRUD/useUsersCRUD'
 
 const users = ref([])
 const search = ref('')

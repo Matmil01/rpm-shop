@@ -54,7 +54,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
-import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 import OutOfStock from '@/components/OutOfStock.vue'
 

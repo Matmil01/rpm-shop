@@ -71,13 +71,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
-import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import SimpleButton from '@/components/SimpleButton.vue'
-import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
-import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
+import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
+import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 
 const router = useRouter()
 const cart = useCartStore()

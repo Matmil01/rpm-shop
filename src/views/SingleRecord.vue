@@ -125,7 +125,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
-import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 import OutOfStock from '@/components/OutOfStock.vue'
 import WishlistButton from '@/components/WishlistButton.vue'
@@ -133,7 +133,7 @@ import SimpleButton from '@/components/SimpleButton.vue'
 import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { useUserStore } from '@/composables/piniaStores/userStore'
-import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
+import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 
 const route = useRoute()
 const record = ref({})

@@ -28,7 +28,7 @@
 <script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useRecordsCRUD } from '@/composables/useRecordsCRUD'
+import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
 

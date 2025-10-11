@@ -62,7 +62,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import AddToCartButton from '@/components/AddToCartButton.vue'
 import TrashButton from '@/components/TrashButton.vue'
 import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'

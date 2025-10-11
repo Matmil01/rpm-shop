@@ -79,7 +79,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
-import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import SimpleButton from '@/components/SimpleButton.vue'
 import TrashButton from '@/components/TrashButton.vue'
 

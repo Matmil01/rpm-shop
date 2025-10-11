@@ -60,7 +60,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useOrdersCRUD } from '@/composables/useOrdersCRUD'
+import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 
 const route = useRoute()

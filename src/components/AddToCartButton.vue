@@ -23,7 +23,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
-import { usePriceCalculator } from '@/composables/usePriceCalculator'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 
 const props = defineProps({
   item: {
