@@ -124,16 +124,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useCartStore } from '@/composables/piniaStores/cartStore'
-import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
-import AddToCartButton from '@/components/AddToCartButton.vue'
-import OutOfStock from '@/components/OutOfStock.vue'
-import WishlistButton from '@/components/WishlistButton.vue'
-import SimpleButton from '@/components/SimpleButton.vue'
 import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { db } from '@/firebase'
+import { useCartStore } from '@/composables/piniaStores/cartStore'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
+import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
+import OutOfStock from '@/components/buttons/OutOfStock.vue'
+import WishlistButton from '@/components/buttons/WishlistButton.vue'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
 const route = useRoute()
 const record = ref({})

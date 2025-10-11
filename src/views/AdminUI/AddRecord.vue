@@ -142,8 +142,8 @@ import { useRandomDefaults } from '@/composables/records/useRandomDefaults.js'
 import { useReleaseMapper } from '@/composables/API/useReleaseMapper.js'
 import { useRecordBuilder } from '@/composables/records/useRecordBuilder.js'
 import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.js'
-import SimpleButton from '@/components/SimpleButton.vue'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
 const artist = ref('')
 const album = ref('')

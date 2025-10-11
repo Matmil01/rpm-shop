@@ -6,13 +6,13 @@
 
 <script setup>
 import './main.css'
-import NavBar from './components/NavBar.vue';
-import FooterView from './components/FooterView.vue';
 import { onMounted } from 'vue'
 import { auth, db } from '@/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import NavBar from './components/NavBar.vue';
+import FooterView from './components/FooterView.vue';
 
 const userStore = useUserStore()
 

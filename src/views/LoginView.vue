@@ -28,7 +28,7 @@ import { auth, db } from '@/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
-import SimpleButton from '@/components/SimpleButton.vue'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
 const username = ref('')
 const password = ref('')

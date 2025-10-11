@@ -63,10 +63,10 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
-import AddToCartButton from '@/components/AddToCartButton.vue'
-import TrashButton from '@/components/TrashButton.vue'
 import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
+import TrashButton from '@/components/buttons/TrashButton.vue'
 
 const wishlist = useWishlistStore()
 const userStore = useUserStore()

@@ -37,7 +37,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import RecordCard from '@/components/RecordCard.vue'
-import SimpleButton from '@/components/SimpleButton.vue'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
 const tag = ref('')
 const search = ref('')

@@ -55,8 +55,8 @@
 import { computed } from 'vue'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
-import AddToCartButton from '@/components/AddToCartButton.vue'
-import OutOfStock from '@/components/OutOfStock.vue'
+import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
+import OutOfStock from '@/components/buttons/OutOfStock.vue'
 
 const props = defineProps({
   id: String,

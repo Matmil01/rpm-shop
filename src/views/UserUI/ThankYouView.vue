@@ -71,7 +71,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
-import SimpleButton from '@/components/SimpleButton.vue'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
 const route = useRoute()
 const { fetchOrderByNumber } = useOrdersCRUD()

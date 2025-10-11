@@ -32,10 +32,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '@/composables/piniaStores/userStore'
 import { db } from '@/firebase'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
-import SimpleButton from '@/components/SimpleButton.vue'
+import { useUserStore } from '@/composables/piniaStores/userStore'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
+
 const userStore = useUserStore()
 const name = ref('')
 const address = ref('')

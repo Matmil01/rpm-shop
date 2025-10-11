@@ -148,15 +148,15 @@
 </template>
 
 <script setup>
-import TrashButton from '@/components/TrashButton.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { signOut } from 'firebase/auth'
+import { auth } from '@/firebase'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import { useUserStore } from '@/composables/piniaStores/userStore'
-import SimpleButton from '@/components/SimpleButton.vue'
-import { signOut } from 'firebase/auth'
-import { auth } from '@/firebase'
+import SimpleButton from '@/components/buttons/SimpleButton.vue'
+import TrashButton from '@/components/buttons/TrashButton.vue'
 
 const router = useRouter()
 const searchInput = ref('')
