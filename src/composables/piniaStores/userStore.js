@@ -10,10 +10,10 @@ export const useUserStore = defineStore('user', {
     loggedIn: false,
   }),
   actions: {
-    setUser(user, role, profilePic = null) {
+    setUser(user, role, profilePic = null, username = null) {
       this.uid = user.uid
       this.email = user.email
-      this.username = user.email ? user.email.split('@')[0] : null
+      this.username = username || (user.email ? user.email.split('@')[0] : null)
       this.role = role
       this.profilePic = profilePic
       this.loggedIn = true

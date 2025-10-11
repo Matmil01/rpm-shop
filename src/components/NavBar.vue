@@ -118,6 +118,12 @@
                   >
                     Wishlist
                   </router-link>
+                  <router-link
+                    to="/user/orders"
+                    class="block w-full text-center text-MyYellow hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
+                  >
+                    Order History
+                  </router-link>
                   <hr class="border-t border-gray-700 w-full mb-2" />
                   <span
                     @click="logout"

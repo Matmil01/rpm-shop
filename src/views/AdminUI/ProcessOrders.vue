@@ -2,12 +2,24 @@
   <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
     <div class="w-full mt-12">
       <h3 class="text-2xl font-headline mb-4">Recent Orders</h3>
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Search by order number or customer name..."
-        class="mb-4 w-full border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main"
-      />
+      <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Search by order number or customer name..."
+          class="flex-1 border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main"
+        />
+        <select
+          v-model="statusFilter"
+          class="border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main w-48"
+        >
+          <option value="" class="font-main">All Statuses</option>
+          <option value="new" class="font-main">New</option>
+          <option value="processing" class="font-main">Processing</option>
+          <option value="shipped" class="font-main">Shipped</option>
+          <option value="cancelled" class="font-main">Cancelled</option>
+        </select>
+      </div>
       <div v-if="filteredOrders.length" class="rounded overflow-hidden">
         <table class="w-full table-fixed border-collapse border border-MyYellow font-main text-MyWhite bg-MyBlack">
           <thead>
@@ -23,7 +35,14 @@
           </thead>
           <tbody>
             <tr v-for="order in filteredOrders" :key="order.id" class="border-t border-MyDark">
-              <td class="p-2 border border-MyDark">{{ order.orderNumber }}</td>
+              <td class="p-2 border border-MyDark">
+                <router-link
+                  :to="`/user/orders/${order.orderNumber}`"
+                  class="text-MyWhite underline hover:opacity-70 ease-in-out duration-200 font-main"
+                >
+                  {{ order.orderNumber }}
+                </router-link>
+              </td>
               <td class="p-2 border border-MyDark">
                 {{ order.customer?.name }}
                 <span v-if="order.customer?.username" class="text-xs text-gray-400">
@@ -48,31 +67,18 @@
               <td class="p-2 border border-MyDark">
                 <select
                   @change="handleStatusChange(order.id, $event.target.value)"
-                  class="bg-gray-800 text-MyWhite rounded px-2 py-1 text-xs cursor-pointer"
+                  class="bg-gray-800 text-MyWhite rounded px-2 py-1 text-xs cursor-pointer font-main"
                 >
-                  <option
-                    value=""
-                    :selected="order.status === 'new'"
-                    disabled
-                  >
+                  <option value="" :selected="order.status === 'new'" disabled class="font-main">
                     Select action
                   </option>
-                  <option
-                    value="processing"
-                    :selected="order.status === 'processing'"
-                  >
+                  <option value="processing" :selected="order.status === 'processing'" class="font-main">
                     Processing
                   </option>
-                  <option
-                    value="shipped"
-                    :selected="order.status === 'shipped'"
-                  >
+                  <option value="shipped" :selected="order.status === 'shipped'" class="font-main">
                     Shipped
                   </option>
-                  <option
-                    value="cancelled"
-                    :selected="order.status === 'cancelled'"
-                  >
+                  <option value="cancelled" :selected="order.status === 'cancelled'" class="font-main">
                     Cancelled
                   </option>
                 </select>
@@ -101,6 +107,7 @@ import TrashButton from '@/components/TrashButton.vue'
 const { listenToOrders, updateOrder, deleteOrder } = useOrdersCRUD()
 const orders = ref([])
 const search = ref('')
+const statusFilter = ref('')
 let unsubscribe = null
 
 onMounted(() => {
@@ -114,12 +121,18 @@ onUnmounted(() => {
 })
 
 const filteredOrders = computed(() => {
-  if (!search.value.trim()) return orders.value
-  const term = search.value.trim().toLowerCase()
-  return orders.value.filter(order =>
-    (order.orderNumber && order.orderNumber.toLowerCase().includes(term)) ||
-    (order.customer?.name && order.customer.name.toLowerCase().includes(term))
-  )
+  let filtered = orders.value
+  if (search.value.trim()) {
+    const term = search.value.trim().toLowerCase()
+    filtered = filtered.filter(order =>
+      (order.orderNumber && order.orderNumber.toLowerCase().includes(term)) ||
+      (order.customer?.name && order.customer.name.toLowerCase().includes(term))
+    )
+  }
+  if (statusFilter.value) {
+    filtered = filtered.filter(order => order.status === statusFilter.value)
+  }
+  return filtered
 })
 
 async function handleStatusChange(orderId, newStatus) {
@@ -135,7 +148,6 @@ async function handleStatusChange(orderId, newStatus) {
 async function handleDeleteOrder(id) {
   try {
     await deleteOrder(id)
-    // Optionally remove from local orders list:
     orders.value = orders.value.filter(order => order.id !== id)
   } catch (error) {
     alert('Error deleting order: ' + error.message)

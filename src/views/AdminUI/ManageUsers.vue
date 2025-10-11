@@ -17,6 +17,7 @@
             <th class="p-2 border border-MyDark">Email</th>
             <th class="p-2 border border-MyDark">Role</th>
             <th class="p-2 border border-MyDark">Orders</th>
+            <th class="p-2 border border-MyDark">Date Joined</th>
             <th class="p-2 border border-MyDark">Actions</th>
           </tr>
         </thead>
@@ -26,6 +27,9 @@
             <td class="p-2 border border-MyDark">{{ user.email }}</td>
             <td class="p-2 border border-MyDark">{{ user.role }}</td>
             <td class="p-2 border border-MyDark">{{ user.orderCount || 0 }}</td>
+            <td class="p-2 border border-MyDark">
+              {{ user.createdAt?.toDate ? user.createdAt.toDate().toLocaleDateString() : '—' }}
+            </td>
             <td class="p-2 border border-MyDark">
               <button
                 v-if="user.uid !== currentAdminUid"

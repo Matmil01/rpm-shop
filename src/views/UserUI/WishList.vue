@@ -6,7 +6,7 @@
       <div
         v-for="item in wishlist.items"
         :key="item.id"
-        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded-3xl bg-MyBlack gap-6 shadow shadow-MyYellow"
+        class="flex flex-col md:flex-row items-center justify-between mb-6 p-6 rounded-3xl bg-MyDark gap-6 shadow shadow-MyYellow"
       >
         <router-link
           :to="`/record/${item.id}`"

@@ -6,11 +6,20 @@ import AdminNav from "@/views/AdminUI/AdminNav.vue"
 import { auth, db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 import { onAuthStateChanged } from 'firebase/auth'
+import OrderHistory from '@/views/UserUI/OrderHistory.vue'
 
 const routes = [
   { path: "/", name: "home", component: HomeView },
   { path: "/shop", name: "shop", component: FullShop },
   { path: "/record/:id", name: "record", component: SingleRecord, props: true },
+
+  {
+    path: '/user/orders/:orderNumber',
+    name: 'UserOrderDetails',
+    component: () => import('@/views/UserUI/OrderDetails.vue'),
+    meta: { requiresAuth: true }
+  },
+
   {
     path: "/admin",
     component: AdminNav,
@@ -46,12 +55,6 @@ const routes = [
         component: () => import("@/views/AdminUI/ManageUsers.vue"),
         meta: { requiresAuth: true, requiresAdmin: true }
       },
-      {
-        path: "wishlist",
-        name: "AdminWishlist",
-        component: () => import('@/views/UserUI/WishList.vue'),
-        meta: { requiresAuth: true, requiresAdmin: true }
-      }
     ]
   },
   {
@@ -81,6 +84,12 @@ const routes = [
         name: "UserProfile",
         component: () => import("@/views/UserUI/UserProfile.vue"),
         meta: { requiresAuth: true }
+      },
+      {
+        path: "orders",
+        name: "OrderHistory",
+        component: OrderHistory,
+        meta: { requiresAuth: true }
       }
     ]
   },
@@ -99,7 +108,6 @@ const router = createRouter({
 })
 
 let isAuthResolved = false
-// helper that makes sure route guard only runs after Auth has finished loading the user.
 function waitForAuth() {
   return new Promise(resolve => {
     if (isAuthResolved && auth.currentUser !== null) {
@@ -114,20 +122,16 @@ function waitForAuth() {
   })
 }
 
-// Navigation Guard using meta fields
 router.beforeEach(async (to, from, next) => {
   const user = await waitForAuth()
-  // If route requires authentication and user is not logged in
   if (to.matched.some(record => record.meta.requiresAuth) && !user) {
     return next({ name: "Login" })
   }
-  // If route requires admin and user is not admin
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     if (!user) return next({ name: "Login" })
     const userDoc = await getDoc(doc(db, 'users', user.uid))
     if (!userDoc.exists() || userDoc.data().role !== 'admin') return next({ name: "home" })
   }
-  // If route requires unauthenticated user and user is logged in
   if (to.matched.some(record => record.meta.requiresUnauth) && user) {
     return next({ name: "home" })
   }
