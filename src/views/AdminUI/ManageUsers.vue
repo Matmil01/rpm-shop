@@ -57,6 +57,7 @@ import { query, collection, getDocs, where } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useUsersCRUD } from '@/composables/CRUD/useUsersCRUD'
 import { useDeleteItem } from '@/composables/useDeleteItem'
+import { useTableSearch } from '@/composables/useTableSearch'
 
 const users = ref([])
 const search = ref('')
@@ -92,12 +93,5 @@ async function deleteUser(uid) {
   await deleteItem('users', uid, users, 'uid')
 }
 
-const filteredUsers = computed(() => {
-  if (!search.value.trim()) return users.value
-  const term = search.value.trim().toLowerCase()
-  return users.value.filter(user =>
-    (user.username && user.username.toLowerCase().includes(term)) ||
-    (user.email && user.email.toLowerCase().includes(term))
-  )
-})
+const filteredUsers = useTableSearch(users, search, ['username', 'email'])
 </script>

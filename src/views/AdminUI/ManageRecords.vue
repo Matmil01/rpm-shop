@@ -22,7 +22,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="record in filteredRecords" :key="record.id" class="border-t border-MyDark">
+          <tr v-for="record in sortedRecords" :key="record.id" class="border-t border-MyDark">
             <td class="p-2 border border-MyDark">{{ record.artist }}</td>
             <td class="p-2 border border-MyDark">{{ record.album }}</td>
             <td class="p-2 border border-MyDark">
@@ -96,25 +96,25 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
-import { useRecordSearch } from '@/composables/useRecordSearch'
 import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.js'
 import { useTags } from '@/composables/records/useTags'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
 import { useDeleteItem } from '@/composables/useDeleteItem'
+import { useTableSearch } from '@/composables/useTableSearch'
 
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, unsubscribeRecords } = useRecordsCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
-const { tagsList, addTag, removeTag, toggleTag } = useTags()
+const { tagsList } = useTags()
 const { deleteItem, deletingId, error } = useDeleteItem()
 
 const search = ref('')
-const { filteredRecords } = useRecordSearch(records, {
-  searchRef: search,
-  fields: ['artist', 'album'],
-  sortBy: 'artist',
-  sortDirection: 'asc'
-})
+const filteredRecords = useTableSearch(records, search, ['artist', 'album'])
+const sortedRecords = computed(() =>
+  [...filteredRecords.value].sort((a, b) =>
+    (a.artist || '').localeCompare(b.artist || '')
+  )
+)
 
 const savingId = ref(null)
 

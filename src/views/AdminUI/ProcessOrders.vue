@@ -92,6 +92,7 @@ import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useDeleteItem } from '@/composables/useDeleteItem'
 import TrashButton from '@/components/buttons/TrashButton.vue'
 import { useOrderStatus } from '@/composables/useOrderStatus'
+import { useTableSearch } from '@/composables/useTableSearch'
 
 const { listenToOrders, updateOrder } = useOrdersCRUD()
 const { deleteItem, deletingId, error } = useDeleteItem()
@@ -112,20 +113,7 @@ onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
 
-const filteredOrders = computed(() => {
-  let filtered = orders.value
-  if (search.value.trim()) {
-    const term = search.value.trim().toLowerCase()
-    filtered = filtered.filter(order =>
-      (order.orderNumber && order.orderNumber.toLowerCase().includes(term)) ||
-      (order.customer?.name && order.customer.name.toLowerCase().includes(term))
-    )
-  }
-  if (statusFilter.value) {
-    filtered = filtered.filter(order => order.status === statusFilter.value)
-  }
-  return filtered
-})
+const filteredOrders = useTableSearch(orders, search, ['orderNumber', 'customer.name'])
 
 async function handleStatusChange(orderId, newStatus) {
   if (!newStatus) return
