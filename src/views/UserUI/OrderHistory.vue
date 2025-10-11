@@ -27,14 +27,9 @@
             <td class="p-2 border border-MyDark">
               <span
                 class="px-2 py-1 rounded text-xs"
-                :class="{
-                  'bg-yellow-600': order.status === 'new',
-                  'bg-blue-600': order.status === 'processing',
-                  'bg-green-600': order.status === 'shipped',
-                  'bg-red-600': order.status === 'cancelled'
-                }"
+                :class="getStatusColor(order.status)"
               >
-                {{ order.status }}
+                {{ getStatusLabel(order.status) }}
               </span>
             </td>
           </tr>
@@ -51,9 +46,11 @@
 import { ref, onMounted } from 'vue'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import { useOrderStatus } from '@/composables/useOrderStatus'
 
 const { listenToOrders } = useOrdersCRUD()
 const userStore = useUserStore()
+const { getStatusLabel, getStatusColor } = useOrderStatus()
 const orders = ref([])
 const loading = ref(true)
 

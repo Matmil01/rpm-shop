@@ -97,33 +97,13 @@
         <div class="mb-4">
           <label class="block mb-1 font-medium">Tags</label>
           <div class="grid grid-cols-2 gap-2">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Staff Favorites" v-model="tags" class="cursor-pointer" />
-              Staff Favorites
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Japan Imports" v-model="tags" class="cursor-pointer" />
-              Japan Imports
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Soundtracks" v-model="tags" class="cursor-pointer" />
-              Soundtracks
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Doom & Gloom" v-model="tags" class="cursor-pointer" />
-              Doom & Gloom
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Shock & Awe" v-model="tags" class="cursor-pointer" />
-              Shock & Awe
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="Dad Metal" v-model="tags" class="cursor-pointer" />
-              Dad Metal
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" value="7-Inch Singles" v-model="tags" class="cursor-pointer" />
-              7-Inch Singles
+            <label
+              v-for="tag in tagsList"
+              :key="tag"
+              class="flex items-center gap-2 cursor-pointer"
+            >
+              <input type="checkbox" :value="tag" v-model="tags" class="cursor-pointer" />
+              {{ tag }}
             </label>
           </div>
         </div>
@@ -143,6 +123,7 @@ import { useReleaseMapper } from '@/composables/API/useReleaseMapper.js'
 import { useRecordBuilder } from '@/composables/records/useRecordBuilder.js'
 import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.js'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
+import { useTags } from '@/composables/records/useTags'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
 const artist = ref('')
@@ -166,6 +147,7 @@ const { addRecord } = useRecordsCRUD()
 const { mapReleaseToForm } = useReleaseMapper()
 const { buildRecord } = useRecordBuilder()
 const { applySpecialOffersTag } = useSpecialOffersTag()
+const { tagsList, addTag, removeTag, toggleTag } = useTags()
 
 function onSearch() {
   if (searchQuery.value.trim()) {

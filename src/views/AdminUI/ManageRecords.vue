@@ -98,11 +98,15 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/useRecordSearch'
 import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.js'
+import { useTags } from '@/composables/records/useTags'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
+import { useDeleteItem } from '@/composables/useDeleteItem'
 
-const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, deleteRecord: crudDeleteRecord, unsubscribeRecords } = useRecordsCRUD()
+const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, unsubscribeRecords } = useRecordsCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
+const { tagsList, addTag, removeTag, toggleTag } = useTags()
+const { deleteItem, deletingId, error } = useDeleteItem()
 
 const search = ref('')
 const { filteredRecords } = useRecordSearch(records, {
@@ -113,16 +117,6 @@ const { filteredRecords } = useRecordSearch(records, {
 })
 
 const savingId = ref(null)
-
-const tagsList = [
-  'Staff Favorites',
-  'Japan Imports',
-  'Soundtracks',
-  'Doom & Gloom',
-  'Shock & Awe',
-  'Dad Metal',
-  '7-Inch Singles',
-]
 
 onMounted(() => {
   listenToRecords()
@@ -153,22 +147,7 @@ async function autoSave(record, field, value) {
   }
 }
 
-async function deleteRecord(id) {
-  savingId.value = id
-  try {
-    await crudDeleteRecord(id)
-    const idx = records.value.findIndex(record => record.id === id)
-    if (idx !== -1) records.value.splice(idx, 1)
-  } catch (error) {
-    alert('Error deleting record: ' + error.message)
-  } finally {
-    savingId.value = null
-  }
-}
-
-function confirmDelete(id) {
-  if (confirm('Are you sure?')) {
-    deleteRecord(id)
-  }
+async function confirmDelete(id) {
+  await deleteItem('records', id, records)
 }
 </script>

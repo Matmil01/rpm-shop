@@ -13,11 +13,6 @@
           v-model="statusFilter"
           class="border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main w-48"
         >
-          <option value="" class="font-main">All Statuses</option>
-          <option value="new" class="font-main">New</option>
-          <option value="processing" class="font-main">Processing</option>
-          <option value="shipped" class="font-main">Shipped</option>
-          <option value="cancelled" class="font-main">Cancelled</option>
         </select>
       </div>
       <div v-if="filteredOrders.length" class="rounded overflow-hidden">
@@ -54,14 +49,9 @@
               <td class="p-2 border border-MyDark">
                 <span
                   class="px-2 py-1 rounded text-xs"
-                  :class="{
-                    'bg-yellow-600': order.status === 'new',
-                    'bg-blue-600': order.status === 'processing',
-                    'bg-green-600': order.status === 'shipped',
-                    'bg-red-600': order.status === 'cancelled'
-                  }"
+                  :class="getStatusColor(order.status)"
                 >
-                  {{ order.status }}
+                  {{ getStatusLabel(order.status) }}
                 </span>
               </td>
               <td class="p-2 border border-MyDark">
@@ -69,17 +59,14 @@
                   @change="handleStatusChange(order.id, $event.target.value)"
                   class="bg-gray-800 text-MyWhite rounded px-2 py-1 text-xs cursor-pointer font-main"
                 >
-                  <option value="" :selected="order.status === 'new'" disabled class="font-main">
-                    Select action
-                  </option>
-                  <option value="processing" :selected="order.status === 'processing'" class="font-main">
-                    Processing
-                  </option>
-                  <option value="shipped" :selected="order.status === 'shipped'" class="font-main">
-                    Shipped
-                  </option>
-                  <option value="cancelled" :selected="order.status === 'cancelled'" class="font-main">
-                    Cancelled
+                  <option
+                    v-for="opt in statusOptions"
+                    :key="opt.value"
+                    :value="opt.value"
+                    :selected="order.status === opt.value"
+                    class="font-main"
+                  >
+                    {{ opt.label }}
                   </option>
                 </select>
               </td>
@@ -102,9 +89,14 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
+import { useDeleteItem } from '@/composables/useDeleteItem'
 import TrashButton from '@/components/buttons/TrashButton.vue'
+import { useOrderStatus } from '@/composables/useOrderStatus'
 
-const { listenToOrders, updateOrder, deleteOrder } = useOrdersCRUD()
+const { listenToOrders, updateOrder } = useOrdersCRUD()
+const { deleteItem, deletingId, error } = useDeleteItem()
+const { statusOptions, getStatusLabel, getStatusColor } = useOrderStatus()
+
 const orders = ref([])
 const search = ref('')
 const statusFilter = ref('')
@@ -145,18 +137,7 @@ async function handleStatusChange(orderId, newStatus) {
   }
 }
 
-async function handleDeleteOrder(id) {
-  try {
-    await deleteOrder(id)
-    orders.value = orders.value.filter(order => order.id !== id)
-  } catch (error) {
-    alert('Error deleting order: ' + error.message)
-  }
-}
-
-function confirmDelete(id) {
-  if (confirm('Are you sure you want to delete this order?')) {
-    handleDeleteOrder(id)
-  }
+async function confirmDelete(id) {
+  await deleteItem('orders', id, orders)
 }
 </script>

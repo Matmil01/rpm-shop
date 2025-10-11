@@ -52,18 +52,18 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { db, } from '@/firebase'
-import { query, collection, getDocs, where, deleteDoc, doc } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { query, collection, getDocs, where } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useUsersCRUD } from '@/composables/CRUD/useUsersCRUD'
+import { useDeleteItem } from '@/composables/useDeleteItem'
 
 const users = ref([])
 const search = ref('')
 const loading = ref(true)
-const deleting = ref(null)
-const error = ref('')
 const userStore = useUserStore()
 const currentAdminUid = userStore.uid
+const { deleteItem, deletingId, error } = useDeleteItem()
 
 const { listenToUsers } = useUsersCRUD()
 let unsubscribe = null
@@ -89,16 +89,7 @@ onUnmounted(() => {
 })
 
 async function deleteUser(uid) {
-  if (!confirm('Are you sure you want to delete this user? This cannot be undone.')) return
-  deleting.value = uid
-  error.value = ''
-  try {
-    await deleteDoc(doc(db, 'users', uid))
-    users.value = users.value.filter(u => u.uid !== uid)
-  } catch (error) {
-    error.value = 'Failed to delete user.'
-  }
-  deleting.value = null
+  await deleteItem('users', uid, users, 'uid')
 }
 
 const filteredUsers = computed(() => {
