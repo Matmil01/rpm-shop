@@ -29,8 +29,8 @@
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
-import { useRecordSearch } from '@/composables/useRecordSearch'
-import RecordCard from '@/components/RecordCard.vue'
+import { useRecordSearch } from '@/composables/records/useRecordSearch'
+import RecordCard from '@/components/user/RecordCard.vue'
 
 const route = useRoute()
 const search = ref('')

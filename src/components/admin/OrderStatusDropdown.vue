@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { useOrderStatus } from '@/composables/useOrderStatus'
+import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 
 const props = defineProps({
   modelValue: { type: String, required: true }

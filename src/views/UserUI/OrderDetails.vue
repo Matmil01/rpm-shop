@@ -73,7 +73,7 @@ import { useRoute } from 'vue-router'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
-import { useOrderStatus } from '@/composables/useOrderStatus'
+import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 

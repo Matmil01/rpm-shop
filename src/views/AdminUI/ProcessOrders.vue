@@ -13,6 +13,10 @@
           v-model="statusFilter"
           class="border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main w-48"
         >
+          <option value="">All Statuses</option>
+          <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
         </select>
       </div>
       <div v-if="filteredOrders.length" class="rounded overflow-hidden">
@@ -78,13 +82,13 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
-import { useDeleteItem } from '@/composables/useDeleteItem'
+import { useDeleteItem } from '@/composables/admin/useDeleteItem'
 import TrashButton from '@/components/buttons/TrashButton.vue'
-import OrderStatusDropdown from '@/components/adminTools/OrderStatusDropdown.vue'
-import { useOrderStatus } from '@/composables/useOrderStatus'
-import { useTableSearch } from '@/composables/useTableSearch'
+import OrderStatusDropdown from '@/components/admin/OrderStatusDropdown.vue'
+import { useOrderStatus } from '@/composables/admin/useOrderStatus'
+import { useTableSearch } from '@/composables/admin/useTableSearch'
 
 const { listenToOrders, updateOrder } = useOrdersCRUD()
 const { deleteItem, deletingId, error } = useDeleteItem()
@@ -105,7 +109,13 @@ onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
 
-const filteredOrders = useTableSearch(orders, search, ['orderNumber', 'customer.name'])
+const searchedOrders = useTableSearch(orders, search, ['orderNumber', 'customer.name'])
+
+const filteredOrders = computed(() =>
+  statusFilter.value
+    ? searchedOrders.value.filter(order => order.status === statusFilter.value)
+    : searchedOrders.value
+)
 
 async function handleStatusChange(orderId, newStatus) {
   if (!newStatus) return

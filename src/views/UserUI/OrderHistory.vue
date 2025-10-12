@@ -46,7 +46,7 @@
 import { ref, onMounted } from 'vue'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
-import { useOrderStatus } from '@/composables/useOrderStatus'
+import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 
 const { listenToOrders } = useOrdersCRUD()
 const userStore = useUserStore()

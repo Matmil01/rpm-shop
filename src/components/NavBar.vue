@@ -90,8 +90,8 @@ import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useSpinAnimation } from '@/composables/useSpinAnimation'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
-import CartDropdown from '@/components/CartDropdown.vue'
-import UserDropdown from '@/components/UserDropdown.vue'
+import CartDropdown from '@/components/user/CartDropdown.vue'
+import UserDropdown from '@/components/user/UserDropdown.vue'
 
 const router = useRouter()
 const searchInput = ref('')

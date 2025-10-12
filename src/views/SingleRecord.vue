@@ -110,7 +110,7 @@ import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
 import OutOfStock from '@/components/buttons/OutOfStock.vue'
 import WishlistButton from '@/components/buttons/WishlistButton.vue'
-import CommentsSection from '@/components/CommentsSection.vue'
+import CommentsSection from '@/components/user/CommentsSection.vue'
 
 const route = useRoute()
 const record = ref({})

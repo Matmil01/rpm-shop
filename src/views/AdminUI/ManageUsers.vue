@@ -56,8 +56,8 @@ import { db } from '@/firebase'
 import { query, collection, getDocs, where } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useUsersCRUD } from '@/composables/CRUD/useUsersCRUD'
-import { useDeleteItem } from '@/composables/useDeleteItem'
-import { useTableSearch } from '@/composables/useTableSearch'
+import { useDeleteItem } from '@/composables/admin/useDeleteItem'
+import { useTableSearch } from '@/composables/admin/useTableSearch'
 
 const users = ref([])
 const search = ref('')

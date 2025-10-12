@@ -71,7 +71,7 @@ import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
-import QuantitySelector from '@/components/QuantitySelector.vue'
+import QuantitySelector from '@/components/user/QuantitySelector.vue'
 
 const router = useRouter()
 const cart = useCartStore()

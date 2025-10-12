@@ -82,7 +82,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
-import { useOrderStatus } from '@/composables/useOrderStatus'
+import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'

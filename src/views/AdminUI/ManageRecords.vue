@@ -100,8 +100,8 @@ import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.j
 import { useTags } from '@/composables/records/useTags'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
-import { useDeleteItem } from '@/composables/useDeleteItem'
-import { useTableSearch } from '@/composables/useTableSearch'
+import { useDeleteItem } from '@/composables/admin/useDeleteItem'
+import { useTableSearch } from '@/composables/admin/useTableSearch'
 
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, unsubscribeRecords } = useRecordsCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
