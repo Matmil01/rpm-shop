@@ -19,18 +19,18 @@
         <table class="w-full table-fixed border-collapse border border-MyYellow font-main text-MyWhite bg-MyBlack">
           <thead>
             <tr class="bg-MyDark text-center text-MyWhite font-main">
-              <th class="p-2 border border-MyDark">Order #</th>
-              <th class="p-2 border border-MyDark">Customer</th>
-              <th class="p-2 border border-MyDark">Total</th>
+              <th class="p-2 border border-MyDark w-[90px]">Order #</th>
+              <th class="p-2 border border-MyDark w-[140px]">Customer</th>
+              <th class="p-2 border border-MyDark w-[90px]">Total</th>
               <th class="p-2 border border-MyDark w-[120px]">Date</th>
-              <th class="p-2 border border-MyDark w-[100px]">Status</th>
+              <th class="p-2 border border-MyDark w-[110px]">Status</th>
               <th class="p-2 border border-MyDark w-[120px]">Actions</th>
               <th class="p-2 border border-MyDark w-[60px]">Delete</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="order in filteredOrders" :key="order.id" class="border-t border-MyDark">
-              <td class="p-2 border border-MyDark">
+              <td class="p-2 border border-MyDark w-[90px]">
                 <router-link
                   :to="`/user/orders/${order.orderNumber}`"
                   class="text-MyWhite underline hover:opacity-70 ease-in-out duration-200 font-main"
@@ -38,15 +38,15 @@
                   {{ order.orderNumber }}
                 </router-link>
               </td>
-              <td class="p-2 border border-MyDark">
+              <td class="p-2 border border-MyDark w-[140px]">
                 {{ order.customer?.name }}
                 <span v-if="order.customer?.username" class="text-xs text-gray-400">
                   ({{ order.customer.username }})
                 </span>
               </td>
-              <td class="p-2 border border-MyDark">{{ order.totalAmount }} kr.</td>
-              <td class="p-2 border border-MyDark">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
-              <td class="p-2 border border-MyDark">
+              <td class="p-2 border border-MyDark w-[90px]">{{ order.totalAmount }} kr.</td>
+              <td class="p-2 border border-MyDark w-[120px]">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
+              <td class="p-2 border border-MyDark w-[110px]">
                 <span
                   class="px-2 py-1 rounded text-xs"
                   :class="getStatusColor(order.status)"
@@ -54,23 +54,14 @@
                   {{ getStatusLabel(order.status) }}
                 </span>
               </td>
-              <td class="p-2 border border-MyDark">
-                <select
-                  @change="handleStatusChange(order.id, $event.target.value)"
-                  class="bg-gray-800 text-MyWhite rounded px-2 py-1 text-xs cursor-pointer font-main"
-                >
-                  <option
-                    v-for="opt in statusOptions"
-                    :key="opt.value"
-                    :value="opt.value"
-                    :selected="order.status === opt.value"
-                    class="font-main"
-                  >
-                    {{ opt.label }}
-                  </option>
-                </select>
+              <td class="p-2 border border-MyDark w-[120px]">
+                <OrderStatusDropdown
+                  v-model="order.status"
+                  @update:modelValue="val => handleStatusChange(order.id, val)"
+                  class="w-full"
+                />
               </td>
-              <td class="p-2 border border-MyDark align-middle text-center">
+              <td class="p-2 border border-MyDark align-middle text-center w-[60px]">
                 <TrashButton
                   title="Delete order"
                   :disabled="false"
@@ -87,10 +78,11 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useDeleteItem } from '@/composables/useDeleteItem'
 import TrashButton from '@/components/buttons/TrashButton.vue'
+import OrderStatusDropdown from '@/components/adminTools/OrderStatusDropdown.vue'
 import { useOrderStatus } from '@/composables/useOrderStatus'
 import { useTableSearch } from '@/composables/useTableSearch'
 

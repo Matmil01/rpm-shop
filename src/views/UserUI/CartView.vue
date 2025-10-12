@@ -31,22 +31,11 @@
 
           <!-- Quantity Controls -->
           <div class="flex items-center mt-2">
-            <button
-              @click="decrementQuantity(item)"
-              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-l flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer"
-              :disabled="item.quantity <= 1"
-            >
-              -
-            </button>
-            <div class="px-2 py-1 bg-gray-800 text-center text-xs w-8">
-              {{ item.quantity }}
-            </div>
-            <button
-              @click="incrementQuantity(item)"
-              class="w-6 h-6 bg-gray-700 text-MyWhite rounded-r flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer"
-            >
-              +
-            </button>
+            <QuantitySelector
+              v-model="item.quantity"
+              :min="1"
+              @update:modelValue="val => updateQuantity(item, val)"
+            />
           </div>
         </div>
 
@@ -82,6 +71,7 @@ import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
+import QuantitySelector from '@/components/QuantitySelector.vue'
 
 const router = useRouter()
 const cart = useCartStore()
@@ -89,18 +79,10 @@ const { calculateDiscountedPrice, calculateTotalPrice } = usePriceCalculator()
 
 const totalPrice = computed(() => calculateTotalPrice(cart.items))
 
-function incrementQuantity(item) {
+function updateQuantity(item, newQuantity) {
   const cartItem = cart.items.find(cartItem => cartItem.id === item.id)
   if (cartItem) {
-    cartItem.quantity += 1
-    cart.saveToLocalStorage()
-  }
-}
-
-function decrementQuantity(item) {
-  const cartItem = cart.items.find(cartItem => cartItem.id === item.id)
-  if (cartItem && cartItem.quantity > 1) {
-    cartItem.quantity -= 1
+    cartItem.quantity = newQuantity
     cart.saveToLocalStorage()
   }
 }

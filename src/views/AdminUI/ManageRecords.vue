@@ -66,7 +66,7 @@
                   Add
                 </button>
               </div>
-              <div v-if="record.showTagSelector" class="mt-2 bg-MyDark p-2 rounded shadow">
+              <div v-if="record.showTagSelector" class="mt-2 bg-MyBlack p-2 rounded shadow">
                 <label v-for="tag in tagsList" :key="tag" class="flex items-center gap-1 mb-1">
                   <input type="checkbox" :value="tag" v-model="record.tags" />
                   {{ tag }}
