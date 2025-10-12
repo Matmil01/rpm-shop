@@ -8,7 +8,7 @@
 
     <div v-else>
       <div class="mb-6 p-4 rounded bg-MyBlack">
-        <h2 class="font-bold mb-2">Order Summary</h2>
+        <h2 class="text-xl font-bold mb-2">Order Summary</h2>
         <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
           <!-- Image -->
           <img
@@ -44,9 +44,10 @@
 
       <!-- Customer input fields -->
       <div v-if="!orderSubmitted">
-        <h2 class="font-bold mb-4">Customer Information</h2>
+        <h2 class="text-xl font-bold mb-4">Customer Information</h2>
         <div class="mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow text-MyWhite">
           <div><span class="font-bold">Name:</span> {{ customerName }}</div>
+          <div><span class="font-bold">Username:</span> {{ username }}</div>
           <div><span class="font-bold">Address:</span> {{ customerAddress }}</div>
           <div v-if="userStore.email"><span class="font-bold">Email:</span> {{ userStore.email }}</div>
         </div>
@@ -88,6 +89,7 @@ const userStore = useUserStore()
 
 const customerName = ref('')
 const customerAddress = ref('')
+const username = ref('')
 const orderNumber = ref(`RPM-${Math.floor(100000 + Math.random() * 900000)}`)
 const processing = ref(false)
 const submitError = ref('')
@@ -101,6 +103,7 @@ onMounted(async () => {
     if (userDoc.exists()) {
       customerName.value = userDoc.data().name || ''
       customerAddress.value = userDoc.data().address || ''
+      username.value = userDoc.data().username || ''
     }
   }
 })

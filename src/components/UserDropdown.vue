@@ -10,7 +10,7 @@
         Edit Profile
       </router-link>
       <router-link
-        :to="userStore.role === 'admin' ? '/admin/wishlist' : '/user/wishlist'"
+        to="/user/wishlist"
         class="block w-full text-center text-MyYellow hover:opacity-70 transition duration-200 ease-in-out font-main cursor-pointer mb-2"
       >
         Wishlist

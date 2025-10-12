@@ -1,18 +1,24 @@
 <template>
   <div class="max-w-lg mx-auto mt-10 p-8 font-main">
     <h2 class="text-2xl font-headline mb-6 text-MyWhite">Edit Profile</h2>
-    <div class="flex flex-col items-center mb-6">
+
+    <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Profile Picture</h3>
+    <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow flex flex-col items-center">
       <img
         src="/avatars/userDefault.svg"
         alt="Profile Picture"
         class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 mb-2"
       />
     </div>
-    <div class="text-center text-MyYellow">
-      <div class="mb-2"><strong>Username:</strong> {{ userStore.username }}</div>
-      <div><strong>Email:</strong> {{ userStore.email }}</div>
+
+    <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Account</h3>
+    <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow text-center">
+      <div class="mb-2 text-MyYellow"><strong>Username:</strong> {{ userStore.username }}</div>
+      <div class="text-MyYellow"><strong>Email:</strong> {{ userStore.email }}</div>
     </div>
-    <div class="w-full max-w-xs mx-auto">
+
+    <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Costumer Info</h3>
+    <div class="w-full max-w-xs mx-auto mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow">
       <label class="block mb-1 text-MyYellow">Name</label>
       <input v-model="name" class="w-full p-2 rounded-full bg-MyBlack text-MyWhite border border-MyYellow mb-4" />
 

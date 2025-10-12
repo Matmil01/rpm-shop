@@ -59,9 +59,9 @@ async function login() {
         router.push('/')
       }
     }, 700)
-  } catch (error) {
+  } catch (err) {
     loading.value = false
-    error.value = 'Login failed. Check your username and password.'
+    error.value = 'Wrong username or password.'
   }
 }
 </script>

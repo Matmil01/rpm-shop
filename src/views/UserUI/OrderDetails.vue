@@ -3,46 +3,56 @@
     <h1 class="text-2xl font-headline mb-4">Order #{{ order?.orderNumber }}</h1>
     <div v-if="loading">Loading order details...</div>
     <div v-else-if="order">
-      <div class="mb-6">
-        <h2 class="text-xl font-bold mb-2">Customer Information</h2>
-        <div>Name: {{ order.customer?.name }}</div>
-        <div>Email: {{ order.customer?.email }}</div>
-        <div>Username: {{ order.customer?.username }}</div>
-        <div>Address: {{ order.customer?.address }}</div>
+      <!-- Customer Info -->
+      <h2 class="text-xl font-bold mb-2">Customer Information</h2>
+      <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow">
+        <div><span class="font-bold">Name:</span> {{ order.customer?.name }}</div>
+        <div><span class="font-bold">Username:</span> {{ username }}</div>
+        <div><span class="font-bold">Address:</span> {{ order.customer?.address }}</div>
+        <div><span class="font-bold">Email:</span> {{ order.customer?.email }}</div>
       </div>
-      <div class="mb-6">
-        <h2 class="text-xl font-bold mb-2">Order Details</h2>
+      <!-- Order Details -->
+      <h2 class="text-xl font-bold mb-2">Order Details</h2>
+      <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow">
         <div>Date: {{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleString() : '' }}</div>
-        <div>Status: <span class="px-2 py-1 rounded text-xs"
-          :class="{
-            'bg-yellow-600': order.status === 'new',
-            'bg-blue-600': order.status === 'processing',
-            'bg-green-600': order.status === 'shipped',
-            'bg-red-600': order.status === 'cancelled'
-          }"
-        >{{ order.status }}</span></div>
+        <div>
+          Status:
+          <span class="px-2 py-1 rounded text-xs"
+            :class="getStatusColor(order.status)"
+          >{{ getStatusLabel(order.status) }}</span>
+        </div>
         <div>Total: {{ order.totalAmount }} kr.</div>
       </div>
+      <!-- Items List -->
+      <h2 class="text-xl font-bold mb-2">Items</h2>
       <div>
-        <h2 class="text-xl font-bold mb-2">Items</h2>
-        <table class="w-full border border-MyYellow mb-4">
-          <thead>
-            <tr>
-              <th class="p-2 border border-MyDark">Album</th>
-              <th class="p-2 border border-MyDark">Artist</th>
-              <th class="p-2 border border-MyDark">Quantity</th>
-              <th class="p-2 border border-MyDark">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in order.items" :key="item.id">
-              <td class="p-2 border border-MyDark">{{ item.album }}</td>
-              <td class="p-2 border border-MyDark">{{ item.artist }}</td>
-              <td class="p-2 border border-MyDark">{{ item.quantity }}</td>
-              <td class="p-2 border border-MyDark">{{ item.price }} kr.</td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-for="item in order.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
+          <!-- Image -->
+          <img
+            v-if="item.coverImage"
+            :src="item.coverImage"
+            alt="Cover"
+            class="w-20 h-20 object-cover rounded shadow"
+          />
+          <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
+            No Image
+          </div>
+          <!-- Details -->
+          <div class="flex-1">
+            <div class="font-bold truncate">{{ item.album }}</div>
+            <div class="text-sm mb-1 truncate">{{ item.artist }}</div>
+            <div class="text-sm">
+              <span v-if="item.discount && item.discount > 0">
+                <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
+                <span class="text-MyRed font-bold">{{ calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
+              </span>
+              <span v-else>
+                <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
+              </span>
+            </div>
+            <div class="text-xs mt-1">Qty: {{ item.quantity }}</div>
+          </div>
+        </div>
       </div>
       <button
         @click="$router.back()"
@@ -62,24 +72,36 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
+import { useOrderStatus } from '@/composables/useOrderStatus'
+import { db } from '@/firebase'
+import { doc, getDoc } from 'firebase/firestore'
 
 const route = useRoute()
 const { fetchAllOrders } = useOrdersCRUD()
 const userStore = useUserStore()
 const order = ref(null)
 const loading = ref(true)
+const { calculateDiscountedPrice } = usePriceCalculator()
+const { getStatusLabel, getStatusColor } = useOrderStatus()
+const username = ref('')
 
 onMounted(async () => {
   const orderNumber = route.params.orderNumber
   const allOrders = await fetchAllOrders()
   if (userStore.role === 'admin') {
-    // Admins can see any order
     order.value = allOrders.find(o => String(o.orderNumber) === String(orderNumber))
   } else {
-    // Users can only see their own orders
     order.value = allOrders.find(
       o => String(o.orderNumber) === String(orderNumber) && o.customer?.uid === userStore.uid
     )
+  }
+  // Fetch username from Firestore using customer.uid
+  if (order.value?.customer?.uid) {
+    const userDoc = await getDoc(doc(db, 'users', order.value.customer.uid))
+    if (userDoc.exists()) {
+      username.value = userDoc.data().username || ''
+    }
   }
   loading.value = false
 })
