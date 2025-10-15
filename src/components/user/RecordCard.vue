@@ -8,7 +8,7 @@
       <div class="relative group">
 
         <img
-          src="/vinyl_PNG18.png"
+          src="/vinyl_PNG18.webp"
           alt=""
           loading="lazy"
           class="absolute inset-0 w-full h-full z-0 opacity-100 transition-all duration-300

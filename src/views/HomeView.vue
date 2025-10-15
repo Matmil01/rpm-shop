@@ -2,10 +2,14 @@
   <div class="pt-10"></div>
   <div class="container mx-auto px-4 font-headline text-MyYellow">
     <div v-for="category in categories" :key="category" class="mb-10">
-      <div class="flex justify-between items-center mb-4">
-        <h1 class="text-4xl font-headline w-full text-center uppercase">{{ category }}</h1>
+      <!-- Responsive header row -->
+      <div class="flex flex-col items-center gap-3 md:gap-0 mb-4 md:flex-row md:justify-between md:items-center">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-headline w-full text-center uppercase">
+          {{ category }}
+        </h1>
         <SimpleButton
           :to="`/shop?tag=${encodeURIComponent(category)}`"
+          class="inline-flex w-auto self-center md:self-auto"
         >
           See all
         </SimpleButton>
@@ -33,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/records/useRecordSearch'
 import RecordCard from '@/components/user/RecordCard.vue'

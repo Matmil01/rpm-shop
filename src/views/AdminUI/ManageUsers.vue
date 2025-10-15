@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { db } from '@/firebase'
 import { query, collection, getDocs, where } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
@@ -64,7 +64,7 @@ const search = ref('')
 const loading = ref(true)
 const userStore = useUserStore()
 const currentAdminUid = userStore.uid
-const { deleteItem, deletingId, error } = useDeleteItem()
+const { deleteItem, deletingId: deleting, error } = useDeleteItem()
 
 const { listenToUsers } = useUsersCRUD()
 let unsubscribe = null

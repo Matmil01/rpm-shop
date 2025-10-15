@@ -1,7 +1,7 @@
 <template>
   <div class="p-6 flex flex-col items-center">
-    <nav class="flex gap-20 pt-10 justify-center">
-      <!-- Return to Dashboard -->
+    <nav class="grid grid-cols-2 gap-x-8 gap-y-10 pt-10 place-items-center md:flex md:gap-20 md:justify-center">
+      <!-- Return to Orders -->
       <router-link to="/admin" class="flex flex-col items-center group">
         <img src="/icons/manageOrders.svg" alt="Orders Icon" class="w-24 h-24 md:w-32 md:h-32 mx-auto group-hover:opacity-70 transition-opacity ease-in-out duration-200" />
         <span class="mt-4 text-xl font-main text-MyWhite">Process Orders</span>

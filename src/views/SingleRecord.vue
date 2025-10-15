@@ -14,16 +14,18 @@
             alt="Album Cover"
             class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow"
           />
-          <div class="text-lg font-bold text-left mb-1">
+          <div class="text-base md:text-lg font-bold text-center md:text-left mb-1">
             {{ record.album }}
           </div>
           <router-link
             :to="`/shop?search=${encodeURIComponent(record.artist)}`"
-            class="text-MyYellow underline hover:opacity-70 transition text-left block mb-2"
+            class="text-MyYellow underline hover:opacity-70 transition text-center md:text-left block mb-2"
           >
             {{ record.artist }}
           </router-link>
-          <div class="flex items-center justify-start mt-4 gap-4">
+          <div
+            class="flex flex-col items-center justify-center md:flex-row md:items-center md:justify-start mt-4 gap-3 md:gap-4"
+          >
             <AddToCartButton
               v-if="record.stock > 0"
               :item="{
@@ -42,7 +44,7 @@
 
         <!-- Right: Details & Tracklist -->
         <div class="flex-1 flex flex-col gap-8">
-          <dl class="grid grid-cols-2 gap-x-4 gap-y-4 mb-2">
+          <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 mb-2">
             <div>
               <dt class="font-semibold">Genre:</dt>
               <dd>

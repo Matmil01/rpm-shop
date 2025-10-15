@@ -7,7 +7,7 @@
       <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
         <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
         <div class="flex-1">
-          <div class="font-bold text-sm text-white">{{ item.album }}</div>
+          <div class="text-sm text-MyWhite font-bold">{{ item.album }}</div>
           <div class="text-xs text-MyWhite">{{ item.artist }}</div>
           <div class="text-xs text-MyWhite">x{{ item.quantity }}</div>
         </div>

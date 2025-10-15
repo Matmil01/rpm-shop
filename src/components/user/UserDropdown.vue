@@ -1,5 +1,11 @@
 <template>
-  <div class="absolute right-0 mt-2 w-40 bg-MyBlack rounded-3xl shadow shadow-MyYellow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+  <div
+    :class="[
+      'absolute right-0 mt-2 w-40 bg-MyBlack rounded-3xl shadow shadow-MyYellow transition-all z-50',
+      open ? 'opacity-100 visible pointer-events-auto' : 'opacity-0 invisible pointer-events-none',
+      'md:group-hover:opacity-100 md:group-hover:visible md:pointer-events-auto'
+    ]"
+  >
     <div class="p-4 flex flex-col items-center">
       <span class="font-bold text-MyYellow mb-2">{{ userStore.username }}</span>
       <hr class="border-t border-gray-700 w-full mb-2" />
@@ -35,6 +41,10 @@
 
 <script setup>
 import { useUserStore } from '@/composables/piniaStores/userStore'
+
+defineProps({
+  open: { type: Boolean, default: false }
+})
 
 const userStore = useUserStore()
 </script>
