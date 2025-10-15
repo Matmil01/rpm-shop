@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', {
       this.email = user.email
       this.username = username || (user.email ? user.email.split('@')[0] : null)
       this.role = role
-      this.profilePic = profilePic
+      this.profilePic = profilePic ?? user.photoURL ?? null
       this.loggedIn = true
     },
     clearUser() {
