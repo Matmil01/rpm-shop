@@ -40,11 +40,11 @@
                 <template v-if="userStore.role === 'admin'">
                   <router-link to="/admin" class="hidden md:flex items-center">
                     <img
-                      :key="`avatar-${userStore.uid}-${avatarSrc}`"
-                      :src="avatarSrc"
+                      :key="`profilePic-${userStore.uid}-${profilePicSrc}`"
+                      :src="profilePicSrc"
                       alt="Profile"
                       class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-70 object-cover"
-                      @error="onAvatarError"
+                      @error="onProfilePicError"
                     />
                   </router-link>
                   <button
@@ -54,11 +54,11 @@
                     :aria-expanded="userMenuOpen"
                   >
                     <img
-                      :key="`avatar-m-${userStore.uid}-${avatarSrc}`"
-                      :src="avatarSrc"
+                      :key="`profilePic-m-${userStore.uid}-${profilePicSrc}`"
+                      :src="profilePicSrc"
                       alt="Profile"
                       class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 transition-opacity object-cover"
-                      @error="onAvatarError"
+                      @error="onProfilePicError"
                     />
                   </button>
                 </template>
@@ -66,11 +66,11 @@
                 <!-- Non-admin -->
                 <template v-else>
                   <img
-                    :key="`avatar-${userStore.uid}-${avatarSrc}`"
-                    :src="avatarSrc"
+                    :key="`profilePic-${userStore.uid}-${profilePicSrc}`"
+                    :src="profilePicSrc"
                     alt="Profile"
                     class="hidden md:block w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-default transition-opacity object-cover"
-                    @error="onAvatarError"
+                    @error="onProfilePicError"
                   />
                   <button
                     class="md:hidden flex items-center"
@@ -79,11 +79,11 @@
                     :aria-expanded="userMenuOpen"
                   >
                     <img
-                      :key="`avatar-m-${userStore.uid}-${avatarSrc}`"
-                      :src="avatarSrc"
+                      :key="`profilePic-m-${userStore.uid}-${profilePicSrc}`"
+                      :src="profilePicSrc"
                       alt="Profile"
                       class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 transition-opacity object-cover"
-                      @error="onAvatarError"
+                      @error="onProfilePicError"
                     />
                   </button>
                 </template>
@@ -122,17 +122,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
-import { auth, db } from '@/firebase'               // CHANGED: import db
-import { doc, getDoc } from 'firebase/firestore'    // ADDED
+import { auth } from '@/firebase'
 import { useCartStore } from '@/composables/piniaStores/cartStore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useSpinAnimation } from '@/composables/useSpinAnimation'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import CartDropdown from '@/components/user/CartDropdown.vue'
 import UserDropdown from '@/components/user/UserDropdown.vue'
+import { useProfilePic } from '@/composables/user/useProfilePic'
 
 const router = useRouter()
 const searchInput = ref('')
@@ -142,54 +142,20 @@ const { angle: logoAngle, startSpin, stopSpin } = useSpinAnimation(180)
 
 const userMenuOpen = ref(false)
 const userMenuEl = ref(null)
-const DEFAULT_AVATAR = '/avatars/userDefault.svg'
-const avatarSrc = computed(() =>
-  (typeof userStore.profilePic === 'string' && userStore.profilePic.trim()) || DEFAULT_AVATAR
-)
 
-function onAvatarError(e) {
+// Use composable for profilePic logic
+const { profilePicSrc, DEFAULT_PROFILE_PIC } = useProfilePic()
+
+function onProfilePicError(e) {
   const img = e?.target
-  if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_AVATAR)) {
-    img.src = DEFAULT_AVATAR
+  if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_PROFILE_PIC)) {
+    img.src = DEFAULT_PROFILE_PIC
   }
 }
 
-// ADDED: load profilePic from Firestore immediately on login
-async function syncProfilePicFromFirestore() {
-  if (!userStore.loggedIn || !userStore.uid) return
-  try {
-    const snap = await getDoc(doc(db, 'users', userStore.uid))
-    if (snap.exists()) {
-      const data = snap.data()
-      const pic = data.profilePic || data.avatarUrl || null
-      if (pic && pic !== userStore.profilePic) {
-        userStore.profilePic = pic
-      }
-    }
-  } catch (_) {
-    // ignore
-  }
-}
-
-// OPTIONAL: backfill from Auth photoURL only if store is empty
-function syncProfilePicFromAuth() {
-  const authPic = auth.currentUser?.photoURL || null
-  if (userStore.loggedIn && !userStore.profilePic && authPic) {
-    userStore.profilePic = authPic
-  }
-}
-
-watch(() => userStore.uid, async () => {
-  userMenuOpen.value = false
-  await syncProfilePicFromFirestore()  // ADDED
-  syncProfilePicFromAuth()             // keep as fallback
-})
-
-onMounted(async () => {
+onMounted(() => {
   document.addEventListener('click', onGlobalClick)
   document.addEventListener('keydown', onEsc)
-  await syncProfilePicFromFirestore()  // ADDED
-  syncProfilePicFromAuth()
 })
 
 onUnmounted(() => {

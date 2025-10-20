@@ -11,8 +11,8 @@
       >
         <img
           :key="imgKey(comment)"
-          :src="getAvatar(comment)"
-          alt="Avatar"
+          :src="getProfilePic(comment)"
+          alt="Profile Picture"
           class="w-8 h-8 rounded-full object-cover bg-gray-700 border border-gray-600 shrink-0"
           @error="onImgError"
         />
@@ -29,8 +29,8 @@
     <div v-if="userStore.loggedIn" class="mt-4">
       <form @submit.prevent="submitComment" class="flex items-start gap-3">
         <img
-          :src="userAvatar"
-          alt="Your Avatar"
+          :src="profilePicSrc"
+          alt="Your Profile Picture"
           class="w-8 h-8 rounded-full object-cover bg-gray-700 border border-gray-600 shrink-0"
           @error="onImgError"
         />
@@ -54,114 +54,49 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '@/firebase'
+import { watch, onMounted } from 'vue'
 import { useComments } from '@/composables/user/useComments'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
+import { useProfilePic } from '@/composables/user/useProfilePic'
+import { useCommentUserPic } from '@/composables/user/useCommentUserPic'
 
 const props = defineProps({ recordId: { type: String, required: true } })
 
 const userStore = useUserStore()
-const DEFAULT_AVATAR = '/avatars/userDefault.svg'
-
+const { profilePicSrc } = useProfilePic() // Current user only
 const { comments, newComment, addComment } = useComments(props.recordId)
 
-// Cache avatars for comments that lack profilePic/avatarUrl
-const avatarCache = ref({}) // { [uid]: url|null }
-
-const userAvatar = computed(() =>
-  (typeof userStore.profilePic === 'string' && userStore.profilePic.trim()) || DEFAULT_AVATAR
-)
-
-// Normalize to whatever field the comment used for the author id
-function getUid(comment) {
-  return (
-    comment?.uid ||
-    comment?.userId ||
-    comment?.userID ||
-    comment?.userUid ||
-    comment?.authorId ||
-    comment?.authorID ||
-    null
-  )
-}
-
-function getAvatar(comment) {
-  const inlinePic =
-    (comment?.profilePic && String(comment.profilePic).trim()) ||
-    (comment?.avatarUrl && String(comment.avatarUrl).trim()) // legacy
-
-  if (inlinePic) return inlinePic
-
-  const uid = getUid(comment)
-  const cached = uid ? avatarCache.value[uid] : null
-  return (cached && String(cached).trim()) || DEFAULT_AVATAR
-}
+// Use composable for all user profile pics in comments
+const {
+  getUid,
+  getProfilePic,
+  hydrateMissingProfilePics,
+  DEFAULT_PROFILE_PIC
+} = useCommentUserPic()
 
 function imgKey(comment) {
   const uid = getUid(comment) || 'nouid'
-  const inline =
-    (comment?.profilePic && String(comment.profilePic).trim()) ||
-    (comment?.avatarUrl && String(comment.avatarUrl).trim()) ||
-    ''
-  const cached = avatarCache.value[uid] || ''
-  // Re-render when either inline or cached value changes
-  return `${comment.id}-${uid}-${inline}-${cached}`
+  const inline = comment?.profilePic && String(comment.profilePic).trim() || ''
+  return `${comment.id}-${uid}-${inline}`
 }
 
 function onImgError(e) {
   const img = e?.target
-  if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_AVATAR)) {
-    img.src = DEFAULT_AVATAR
+  if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_PROFILE_PIC)) {
+    img.src = DEFAULT_PROFILE_PIC
   }
-}
-
-async function hydrateMissingAvatars() {
-  const lookups = []
-  const seen = new Set()
-  for (const c of comments.value || []) {
-    const uid = getUid(c)
-    if (!uid) continue
-
-    // Skip if comment already has an inline avatar
-    const hasInline =
-      (c.profilePic && String(c.profilePic).trim()) ||
-      (c.avatarUrl && String(c.avatarUrl).trim())
-    if (hasInline) continue
-
-    // Skip if already cached or queued
-    if (avatarCache.value[uid] !== undefined) continue
-    if (seen.has(uid)) continue
-    seen.add(uid)
-
-    lookups.push(
-      getDoc(doc(db, 'users', uid))
-        .then(snap => {
-          const url = snap.exists()
-            ? (snap.data().profilePic || snap.data().avatarUrl || null)
-            : null
-          avatarCache.value = { ...avatarCache.value, [uid]: url }
-        })
-        .catch(() => {
-          avatarCache.value = { ...avatarCache.value, [uid]: null }
-        })
-    )
-  }
-  if (lookups.length) await Promise.allSettled(lookups)
 }
 
 watch(comments, () => {
-  hydrateMissingAvatars()
+  hydrateMissingProfilePics(comments.value)
 }, { immediate: true })
 
 onMounted(() => {
-  hydrateMissingAvatars()
+  hydrateMissingProfilePics(comments.value)
 })
 
-// Ensure we store profilePic with each new comment
 async function submitComment() {
-  await addComment({ profilePic: userStore.profilePic || null })
+  await addComment({ profilePic: profilePicSrc.value })
 }
 </script>

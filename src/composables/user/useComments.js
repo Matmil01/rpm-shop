@@ -2,9 +2,11 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { db } from '@/firebase'
 import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
+import { useProfilePic } from '@/composables/user/useProfilePic'
 
 export function useComments(recordId) {
   const userStore = useUserStore()
+  const { profilePicSrc } = useProfilePic()
   const comments = ref([])
   const newComment = ref('')
   let unsubscribeComments = null
@@ -12,7 +14,7 @@ export function useComments(recordId) {
   function listenToComments() {
     if (!recordId) return
     const commentsRef = collection(db, 'records', recordId, 'comments')
-    const q = query(commentsRef, orderBy('date', 'desc')) // uses existing 'date' field
+    const q = query(commentsRef, orderBy('date', 'desc'))
     unsubscribeComments = onSnapshot(q, snapshot => {
       comments.value = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -28,7 +30,7 @@ export function useComments(recordId) {
       text,
       username: userStore.username || 'Anonymous',
       uid: userStore.uid || null,
-      profilePic: userStore.profilePic || null, // store avatar with the comment
+      profilePic: profilePicSrc.value,
       date: new Date().toISOString(),
       createdAt: serverTimestamp(),
       ...extra

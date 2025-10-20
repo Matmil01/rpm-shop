@@ -9,17 +9,17 @@
       <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Profile Picture</h3>
       <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow flex flex-col items-center gap-3">
         <img
-          :src="previewUrl || avatarSrc"
+          :src="previewUrl || profilePicSrc"
           alt="Profile Picture"
           class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 object-cover"
-          @error="onAvatarError"
+          @error="onProfilePicError"
         />
 
         <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="onFileChange" />
 
         <div class="flex gap-3">
           <SimpleButton @click="chooseFile">Choose Picture</SimpleButton>
-          <SimpleButton @click="uploadAvatar" :disabled="!selectedFile || uploading">
+          <SimpleButton @click="uploadProfilePic" :disabled="!selectedFile || uploading">
             {{ uploading ? 'Uploading...' : 'Upload' }}
           </SimpleButton>
         </div>
@@ -43,7 +43,7 @@
 
     <!-- Customer Info Section -->
     <div class="w-full max-w-xs mx-auto">
-      <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Costumer Info</h3>
+      <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Customer Info</h3>
       <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow">
         <label class="block mb-1 text-MyYellow">Name</label>
         <input v-model="name" class="w-full p-2 rounded-full bg-MyBlack text-MyWhite border border-MyYellow mb-4" />
@@ -60,13 +60,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { db, auth } from '@/firebase'
+import { ref } from 'vue'
+import { db } from '@/firebase'
 import { doc, updateDoc, getDoc } from 'firebase/firestore'
-import { updateProfile } from 'firebase/auth'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import { uploadToCloudinary } from '@/composables/user/useCloudinaryUpload'
+import { useProfilePic } from '@/composables/user/useProfilePic'
 
 const userStore = useUserStore()
 
@@ -75,7 +75,7 @@ const address = ref('')
 const success = ref('')
 const error = ref('')
 
-// Avatar state
+// Profile picture state
 const fileInput = ref(null)
 const selectedFile = ref(null)
 const previewUrl = ref('')
@@ -83,17 +83,13 @@ const uploading = ref(false)
 const uploadError = ref('')
 const uploadSuccess = ref('')
 
-const DEFAULT_AVATAR = '/avatars/userDefault.svg'
+// Use composable for profilePic logic
+const { profilePicSrc, updateProfilePic, DEFAULT_PROFILE_PIC } = useProfilePic()
 
-// Only render from store (prevents cross-user leakage)
-const avatarSrc = computed(() =>
-  (typeof userStore.profilePic === 'string' && userStore.profilePic.trim()) || DEFAULT_AVATAR
-)
-
-function onAvatarError(e) {
+function onProfilePicError(e) {
   const img = e?.target
-  if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_AVATAR)) {
-    img.src = DEFAULT_AVATAR
+  if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_PROFILE_PIC)) {
+    img.src = DEFAULT_PROFILE_PIC
   }
 }
 
@@ -104,11 +100,7 @@ async function loadProfile() {
     const data = snap.data()
     name.value = data.name || ''
     address.value = data.address || ''
-    // Prefer profilePic; support legacy avatarUrl; finally fall back to Auth once
-    const pic = data.profilePic || data.avatarUrl || auth.currentUser?.photoURL || null
-    if (pic && userStore.profilePic !== pic) {
-      userStore.profilePic = pic
-    }
+    // Do NOT set userStore.profilePic here; composable handles it
   }
 }
 loadProfile()
@@ -129,29 +121,21 @@ function onFileChange(e) {
   previewUrl.value = file ? URL.createObjectURL(file) : ''
 }
 
-async function uploadAvatar() {
+async function uploadProfilePic() {
   if (!selectedFile.value || !userStore.uid) return
   try {
     uploading.value = true
     uploadError.value = ''
     uploadSuccess.value = ''
 
+    // Upload to Cloudinary
     const result = await uploadToCloudinary(selectedFile.value, { folder: 'rpm-shop/avatars' })
-    const secureUrl = result.secure_url
-
-    // Write profilePic (and avatarUrl for legacy compatibility)
-    await updateDoc(doc(db, 'users', userStore.uid), {
-      profilePic: secureUrl,
-      avatarUrl: secureUrl
-    })
-
-    // Update Firebase Auth (optional)
-    if (auth.currentUser) {
-      await updateProfile(auth.currentUser, { photoURL: secureUrl })
+    if (!result?.secure_url) {
+      throw new Error('No secure_url returned from Cloudinary')
     }
 
-    // Update store for Navbar
-    userStore.profilePic = secureUrl
+    // Save to Firestore and Pinia
+    await updateProfilePic(result.secure_url)
 
     uploadSuccess.value = 'Profile picture updated!'
     selectedFile.value = null
