@@ -1,4 +1,5 @@
 <template>
+  <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   <div class="pt-10"></div>
   <div class="container mx-auto px-4 font-headline text-MyYellow">
     <div v-for="category in categories" :key="category" class="mb-10">
@@ -28,6 +29,7 @@
             :price="Number(record.price) || 0"
             :discount="Number(record.discount) || 0"
             :stock="record.stock"
+            :showSnackbar="showSnackbar"
           />
         </div>
       </div>
@@ -42,6 +44,15 @@ import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/records/useRecordSearch'
 import RecordCard from '@/components/user/RecordCard.vue'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
+import Snackbar from '@/components/Snackbar.vue'
+
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
+}
 
 const tag = ref('')
 const search = ref('')

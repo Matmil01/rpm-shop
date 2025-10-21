@@ -1,4 +1,5 @@
 <template>
+  <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   <div class="container mx-auto px-4 max-w-5xl p-8 text-MyWhite font-main">
     <h1 class="text-3xl font-bold mb-8 text-center font-headline">Your Wishlist</h1>
     <div v-if="loading" class="text-center text-lg text-MyWhite">Loading wishlist...</div>
@@ -43,7 +44,7 @@
           </div>
         </div>
         <div class="flex flex-row items-center gap-2 md:ml-6">
-          <AddToCartButton :item="item" />
+          <AddToCartButton :item="item" @added="showSnackbar('Added to cart!')" />
           <TrashButton
             title="Remove from wishlist"
             alt="Remove"
@@ -67,6 +68,15 @@ import { useWishlistStore } from '@/composables/piniaStores/wishlistStore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
+import Snackbar from '@/components/Snackbar.vue'
+
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
+}
 
 const wishlist = useWishlistStore()
 const userStore = useUserStore()

@@ -78,6 +78,7 @@
       </div>
       <div v-else class="text-MyWhite">No orders yet.</div>
     </div>
+    <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   </div>
 </template>
 
@@ -89,6 +90,15 @@ import TrashButton from '@/components/buttons/TrashButton.vue'
 import OrderStatusDropdown from '@/components/admin/OrderStatusDropdown.vue'
 import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 import { useTableSearch } from '@/composables/admin/useTableSearch'
+import Snackbar from '@/components/Snackbar.vue'
+
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
+}
 
 const { listenToOrders, updateOrder } = useOrdersCRUD()
 const { deleteItem, deletingId, error } = useDeleteItem()
@@ -121,9 +131,9 @@ async function handleStatusChange(orderId, newStatus) {
   if (!newStatus) return
   try {
     await updateOrder(orderId, { status: newStatus })
-    console.log(`Order ${orderId} status updated to ${newStatus}`)
+    showSnackbar(`Order status updated!`)
   } catch (error) {
-    console.error('Error updating order status:', error)
+    showSnackbar('Error updating order status: ' + error.message)
   }
 }
 

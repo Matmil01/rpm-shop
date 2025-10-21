@@ -90,6 +90,7 @@
         </tbody>
       </table>
     </div>
+    <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   </div>
 </template>
 
@@ -102,6 +103,15 @@ import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
 import { useDeleteItem } from '@/composables/admin/useDeleteItem'
 import { useTableSearch } from '@/composables/admin/useTableSearch'
+import Snackbar from '@/components/Snackbar.vue'
+
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
+}
 
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, unsubscribeRecords } = useRecordsCRUD()
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
@@ -142,8 +152,9 @@ watch(() => records.value, (newRecords) => {
 async function autoSave(record, field, value) {
   try {
     await crudUpdateRecord(record.id, { [field]: value })
+    showSnackbar('Saved!')
   } catch (error) {
-    alert('Error saving change: ' + error.message)
+    showSnackbar('Error saving change: ' + error.message)
   }
 }
 

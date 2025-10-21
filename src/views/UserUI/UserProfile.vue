@@ -27,8 +27,6 @@
         <div v-if="selectedFile" class="text-MyYellow text-sm">
           {{ selectedFile.name }}
         </div>
-        <div v-if="uploadError" class="text-MyRed font-main text-sm">{{ uploadError }}</div>
-        <div v-if="uploadSuccess" class="text-green-400 font-main text-sm">{{ uploadSuccess }}</div>
       </div>
     </div>
 
@@ -52,10 +50,10 @@
         <input v-model="address" class="w-full p-2 rounded-full bg-MyBlack text-MyWhite border border-MyYellow mb-4" />
 
         <SimpleButton @click="saveProfile">Save Profile</SimpleButton>
-        <div v-if="success" class="text-green-400 mt-2 font-main">{{ success }}</div>
-        <div v-if="error" class="text-MyRed mt-2 font-main">{{ error }}</div>
       </div>
     </div>
+
+    <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   </div>
 </template>
 
@@ -67,21 +65,26 @@ import { useUserStore } from '@/composables/piniaStores/userStore'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import { uploadToCloudinary } from '@/composables/user/useCloudinaryUpload'
 import { useProfilePic } from '@/composables/user/useProfilePic'
+import Snackbar from '@/components/Snackbar.vue'
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
+
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
+}
 
 const userStore = useUserStore()
 
 const name = ref('')
 const address = ref('')
-const success = ref('')
-const error = ref('')
 
 // Profile picture state
 const fileInput = ref(null)
 const selectedFile = ref(null)
 const previewUrl = ref('')
 const uploading = ref(false)
-const uploadError = ref('')
-const uploadSuccess = ref('')
 
 // Use composable for profilePic logic
 const { profilePicSrc, updateProfilePic, DEFAULT_PROFILE_PIC } = useProfilePic()
@@ -106,14 +109,10 @@ async function loadProfile() {
 loadProfile()
 
 function chooseFile() {
-  uploadError.value = ''
-  uploadSuccess.value = ''
   fileInput.value?.click()
 }
 
 function onFileChange(e) {
-  uploadError.value = ''
-  uploadSuccess.value = ''
   const file = e.target.files?.[0]
   selectedFile.value = file || null
 
@@ -125,8 +124,6 @@ async function uploadProfilePic() {
   if (!selectedFile.value || !userStore.uid) return
   try {
     uploading.value = true
-    uploadError.value = ''
-    uploadSuccess.value = ''
 
     // Upload to Cloudinary
     const result = await uploadToCloudinary(selectedFile.value, { folder: 'rpm-shop/avatars' })
@@ -137,13 +134,13 @@ async function uploadProfilePic() {
     // Save to Firestore and Pinia
     await updateProfilePic(result.secure_url)
 
-    uploadSuccess.value = 'Profile picture updated!'
+    showSnackbar('Profile picture updated!')
     selectedFile.value = null
     if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
     previewUrl.value = ''
   } catch (e) {
     console.error('Cloudinary upload error:', e)
-    uploadError.value = e?.message || 'Upload failed.'
+    showSnackbar('Error uploading profile picture')
   } finally {
     uploading.value = false
   }
@@ -156,11 +153,9 @@ async function saveProfile() {
       name: name.value,
       address: address.value
     })
-    success.value = 'Profile updated!'
-    error.value = ''
+    showSnackbar('Profile updated!')
   } catch (err) {
-    error.value = 'Failed to save profile.'
-    success.value = ''
+    showSnackbar('Error saving profile')
   }
 }
 </script>

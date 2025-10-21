@@ -116,6 +116,13 @@
         </SimpleButton>
       </form>
     </div>
+
+    <!-- Snackbar Component -->
+    <Snackbar
+      v-model:show="snackbarShow"
+      :message="snackbarMessage"
+      color="success"
+    />
   </div>
 </template>
 
@@ -129,6 +136,7 @@ import { useSpecialOffersTag } from '@/composables/records/useSpecialOffersTag.j
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useTags } from '@/composables/records/useTags'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
+import Snackbar from '@/components/Snackbar.vue'
 
 const artist = ref('')
 const album = ref('')
@@ -152,6 +160,9 @@ const { mapReleaseToForm } = useReleaseMapper()
 const { buildRecord } = useRecordBuilder()
 const { applySpecialOffersTag } = useSpecialOffersTag()
 const { tagsList, addTag, removeTag, toggleTag } = useTags()
+
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
 
 function onSearch() {
   if (searchQuery.value.trim()) {
@@ -194,9 +205,15 @@ async function onSubmit() {
 
   try {
     await addRecord(record)
-    alert('Added to Firestore!')
+    showSnackbar('Added to Firestore!')
   } catch (error) {
-    alert('Error adding record: ' + error.message)
+    showSnackbar('Error adding record: ' + error.message)
   }
+}
+
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
 }
 </script>

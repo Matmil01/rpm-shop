@@ -39,7 +39,10 @@ const discountedPrice = computed(() =>
   calculateDiscountedPrice(props.item.price, props.item.discount)
 )
 
+const emit = defineEmits(['added'])
+
 function handleAdd() {
   cart.addToCart(props.item)
+  emit('added')
 }
 </script>

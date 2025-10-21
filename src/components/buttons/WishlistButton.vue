@@ -19,6 +19,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['added', 'removed'])
+
 const wishlist = useWishlistStore()
 
 const inWishlist = computed(() =>
@@ -29,6 +31,7 @@ async function toggleWishlist() {
   if (!props.record.id) return
   if (inWishlist.value) {
     await wishlist.removeFromWishlist(props.record.id)
+    emit('removed')
   } else {
     await wishlist.addToWishlist({
       id: props.record.id,
@@ -38,6 +41,7 @@ async function toggleWishlist() {
       price: props.record.price,
       discount: props.record.discount
     })
+    emit('added')
   }
 }
 </script>

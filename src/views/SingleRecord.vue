@@ -1,4 +1,5 @@
 <template>
+  <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   <div class="pt-10"></div>
   <div class="container mx-auto px-4">
     <!-- Main Record Details Container -->
@@ -36,9 +37,15 @@
                 price: record.price,
                 discount: record.discount
               }"
+              @added="showSnackbar('Added to cart!')"
             />
             <OutOfStock v-else-if="record.id && record.stock === 0" />
-            <WishlistButton v-if="record.id" :record="record" />
+            <WishlistButton
+              v-if="record.id"
+              :record="record"
+              @added="showSnackbar('Added to wishlist!')"
+              @removed="showSnackbar('Removed from wishlist!')"
+            />
           </div>
         </div>
 
@@ -113,6 +120,15 @@ import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
 import OutOfStock from '@/components/buttons/OutOfStock.vue'
 import WishlistButton from '@/components/buttons/WishlistButton.vue'
 import CommentsSection from '@/components/user/CommentsSection.vue'
+import Snackbar from '@/components/Snackbar.vue'
+
+const snackbarMessage = ref('')
+const snackbarShow = ref(false)
+function showSnackbar(msg) {
+  snackbarMessage.value = msg
+  snackbarShow.value = true
+  setTimeout(() => snackbarShow.value = false, 3000)
+}
 
 const route = useRoute()
 const record = ref({})

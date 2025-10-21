@@ -38,14 +38,18 @@
     </router-link>
 
     <div class="flex items-center justify-center mt-4">
-      <AddToCartButton v-if="props.stock > 0" :item="{
-        id: props.id,
-        album: props.album,
-        artist: props.artist,
-        coverImage: props.coverImage,
-        price: props.price,
-        discount: props.discount
-      }" />
+      <AddToCartButton
+        v-if="props.stock > 0"
+        :item="{
+          id: props.id,
+          album: props.album,
+          artist: props.artist,
+          coverImage: props.coverImage,
+          price: props.price,
+          discount: props.discount
+        }"
+        @added="props.showSnackbar && props.showSnackbar('Added to cart!')"
+      />
       <OutOfStock v-else />
     </div>
   </div>
@@ -65,7 +69,8 @@ const props = defineProps({
   coverImage: String,
   price: [Number, String],
   discount: { type: [Number, String], default: 0 },
-  stock: { type: [Number, String], default: 1 }
+  stock: { type: [Number, String], default: 1 },
+  showSnackbar: Function
 })
 
 const { calculateDiscountedPrice } = usePriceCalculator()
