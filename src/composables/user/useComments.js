@@ -4,6 +4,7 @@ import { collection, addDoc, serverTimestamp, onSnapshot, query, orderBy } from 
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useProfilePic } from '@/composables/user/useProfilePic'
 
+// Composable for managing comments on a record
 export function useComments(recordId) {
   const userStore = useUserStore()
   const { profilePicSrc } = useProfilePic()
@@ -23,6 +24,7 @@ export function useComments(recordId) {
     })
   }
 
+  // Adds a new comment to Firestore
   async function addComment(extra = {}) {
     const text = (newComment.value || '').trim()
     if (!text) return
@@ -39,10 +41,13 @@ export function useComments(recordId) {
     newComment.value = ''
   }
 
+  // Start listening for comments when component mounts
   onMounted(listenToComments)
+  // Unsubscribe from listener when component unmounts
   onUnmounted(() => {
     if (typeof unsubscribeComments === 'function') unsubscribeComments()
   })
 
+  // Expose comments state and functions
   return { comments, newComment, addComment }
 }

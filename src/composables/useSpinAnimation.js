@@ -1,20 +1,24 @@
 import { ref } from 'vue'
 
+// Composable for animating a spinning effect (e.g. logo)
+// spinSpeed: degrees per second (default 180)
 export function useSpinAnimation(spinSpeed = 180) {
-  const angle = ref(0)
-  let spinning = false
-  let frameId = null
-  let lastTimestamp = null
+  const angle = ref(0)         // Current rotation angle in degrees
+  let spinning = false         // Is the animation running?
+  let frameId = null           // requestAnimationFrame ID
+  let lastTimestamp = null     // Last frame timestamp
 
+  // Animation step: advances the angle based on time delta
   function spinStep(timestamp) {
     if (!lastTimestamp) lastTimestamp = timestamp
     const delta = timestamp - lastTimestamp
     lastTimestamp = timestamp
-    angle.value += (delta / 1000) * spinSpeed
-    angle.value %= 360
+    angle.value += (delta / 1000) * spinSpeed // Advance angle
+    angle.value %= 360                        // Keep angle in [0, 360)
     if (spinning) frameId = requestAnimationFrame(spinStep)
   }
 
+  // Starts the spinning animation
   function startSpin() {
     if (!spinning) {
       spinning = true
@@ -23,6 +27,7 @@ export function useSpinAnimation(spinSpeed = 180) {
     }
   }
 
+  // Stops the spinning animation
   function stopSpin() {
     spinning = false
     if (frameId) cancelAnimationFrame(frameId)
@@ -31,8 +36,8 @@ export function useSpinAnimation(spinSpeed = 180) {
   }
 
   return {
-    angle,
-    startSpin,
-    stopSpin,
+    angle,      // Reactive angle value for binding to style
+    startSpin,  // Function to start spinning
+    stopSpin,   // Function to stop spinning
   }
 }

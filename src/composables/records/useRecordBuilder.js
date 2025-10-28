@@ -1,3 +1,4 @@
+// Composable for building a record doc for Firestore from input fields and random generators
 export function useRecordBuilder() {
   function buildRecord(fields, randomStock, randomPrice) {
     return {
@@ -16,5 +17,6 @@ export function useRecordBuilder() {
       numRecords: fields.numRecords,
     }
   }
+    // Expose buildRecord function
   return { buildRecord }
 }

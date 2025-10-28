@@ -17,13 +17,18 @@ import FooterView from './components/FooterView.vue';
 const userStore = useUserStore()
 
 onMounted(() => {
+  // Listen for Firebase auth state changes
   onAuthStateChanged(auth, async (user) => {
     if (user) {
+      // If user is logged in, fetch user document from Firestore
       const userDoc = await getDoc(doc(db, 'users', user.uid))
+      // Get role and profilePic from Firestore, fallback to 'user' and null
       const role = userDoc.exists() ? userDoc.data().role : 'user'
       const profilePic = userDoc.exists() ? userDoc.data().profilePic || null : null
+      // Set user info in Pinia store
       userStore.setUser(user, role, profilePic)
     } else {
+      // If no user, clear user info from Pinia store
       userStore.clearUser()
     }
   })

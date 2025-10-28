@@ -1,7 +1,9 @@
+// Uploads a file to Cloudinary and returns the upload result
 export async function uploadToCloudinary(file, opts = {}) {
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
   if (!cloudName || !uploadPreset) {
+    // Throw error if env variables are missing
     throw new Error('Missing Cloudinary env (VITE_CLOUDINARY_CLOUD_NAME, VITE_CLOUDINARY_UPLOAD_PRESET)')
   }
 
@@ -15,8 +17,10 @@ export async function uploadToCloudinary(file, opts = {}) {
     body: formData
   })
 
+  // Parse JSON response
   const json = await res.json().catch(() => null)
   if (!res.ok) {
+    // Throw error if upload failed
     const msg = json?.error?.message || `Cloudinary upload failed (${res.status})`
     throw new Error(msg)
   }

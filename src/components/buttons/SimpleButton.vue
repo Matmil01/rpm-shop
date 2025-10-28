@@ -1,5 +1,5 @@
 <template>
-  <!-- Link mode -->
+  <!-- Link mode: renders a <router-link> if 'to' prop is provided -->
   <router-link
     v-if="to"
     :to="to"
@@ -13,7 +13,7 @@
     <slot />
   </router-link>
 
-  <!-- Button mode -->
+  <!-- Button mode: renders a <button> if 'to' prop is not provided -->
   <button
     v-else
     :type="type"
@@ -29,16 +29,24 @@
 </template>
 
 <script setup>
+// Props:
+// - to: if provided, renders as a <router-link> for navigation
+// - onClick: optional callback for click events
+// - type: button type (default 'button')
+// - disabled: disables the button/link
 const props = defineProps({
   to: { type: [String, Object], default: null },
   onClick: { type: Function, default: null }, // compatibility
   type: { type: String, default: 'button' },
   disabled: { type: Boolean, default: false }
 })
+// Emits 'click' event for parent listeners
 const emit = defineEmits(['click'])
 
+// Handles click events for both button and link modes
 function handleClick(e) {
   if (props.disabled) {
+    // Prevent action if disabled
     e.preventDefault()
     e.stopPropagation()
     return

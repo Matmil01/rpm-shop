@@ -2,10 +2,8 @@
   <Snackbar :message="snackbarMessage" :show="snackbarShow" />
   <div class="pt-10"></div>
   <div class="container mx-auto px-4">
-    <!-- Main Record Details Container -->
     <div class="rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow font-main text-MyYellow relative">
       <div class="flex flex-col md:flex-row gap-12 md:gap-16">
-        <!-- Left: Main Info & Cover -->
         <div
           v-if="record && record.id"
           class="flex-shrink-0 flex flex-col items-center md:items-start gap-4"
@@ -49,7 +47,6 @@
           </div>
         </div>
 
-        <!-- Right: Details & Tracklist -->
         <div class="flex-1 flex flex-col gap-8">
           <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 mb-2">
             <div>
@@ -101,7 +98,6 @@
       </div>
     </div>
 
-    <!-- Comments Section -->
     <div class="mt-10">
       <CommentsSection v-if="record && record.id" :record-id="record.id" />
     </div>
@@ -122,32 +118,47 @@ import WishlistButton from '@/components/buttons/WishlistButton.vue'
 import CommentsSection from '@/components/user/CommentsSection.vue'
 import Snackbar from '@/components/Snackbar.vue'
 
+// Snackbar message text
 const snackbarMessage = ref('')
+// Snackbar visibility state
 const snackbarShow = ref(false)
+
+// Helper to show snackbar notification
 function showSnackbar(msg) {
   snackbarMessage.value = msg
   snackbarShow.value = true
   setTimeout(() => snackbarShow.value = false, 3000)
 }
 
+// Vue Router for record ID param
 const route = useRoute()
+// Reactive record object
 const record = ref({})
+// Access cart store
 const cart = useCartStore()
+// Price calculation function
 const { calculateDiscountedPrice } = usePriceCalculator()
+// Access user store
 const userStore = useUserStore()
+// Unsubscribe function for record listener
 let unsubscribe = null
 
+// CRUD composable for listening to a single record
 const { listenToRecord } = useRecordsCRUD()
 
+// On mount: listen to record changes by ID
 onMounted(() => {
   unsubscribe = listenToRecord(route.params.id, (result) => {
     if (result) record.value = result
   })
 })
+
+// On unmount: unsubscribe from record listener
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
 
+// Computed: discounted price for the record
 const discountedPrice = computed(() => {
   if (record.value && record.value.price) {
     return calculateDiscountedPrice(record.value.price, record.value.discount || 0)

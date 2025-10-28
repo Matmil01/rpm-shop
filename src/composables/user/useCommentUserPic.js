@@ -4,11 +4,13 @@ import { db } from '@/firebase'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import { useProfilePic } from '@/composables/user/useProfilePic'
 
+// Composable for managing and caching user profile pictures for comments
 export function useCommentUserPic() {
   const profilePicCache = ref({})
   const userStore = useUserStore()
   const { profilePicSrc, DEFAULT_PROFILE_PIC } = useProfilePic()
 
+  // Gets UID from a comment object (supports multiple possible field names)
   function getUid(comment) {
     return (
       comment?.uid ||
@@ -21,6 +23,7 @@ export function useCommentUserPic() {
     )
   }
 
+  // Gets the profile picture URL for a comment
   function getProfilePic(comment) {
     const inlinePic = comment?.profilePic && String(comment.profilePic).trim()
     if (inlinePic) return inlinePic
@@ -33,6 +36,7 @@ export function useCommentUserPic() {
     return (cached && String(cached).trim()) || DEFAULT_PROFILE_PIC
   }
 
+  // Loads missing profile pictures from Firestore for comments
   async function hydrateMissingProfilePics(comments) {
     const lookups = []
     const seen = new Set()

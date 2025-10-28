@@ -1,6 +1,6 @@
 <template>
-
   <div class="rounded p-4 w-full mx-auto font-main text-MyWhite">
+    <!-- Link to record details page -->
     <router-link
       :to="`/record/${props.id}`"
       class="block"
@@ -25,11 +25,13 @@
         />
       </div>
     </router-link>
+    <!-- Album title -->
     <div
       class="text-lg font-bold w-full block mb-1 overflow-hidden whitespace-nowrap truncate"
     >
       {{ props.album }}
     </div>
+    <!-- Link to artist search -->
     <router-link
       :to="`/shop?search=${encodeURIComponent(props.artist)}`"
       class="text-MyWhite underline text-left inline mb-2 hover:opacity-70 transition duration-200 ease-in-out"
@@ -37,6 +39,7 @@
       {{ props.artist }}
     </router-link>
 
+    <!-- Add to Cart or Out of Stock button -->
     <div class="flex items-center justify-center mt-4">
       <AddToCartButton
         v-if="props.stock > 0"
@@ -62,6 +65,9 @@ import { usePriceCalculator } from '@/composables/records/usePriceCalculator'
 import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
 import OutOfStock from '@/components/buttons/OutOfStock.vue'
 
+// Props:
+// - id, album, artist, coverImage, price, discount, stock: record info
+// - showSnackbar: function to show snackbar notification
 const props = defineProps({
   id: String,
   album: String,
@@ -73,11 +79,13 @@ const props = defineProps({
   showSnackbar: Function
 })
 
+// Price calculation for discounted price display
 const { calculateDiscountedPrice } = usePriceCalculator()
 
 const discountedPrice = computed(() =>
   calculateDiscountedPrice(props.price, props.discount)
 )
 
+// Access cart store (not used directly here, but available for future logic)
 const cart = useCartStore()
 </script>

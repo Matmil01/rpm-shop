@@ -87,30 +87,48 @@ import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 
+// Get route instance for reading order number from query
 const route = useRoute()
+
+// Orders CRUD composable for fetching order by number
 const { fetchOrderByNumber } = useOrdersCRUD()
+
+// Order status helpers for label and color
 const { getStatusLabel, getStatusColor } = useOrderStatus()
 
+// Computed: order number from query or fallback to random
 const orderNumber = computed(() =>
   route.query.orderNumber || `RPM-${Math.floor(100000 + Math.random() * 900000)}`
 )
 
+// Reactive order data object
 const orderData = ref(null)
+
+// Reactive array of order items
 const orderItems = ref([])
+
+// Reactive total price for the order
 const orderTotal = ref(0)
+
+// Loading state for async fetch
 const isLoading = ref(true)
+
+// Username for display in customer info
 const username = ref('')
 
+// On mount: fetch order details and customer username
 onMounted(async () => {
   if (orderNumber.value) {
     try {
+      // Fetch order data from Firestore using order number
       const fetchedOrder = await fetchOrderByNumber(orderNumber.value)
       if (fetchedOrder) {
+        // Set order data and items
         orderData.value = fetchedOrder
         orderItems.value = fetchedOrder.items || []
         orderTotal.value = fetchedOrder.totalAmount || 0
 
-        // Fetch username from Firestore using customer.uid
+        // Fetch username from Firestore using customer UID
         if (fetchedOrder.customer?.uid) {
           const userDoc = await getDoc(doc(db, 'users', fetchedOrder.customer.uid))
           if (userDoc.exists()) {
@@ -119,8 +137,10 @@ onMounted(async () => {
         }
       }
     } catch (error) {
+      // Log error if fetch fails
       console.error('Error fetching order:', error)
     } finally {
+      // Set loading state to false after fetch
       isLoading.value = false
     }
   }

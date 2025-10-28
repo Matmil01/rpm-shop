@@ -44,19 +44,28 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+// CRUD composable for listening to orders collection
 import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
+// Pinia store for current user info
 import { useUserStore } from '@/composables/piniaStores/userStore'
+// Composable for order status labels/colors
 import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 
+// Orders CRUD composable
 const { listenToOrders } = useOrdersCRUD()
+// User store for current user info
 const userStore = useUserStore()
+// Order status helpers
 const { getStatusLabel, getStatusColor } = useOrderStatus()
+// Reactive array of orders
 const orders = ref([])
+// Loading state for async fetch
 const loading = ref(true)
 
+// On mount: listen to only this user's orders
 onMounted(() => {
   if (!userStore.uid) return
-  // Listen to only this user's orders
+  // Listen to orders and filter for current user
   const unsubscribe = listenToOrders((orderList) => {
     orders.value = orderList.filter(order => order.customer?.uid === userStore.uid)
     loading.value = false

@@ -70,19 +70,28 @@ import AddToCartButton from '@/components/buttons/AddToCartButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
 import Snackbar from '@/components/Snackbar.vue'
 
+// Snackbar message text
 const snackbarMessage = ref('')
+// Snackbar visibility state
 const snackbarShow = ref(false)
+
+// Helper to show snackbar notification
 function showSnackbar(msg) {
   snackbarMessage.value = msg
   snackbarShow.value = true
   setTimeout(() => snackbarShow.value = false, 3000)
 }
 
+// Access wishlist store
 const wishlist = useWishlistStore()
+// Access user store
 const userStore = useUserStore()
+// Price calculation function
 const { calculateDiscountedPrice } = usePriceCalculator()
+// Loading state for wishlist
 const loading = ref(true)
 
+// Loads wishlist from Firestore if user is logged in
 async function tryLoadWishlist() {
   if (userStore.uid) {
     await wishlist.loadWishlist()
@@ -90,11 +99,13 @@ async function tryLoadWishlist() {
   }
 }
 
+// On mount: load wishlist for current user
 onMounted(() => {
   console.log('Current UID:', userStore.uid)
   tryLoadWishlist()
 })
 
+// Watch for changes to user UID and reload wishlist
 watch(
   () => userStore.uid,
   async (newUid) => {

@@ -9,23 +9,31 @@
 <script setup>
 import { ref, watch } from 'vue'
 
+// Props:
+// - message: text to display in the snackbar
+// - show: controls visibility from parent
+// - duration: how long to show the snackbar (ms)
 const props = defineProps({
   message: String,
   show: Boolean,
   duration: { type: Number, default: 3000 }
 })
 
+// Internal state for visibility
 const visible = ref(props.show)
 
+// Watch for changes to 'show' prop and update visibility
 watch(() => props.show, (val) => {
   visible.value = val
   if (val) {
+    // Hide snackbar after 'duration' ms
     setTimeout(() => visible.value = false, props.duration)
   }
 })
 </script>
 
 <style scoped>
+/* Fade transition for snackbar appearance/disappearance */
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
 }

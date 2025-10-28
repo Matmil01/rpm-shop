@@ -105,6 +105,7 @@ import { useDeleteItem } from '@/composables/admin/useDeleteItem'
 import { useTableSearch } from '@/composables/admin/useTableSearch'
 import Snackbar from '@/components/Snackbar.vue'
 
+// Snackbar state and helper for notifications
 const snackbarMessage = ref('')
 const snackbarShow = ref(false)
 function showSnackbar(msg) {
@@ -113,21 +114,30 @@ function showSnackbar(msg) {
   setTimeout(() => snackbarShow.value = false, 3000)
 }
 
+// CRUD composable for records
 const { records, loading, listenToRecords, updateRecord: crudUpdateRecord, unsubscribeRecords } = useRecordsCRUD()
+// Tag logic for "Special Offers"
 const { applySpecialOffersTag, applyToAll } = useSpecialOffersTag()
+// List of available tags
 const { tagsList } = useTags()
+// Delete item composable
 const { deleteItem, deletingId, error } = useDeleteItem()
 
+// Search input for filtering records
 const search = ref('')
+// Computed: filtered records by search term
 const filteredRecords = useTableSearch(records, search, ['artist', 'album'])
+// Computed: sorted records by artist name
 const sortedRecords = computed(() =>
   [...filteredRecords.value].sort((a, b) =>
     (a.artist || '').localeCompare(b.artist || '')
   )
 )
 
+// Tracks which record is currently being saved
 const savingId = ref(null)
 
+// On mount: start listening to records and apply tags
 onMounted(() => {
   listenToRecords()
   records.value.forEach(record => {
@@ -135,10 +145,12 @@ onMounted(() => {
     applySpecialOffersTag(record)
   })
 })
+// On unmount: unsubscribe from records listener
 onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
 })
 
+// Watch for changes to records and update "Special Offers" tag if discount changes
 watch(() => records.value, (newRecords) => {
   if (!newRecords) return
   newRecords.forEach(record => {
@@ -149,15 +161,23 @@ watch(() => records.value, (newRecords) => {
   })
 }, { deep: true })
 
+// Auto-save handler for inline edits (stock, price, discount, tags)
 async function autoSave(record, field, value) {
   try {
-    await crudUpdateRecord(record.id, { [field]: value })
+    // If discount, stock, or price changes, update tags and save both
+    if (['discount', 'stock', 'price'].includes(field)) {
+      applySpecialOffersTag(record)
+      await crudUpdateRecord(record.id, { [field]: value, tags: record.tags })
+    } else {
+      await crudUpdateRecord(record.id, { [field]: value })
+    }
     showSnackbar('Saved!')
   } catch (error) {
     showSnackbar('Error saving change: ' + error.message)
   }
 }
 
+// Confirm and delete a record from Firestore
 async function confirmDelete(id) {
   await deleteItem('records', id, records)
 }

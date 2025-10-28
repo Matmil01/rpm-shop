@@ -1,3 +1,4 @@
+// Composable for mapping Discogs release data to form fields
 export function useReleaseMapper() {
   async function mapReleaseToForm(release, fetchReleaseDetails) {
     let artist = ''
@@ -10,6 +11,7 @@ export function useReleaseMapper() {
     let tracklist = []
     let numRecords = ''
 
+    // Parse artist and album from title if possible
     if (release.title && release.title.includes(' - ')) {
       [artist, album] = release.title.split(' - ')
     } else {
@@ -22,6 +24,7 @@ export function useReleaseMapper() {
     genre = release.genre ? release.genre.join(', ') : ''
     rpm = ''
 
+    // Fetch additional details for tracklist, format, and RPM
     const details = await fetchReleaseDetails(release.id)
     if (details) {
       tracklist = details.tracklist || []
@@ -33,6 +36,7 @@ export function useReleaseMapper() {
       }
     }
 
+    // Return mapped fields for your form
     return {
       artist,
       album,
@@ -46,5 +50,6 @@ export function useReleaseMapper() {
     }
   }
 
+  // Expose the mapping function
   return { mapReleaseToForm }
 }

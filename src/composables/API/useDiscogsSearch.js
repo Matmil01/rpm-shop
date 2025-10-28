@@ -1,5 +1,6 @@
 import { ref } from "vue"
 
+// Composable for searching Discogs API for vinyl releases
 export function useDiscogsSearch() {
   const results = ref([])
   const loading = ref(false)
@@ -21,6 +22,7 @@ export function useDiscogsSearch() {
     }
   }
 
+  // Fetches details for a specific Discogs release by ID
   const fetchReleaseDetails = async (releaseId) => {
     try {
       const res = await fetch(
@@ -34,10 +36,12 @@ export function useDiscogsSearch() {
     }
   }
 
+  // Clears search results and errors
   const clearResults = () => {
     results.value = []
     error.value = null
   }
 
+  // Expose state and functions
   return { results, loading, error, searchAlbums, fetchReleaseDetails, clearResults }
 }

@@ -103,39 +103,44 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHistory(), // Use HTML5 history mode for clean URLs
+  routes                        // Array of route definitions
 })
 
-let isAuthResolved = false
+let isAuthResolved = false      // Tracks if auth state has been checked
 function waitForAuth() {
   return new Promise(resolve => {
+    // If already resolved and user is present, resolve immediately
     if (isAuthResolved && auth.currentUser !== null) {
       resolve(auth.currentUser)
     } else {
+      // Otherwise, wait for Firebase auth state change
       const unsubscribe = onAuthStateChanged(auth, user => {
         isAuthResolved = true
-        unsubscribe()
-        resolve(user)
+        unsubscribe() // Stop listening after first result
+        resolve(user) // Resolve with user object (or null)
       })
     }
   })
 }
 
 router.beforeEach(async (to, from, next) => {
-  const user = await waitForAuth()
+  const user = await waitForAuth() // Wait for auth state before routing
+  // If route requires authentication and user is not logged in, redirect to login
   if (to.matched.some(record => record.meta.requiresAuth) && !user) {
     return next({ name: "Login" })
   }
+  // If route requires admin, check user role in Firestore
   if (to.matched.some(record => record.meta.requiresAdmin)) {
     if (!user) return next({ name: "Login" })
     const userDoc = await getDoc(doc(db, 'users', user.uid))
     if (!userDoc.exists() || userDoc.data().role !== 'admin') return next({ name: "home" })
   }
+  // If route requires unauthenticated user and user is logged in, redirect to home
   if (to.matched.some(record => record.meta.requiresUnauth) && user) {
     return next({ name: "home" })
   }
-  next()
+  next() // Otherwise, proceed to route
 })
 
 export default router

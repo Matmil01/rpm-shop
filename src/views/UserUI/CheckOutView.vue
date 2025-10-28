@@ -10,7 +10,6 @@
       <div class="mb-6 p-4 rounded bg-MyBlack">
         <h2 class="text-xl font-bold mb-2">Order Summary</h2>
         <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
-          <!-- Image -->
           <img
             v-if="item.coverImage"
             :src="item.coverImage"
@@ -21,7 +20,6 @@
             No Image
           </div>
 
-          <!-- Details -->
           <div class="flex-1">
             <div class="font-bold truncate">{{ item.album }}</div>
             <div class="text-sm mb-1 truncate">{{ item.artist }}</div>
@@ -42,7 +40,6 @@
         </div>
       </div>
 
-      <!-- Customer input fields -->
       <div v-if="!orderSubmitted">
         <h2 class="text-xl font-bold mb-4">Customer Information</h2>
         <div class="mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow text-MyWhite">
@@ -80,23 +77,33 @@ import { useOrdersCRUD } from '@/composables/CRUD/useOrdersCRUD'
 import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
+// Router instance for navigation
 const router = useRouter()
+// Access cart store
 const cart = useCartStore()
+// Price calculation functions
 const priceCalculator = usePriceCalculator()
+// Orders CRUD composable
 const { addOrder } = useOrdersCRUD()
+// Records CRUD composable
 const { fetchRecord, updateRecord } = useRecordsCRUD()
+// User store for customer info
 const userStore = useUserStore()
 
+// Customer info fields
 const customerName = ref('')
 const customerAddress = ref('')
 const username = ref('')
+// Random order number
 const orderNumber = ref(`RPM-${Math.floor(100000 + Math.random() * 900000)}`)
+// State for order submission
 const processing = ref(false)
 const submitError = ref('')
 const orderSubmitted = ref(false)
-
+// Computed: total price of all items in cart
 const totalPrice = computed(() => priceCalculator.calculateTotalPrice(cart.items))
 
+// On mount: load customer info from Firestore
 onMounted(async () => {
   if (userStore.uid) {
     const userDoc = await getDoc(doc(db, 'users', userStore.uid))
@@ -108,6 +115,7 @@ onMounted(async () => {
   }
 })
 
+// Handles order submission
 async function submitOrder() {
   if (processing.value) return
 
@@ -115,6 +123,7 @@ async function submitOrder() {
   submitError.value = ''
 
   try {
+    // Check stock for each item in cart
     const stockCheckResults = await Promise.all(
       cart.items.map(async (item) => {
         const record = await fetchRecord(item.id)
@@ -140,12 +149,14 @@ async function submitOrder() {
       })
     )
 
+    // If any item is unavailable, show error
     const unavailableItem = stockCheckResults.find(item => !item.available)
     if (unavailableItem) {
       submitError.value = unavailableItem.message
       return
     }
 
+    // Build order data
     const orderData = {
       orderNumber: orderNumber.value,
       customer: {
@@ -170,8 +181,10 @@ async function submitOrder() {
       status: 'new'
     }
 
+    // Add order to Firestore
     await addOrder(orderData)
 
+    // Update stock for each item
     await Promise.all(
       cart.items.map(async (item) => {
         const stockInfo = stockCheckResults.find(record => record.id === item.id)
@@ -182,8 +195,10 @@ async function submitOrder() {
       })
     )
 
+    // Clear cart after successful order
     cart.clearCart()
 
+    // Redirect to thank you page with order number
     router.push({
       path: '/thankyou',
       query: { orderNumber: orderNumber.value }

@@ -73,12 +73,16 @@ import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import TrashButton from '@/components/buttons/TrashButton.vue'
 import QuantitySelector from '@/components/user/QuantitySelector.vue'
 
+// Router instance for navigation
 const router = useRouter()
+// Access cart store
 const cart = useCartStore()
+// Price calculation functions
 const { calculateDiscountedPrice, calculateTotalPrice } = usePriceCalculator()
-
+// Computed: total price of all items in cart
 const totalPrice = computed(() => calculateTotalPrice(cart.items))
 
+// Updates quantity for a cart item and saves to localStorage
 function updateQuantity(item, newQuantity) {
   const cartItem = cart.items.find(cartItem => cartItem.id === item.id)
   if (cartItem) {
@@ -87,6 +91,7 @@ function updateQuantity(item, newQuantity) {
   }
 }
 
+// Navigates to checkout page
 function checkout() {
   router.push('/user/checkout')
 }

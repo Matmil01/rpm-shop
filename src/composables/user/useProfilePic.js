@@ -8,11 +8,12 @@ const DEFAULT_PROFILE_PIC = '/profilePics/userDefault.svg'
 
 export function useProfilePic() {
   const userStore = useUserStore()
+  // Computed: returns user's profilePic or default if missing
   const profilePicSrc = computed(() =>
     (typeof userStore.profilePic === 'string' && userStore.profilePic.trim()) || DEFAULT_PROFILE_PIC
   )
 
-  // Load from Firestore
+  // Loads profilePic from Firestore and updates userStore
   async function syncFromFirestore() {
     if (!userStore.loggedIn || !userStore.uid) return
     try {
@@ -27,7 +28,7 @@ export function useProfilePic() {
     } catch (_) {}
   }
 
-  // Fallback to Auth
+  // Loads profilePic from Firebase Auth if not set in userStore
   function syncFromAuth() {
     const authPic = auth.currentUser?.photoURL || null
     if (userStore.loggedIn && !userStore.profilePic && authPic) {
@@ -35,7 +36,7 @@ export function useProfilePic() {
     }
   }
 
-  // Update everywhere
+  // Updates profilePic in Firestore, Auth, and userStore
   async function updateProfilePic(url) {
     if (!userStore.uid) return
     await updateDoc(doc(db, 'users', userStore.uid), {
@@ -47,7 +48,7 @@ export function useProfilePic() {
     userStore.profilePic = url
   }
 
-  // Watch for changes
+  // Watches for changes to user UID and syncs profilePic
   watch(() => userStore.uid, async () => {
     await syncFromFirestore()
     syncFromAuth()

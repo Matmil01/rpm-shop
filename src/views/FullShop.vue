@@ -32,17 +32,25 @@ import { useRecordsCRUD } from '@/composables/CRUD/useRecordsCRUD'
 import { useRecordSearch } from '@/composables/records/useRecordSearch'
 import RecordCard from '@/components/user/RecordCard.vue'
 
+// Get route instance for reading query params
 const route = useRoute()
+
+// Search input for filtering records by artist/album
 const search = ref('')
+
+// CRUD composable for records
 const { records, listenToRecords, unsubscribeRecords } = useRecordsCRUD()
 
+// Computed: current tag/category from route query
 const tag = computed(() => route.query.tag)
 const { filteredRecords } = useRecordSearch(records, { tagRef: tag, searchRef: search, sortBy: 'artist', sortDirection: 'asc' })
 
+// On mount: start listening to records collection
 onMounted(() => {
   listenToRecords()
 })
 
+// Watch for changes to search query in route and update search input
 watch(
   () => route.query.search,
   (newSearch) => {
@@ -51,6 +59,7 @@ watch(
   { immediate: true }
 )
 
+// On unmount: unsubscribe from records listener
 onUnmounted(() => {
   if (unsubscribeRecords) unsubscribeRecords()
 })

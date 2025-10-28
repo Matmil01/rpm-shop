@@ -59,16 +59,22 @@ import { useUsersCRUD } from '@/composables/CRUD/useUsersCRUD'
 import { useDeleteItem } from '@/composables/admin/useDeleteItem'
 import { useTableSearch } from '@/composables/admin/useTableSearch'
 
+// Reactive array of users
 const users = ref([])
+// Search input for filtering users
 const search = ref('')
+// Loading state for fetching users
 const loading = ref(true)
+// Current admin UID from user store
 const userStore = useUserStore()
 const currentAdminUid = userStore.uid
+// Delete item composable for banning users
 const { deleteItem, deletingId: deleting, error } = useDeleteItem()
-
+// Users CRUD composable for real-time updates
 const { listenToUsers } = useUsersCRUD()
 let unsubscribe = null
 
+// Adds order count to each user by querying orders collection
 async function addOrderCounts(userList) {
   for (const user of userList) {
     const ordersSnap = await getDocs(query(collection(db, 'orders'), where('customer.uid', '==', user.uid)))
@@ -77,6 +83,7 @@ async function addOrderCounts(userList) {
   users.value = userList
 }
 
+// On mount: start listening to users and add order counts
 onMounted(() => {
   loading.value = true
   unsubscribe = listenToUsers(async (userList) => {
@@ -85,13 +92,16 @@ onMounted(() => {
   })
 })
 
+// On unmount: unsubscribe from users listener
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
 
+// Deletes (bans) a user by UID
 async function deleteUser(uid) {
   await deleteItem('users', uid, users, 'uid')
 }
 
+// Computed: filtered users by search term (username or email)
 const filteredUsers = useTableSearch(users, search, ['username', 'email'])
 </script>

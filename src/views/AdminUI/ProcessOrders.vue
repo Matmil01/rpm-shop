@@ -92,6 +92,7 @@ import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 import { useTableSearch } from '@/composables/admin/useTableSearch'
 import Snackbar from '@/components/Snackbar.vue'
 
+// Snackbar state and helper for notifications
 const snackbarMessage = ref('')
 const snackbarShow = ref(false)
 function showSnackbar(msg) {
@@ -100,33 +101,44 @@ function showSnackbar(msg) {
   setTimeout(() => snackbarShow.value = false, 3000)
 }
 
+// CRUD composable for orders
 const { listenToOrders, updateOrder } = useOrdersCRUD()
+// Delete item composable
 const { deleteItem, deletingId, error } = useDeleteItem()
+// Order status options and helpers
 const { statusOptions, getStatusLabel, getStatusColor } = useOrderStatus()
 
+// Reactive array of orders
 const orders = ref([])
+// Search input for filtering orders
 const search = ref('')
+// Status filter for filtering by order status
 const statusFilter = ref('')
 let unsubscribe = null
 
+// On mount: start listening to orders
 onMounted(() => {
   unsubscribe = listenToOrders((orderList) => {
     orders.value = orderList
   })
 })
 
+// On unmount: unsubscribe from orders listener
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
 
+// Computed: searched orders by order number or customer name
 const searchedOrders = useTableSearch(orders, search, ['orderNumber', 'customer.name'])
 
+// Computed: filtered orders by status
 const filteredOrders = computed(() =>
   statusFilter.value
     ? searchedOrders.value.filter(order => order.status === statusFilter.value)
     : searchedOrders.value
 )
 
+// Handles status change for an order
 async function handleStatusChange(orderId, newStatus) {
   if (!newStatus) return
   try {
@@ -137,6 +149,7 @@ async function handleStatusChange(orderId, newStatus) {
   }
 }
 
+// Confirm and delete an order from Firestore
 async function confirmDelete(id) {
   await deleteItem('orders', id, orders)
 }

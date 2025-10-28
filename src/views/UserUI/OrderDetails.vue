@@ -3,7 +3,6 @@
     <h1 class="text-2xl font-headline mb-4">Order #{{ order?.orderNumber }}</h1>
     <div v-if="loading">Loading order details...</div>
     <div v-else-if="order">
-      <!-- Customer Info -->
       <h2 class="text-xl font-bold mb-2">Customer Information</h2>
       <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow">
         <div><span class="font-bold">Name:</span> {{ order.customer?.name }}</div>
@@ -11,7 +10,6 @@
         <div><span class="font-bold">Address:</span> {{ order.customer?.address }}</div>
         <div><span class="font-bold">Email:</span> {{ order.customer?.email }}</div>
       </div>
-      <!-- Order Details -->
       <h2 class="text-xl font-bold mb-2">Order Details</h2>
       <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow">
         <div>Date: {{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleString() : '' }}</div>
@@ -23,11 +21,9 @@
         </div>
         <div>Total: {{ order.totalAmount }} kr.</div>
       </div>
-      <!-- Items List -->
       <h2 class="text-xl font-bold mb-2">Items</h2>
       <div>
         <div v-for="item in order.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
-          <!-- Image -->
           <img
             v-if="item.coverImage"
             :src="item.coverImage"
@@ -37,7 +33,6 @@
           <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
-          <!-- Details -->
           <div class="flex-1">
             <div class="font-bold truncate">{{ item.album }}</div>
             <div class="text-sm mb-1 truncate">{{ item.artist }}</div>
@@ -77,18 +72,28 @@ import { useOrderStatus } from '@/composables/admin/useOrderStatus'
 import { db } from '@/firebase'
 import { doc, getDoc } from 'firebase/firestore'
 
+// Route instance for order number param
 const route = useRoute()
+// Orders CRUD composable
 const { fetchAllOrders } = useOrdersCRUD()
+// User store for current user info
 const userStore = useUserStore()
+// Reactive order object
 const order = ref(null)
+// Loading state for async fetch
 const loading = ref(true)
+// Price calculation function
 const { calculateDiscountedPrice } = usePriceCalculator()
+// Order status helpers
 const { getStatusLabel, getStatusColor } = useOrderStatus()
+// Username for display
 const username = ref('')
 
+// On mount: fetch order details and customer username
 onMounted(async () => {
   const orderNumber = route.params.orderNumber
   const allOrders = await fetchAllOrders()
+  // Admins can view any order, users only their own
   if (userStore.role === 'admin') {
     order.value = allOrders.find(o => String(o.orderNumber) === String(orderNumber))
   } else {

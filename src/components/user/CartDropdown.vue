@@ -1,10 +1,12 @@
 <template>
+    <!-- Dropdown cart summary, shown when cart has items -->
   <div
     v-if="cart.items.length"
     class="absolute right-0 mt-2 w-72 bg-MyBlack rounded-3xl shadow shadow-MyYellow opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50"
   >
     <div class="p-4">
-      <div v-for="item in cart.items.slice(0, 3)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
+            <!-- Show up to 5 cart items -->
+      <div v-for="item in cart.items.slice(0, 5)" :key="item.id" class="flex items-center mb-3 relative bg-MyBlack p-2 rounded">
         <img :src="item.coverImage" alt="" class="w-10 h-10 rounded mr-2" />
         <div class="flex-1">
           <div class="text-sm text-MyWhite font-bold">{{ item.album }}</div>
@@ -19,8 +21,8 @@
           @click.stop="cart.removeFromCart(item.id)"
         />
       </div>
-      <div v-if="cart.items.length > 3" class="text-xs text-MyWhite mb-2">
-        +{{ cart.items.length - 3 }} more...
+      <div v-if="cart.items.length > 5" class="text-xs text-MyWhite mb-2">
+        +{{ cart.items.length - 5 }} more...
       </div>
       <div class="flex justify-between items-center font-bold text-sm text-MyWhite mb-2">
         <span>{{ cart.items.length }} items</span>

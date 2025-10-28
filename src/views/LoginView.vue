@@ -30,29 +30,43 @@ import { doc, getDoc } from 'firebase/firestore'
 import { useUserStore } from '@/composables/piniaStores/userStore'
 import SimpleButton from '@/components/buttons/SimpleButton.vue'
 
+// Username input field
 const username = ref('')
+// Password input field
 const password = ref('')
+// Error message for login failures
 const error = ref('')
+// Success message for login
 const success = ref('')
+// Loading state for login process
 const loading = ref(false)
+// Router instance for navigation
 const router = useRouter()
+// Access user store for setting user info
 const userStore = useUserStore()
 
+// Handles login form submission
 async function login() {
   error.value = ''
   success.value = ''
   loading.value = true
   try {
+    // Construct email from username for Firebase Auth
     const email = `${username.value}@rpmshop.local`
+    // Sign in with Firebase Auth
     const userCredential = await signInWithEmailAndPassword(auth, email, password.value)
     const user = userCredential.user
+    // Fetch user document from Firestore
     const userDoc = await getDoc(doc(db, 'users', user.uid))
+    // Get role and username from Firestore, fallback to defaults
     const role = userDoc.exists() ? userDoc.data().role : 'user'
     const usernameFromDoc = userDoc.exists() ? userDoc.data().username : user.email.split('@')[0]
+    // Set user info in Pinia store
     userStore.setUser(user, role, null, usernameFromDoc)
     success.value = `Hello, ${usernameFromDoc}!`
     setTimeout(() => {
       loading.value = false
+      // Redirect based on role
       if (role === 'admin') {
         router.push('/admin')
       } else {

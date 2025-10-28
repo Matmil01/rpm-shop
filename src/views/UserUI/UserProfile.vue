@@ -66,17 +66,22 @@ import SimpleButton from '@/components/buttons/SimpleButton.vue'
 import { uploadToCloudinary } from '@/composables/user/useCloudinaryUpload'
 import { useProfilePic } from '@/composables/user/useProfilePic'
 import Snackbar from '@/components/Snackbar.vue'
+
+// Snackbar state for notifications
 const snackbarMessage = ref('')
 const snackbarShow = ref(false)
 
+// Helper to show snackbar notification
 function showSnackbar(msg) {
   snackbarMessage.value = msg
   snackbarShow.value = true
   setTimeout(() => snackbarShow.value = false, 3000)
 }
 
+// Access user store for current user info
 const userStore = useUserStore()
 
+// Customer info fields
 const name = ref('')
 const address = ref('')
 
@@ -89,6 +94,7 @@ const uploading = ref(false)
 // Use composable for profilePic logic
 const { profilePicSrc, updateProfilePic, DEFAULT_PROFILE_PIC } = useProfilePic()
 
+// Handles profile picture load errors (fallback to default)
 function onProfilePicError(e) {
   const img = e?.target
   if (img && img.tagName === 'IMG' && !img.src.endsWith(DEFAULT_PROFILE_PIC)) {
@@ -96,6 +102,7 @@ function onProfilePicError(e) {
   }
 }
 
+// Loads profile info from Firestore
 async function loadProfile() {
   if (!userStore.uid) return
   const snap = await getDoc(doc(db, 'users', userStore.uid))
@@ -108,10 +115,12 @@ async function loadProfile() {
 }
 loadProfile()
 
+// Opens file picker for profile picture
 function chooseFile() {
   fileInput.value?.click()
 }
 
+// Handles file input change and sets preview
 function onFileChange(e) {
   const file = e.target.files?.[0]
   selectedFile.value = file || null
@@ -120,6 +129,7 @@ function onFileChange(e) {
   previewUrl.value = file ? URL.createObjectURL(file) : ''
 }
 
+// Uploads selected profile picture to Cloudinary and saves URL
 async function uploadProfilePic() {
   if (!selectedFile.value || !userStore.uid) return
   try {
@@ -146,6 +156,7 @@ async function uploadProfilePic() {
   }
 }
 
+// Saves customer info (name, address) to Firestore
 async function saveProfile() {
   if (!userStore.uid) return
   try {
