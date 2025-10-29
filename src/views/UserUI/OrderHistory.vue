@@ -15,20 +15,16 @@
         <tbody>
           <tr v-for="order in orders" :key="order.id">
             <td class="p-2 border border-MyDark">
-              <router-link
-                :to="`/user/orders/${order.orderNumber}`"
-                class="text-MyWhite underline hover:opacity-70 duration-200 ease-in-out font-main"
-              >
+              <router-link :to="`/user/orders/${order.orderNumber}`"
+                class="text-MyWhite underline hover:opacity-70 duration-200 ease-in-out font-main">
                 {{ order.orderNumber }}
               </router-link>
             </td>
-            <td class="p-2 border border-MyDark">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
+            <td class="p-2 border border-MyDark">{{ order.orderDate?.toDate ?
+              order.orderDate.toDate().toLocaleDateString() : '' }}</td>
             <td class="p-2 border border-MyDark">{{ order.totalAmount }} kr.</td>
             <td class="p-2 border border-MyDark">
-              <span
-                class="px-2 py-1 rounded text-xs"
-                :class="getStatusColor(order.status)"
-              >
+              <span class="px-2 py-1 rounded text-xs" :class="getStatusColor(order.status)">
                 {{ getStatusLabel(order.status) }}
               </span>
             </td>

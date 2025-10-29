@@ -1,12 +1,8 @@
 <template>
   <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow font-main text-MyWhite">
     <h2 class="text-2xl font-headline mb-8">Registered Users</h2>
-    <input
-      v-model="search"
-      type="text"
-      placeholder="Search by username or email..."
-      class="mb-4 w-full border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main"
-    />
+    <input v-model="search" type="text" placeholder="Search by username or email..."
+      class="mb-4 w-full border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main" />
     <div v-if="loading" class="text-MyWhite mb-4">Fetching users...</div>
 
     <div v-if="filteredUsers.length" class="rounded overflow-hidden">
@@ -31,12 +27,9 @@
               {{ user.createdAt?.toDate ? user.createdAt.toDate().toLocaleDateString() : '—' }}
             </td>
             <td class="p-2 border border-MyDark">
-              <button
-                v-if="user.uid !== currentAdminUid"
-                @click="deleteUser(user.uid)"
+              <button v-if="user.uid !== currentAdminUid" @click="deleteUser(user.uid)"
                 class="bg-MyRed text-MyWhite px-3 py-1 rounded hover:opacity-70 transition ease-in-out duration-200 font-main cursor-pointer"
-                :disabled="deleting === user.uid"
-              >
+                :disabled="deleting === user.uid">
                 <span v-if="deleting === user.uid">Banning...</span>
                 <span v-else>Ban</span>
               </button>

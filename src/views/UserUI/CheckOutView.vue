@@ -9,13 +9,10 @@
     <div v-else>
       <div class="mb-6 p-4 rounded bg-MyBlack">
         <h2 class="text-xl font-bold mb-2">Order Summary</h2>
-        <div v-for="item in cart.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
-          <img
-            v-if="item.coverImage"
-            :src="item.coverImage"
-            alt="Cover"
-            class="w-20 h-20 object-cover rounded shadow"
-          />
+        <div v-for="item in cart.items" :key="item.id"
+          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
+          <img v-if="item.coverImage" :src="item.coverImage" alt="Cover"
+            class="w-20 h-20 object-cover rounded shadow" />
           <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
@@ -26,7 +23,8 @@
             <div class="text-sm">
               <span v-if="item.discount && item.discount > 0">
                 <span class="line-through text-gray-400 mr-2">{{ item.price }} kr.</span>
-                <span class="text-MyRed font-bold">{{ priceCalculator.calculateDiscountedPrice(item.price, item.discount) }} kr.</span>
+                <span class="text-MyRed font-bold">{{ priceCalculator.calculateDiscountedPrice(item.price,
+                  item.discount) }} kr.</span>
               </span>
               <span v-else>
                 <span class="text-gray-200 font-bold">{{ item.price }} kr.</span>
@@ -52,10 +50,7 @@
           {{ submitError }}
         </div>
         <div class="pt-4 flex justify-center">
-          <SimpleButton
-            @click="submitOrder"
-            :disabled="processing"
-          >
+          <SimpleButton @click="submitOrder" :disabled="processing">
             <span v-if="processing">Processing...</span>
             <span v-else>Place Order</span>
           </SimpleButton>

@@ -2,19 +2,10 @@
   <div class="rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow font-main text-MyYellow">
     <h2 class="text-xl font-headline mb-4 uppercase">Comments</h2>
     <div v-if="comments.length" class="space-y-4">
-      <div
-        v-for="comment in comments"
-        :key="comment.id"
-        class="flex items-start gap-3 border-b border-MyYellow pb-3"
-      >
+      <div v-for="comment in comments" :key="comment.id" class="flex items-start gap-3 border-b border-MyYellow pb-3">
         <!-- Profile picture for comment author -->
-        <img
-          :key="imgKey(comment)"
-          :src="getProfilePic(comment)"
-          alt="Profile Picture"
-          class="w-8 h-8 rounded-full object-cover bg-gray-700 border border-gray-600 shrink-0"
-          @error="onImgError"
-        />
+        <img :key="imgKey(comment)" :src="getProfilePic(comment)" alt="Profile Picture"
+          class="w-8 h-8 rounded-full object-cover bg-gray-700 border border-gray-600 shrink-0" @error="onImgError" />
         <div class="flex-1">
           <!-- Username and comment text -->
           <div class="font-bold leading-tight">{{ comment.username }}</div>
@@ -29,20 +20,12 @@
     <div v-if="userStore.loggedIn" class="mt-4">
       <form @submit.prevent="submitComment" class="flex items-start gap-3">
         <!-- Current user's profile picture -->
-        <img
-          :src="profilePicSrc"
-          alt="Your Profile Picture"
-          class="w-8 h-8 rounded-full object-cover bg-gray-700 border border-gray-600 shrink-0"
-          @error="onImgError"
-        />
+        <img :src="profilePicSrc" alt="Your Profile Picture"
+          class="w-8 h-8 rounded-full object-cover bg-gray-700 border border-gray-600 shrink-0" @error="onImgError" />
         <div class="flex-1 flex flex-col gap-2">
           <!-- Comment input -->
-          <textarea
-            v-model="newComment"
-            rows="2"
-            placeholder="Add your (wrong) opinion..."
-            class="rounded p-2 bg-MyBlack text-MyYellow border border-MyYellow"
-          />
+          <textarea v-model="newComment" rows="2" placeholder="Add your (wrong) opinion..."
+            class="rounded p-2 bg-MyBlack text-MyYellow border border-MyYellow" />
           <div class="self-end">
             <!-- Submit button -->
             <SimpleButton type="submit">Post</SimpleButton>

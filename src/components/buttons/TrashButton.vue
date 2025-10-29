@@ -1,12 +1,7 @@
 <template>
-  <img
-    src="/icons/trashIcon.svg"
-    :alt="alt"
-    :title="title"
+  <img src="/icons/trashIcon.svg" :alt="alt" :title="title"
     class="w-6 h-6 cursor-pointer hover:opacity-70 transition duration-200 ease-in-out inline-block"
-    :class="{ 'opacity-50 cursor-not-allowed': disabled }"
-    @click="handleClick"
-  />
+    :class="{ 'opacity-50 cursor-not-allowed': disabled }" @click="handleClick" />
 </template>
 
 <script setup>

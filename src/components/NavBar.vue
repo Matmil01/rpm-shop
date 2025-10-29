@@ -3,20 +3,13 @@
   <nav class="text-MyYellow font-main">
     <div class="container mx-auto px-4">
       <div
-        class="bg-MyDark rounded-3xl shadow-MyYellow shadow flex flex-col gap-3 md:flex-row md:justify-between md:items-center py-4 px-4"
-      >
+        class="bg-MyDark rounded-3xl shadow-MyYellow shadow flex flex-col gap-3 md:flex-row md:justify-between md:items-center py-4 px-4">
         <!-- Top row: logo and icons (mobile layout) -->
         <div class="flex justify-between items-center md:contents">
           <!-- Logo/Home link with spin animation on hover -->
           <router-link to="/" class="flex items-center group md:order-1">
-            <img
-              src="/rpm-logo-white.svg"
-              alt="RPM Logo"
-              :style="{ transform: `rotate(${logoAngle}deg)` }"
-              class="h-10 w-auto"
-              @mouseenter="startSpin"
-              @mouseleave="stopSpin"
-            />
+            <img src="/rpm-logo-white.svg" alt="RPM Logo" :style="{ transform: `rotate(${logoAngle}deg)` }"
+              class="h-10 w-auto" @mouseenter="startSpin" @mouseleave="stopSpin" />
             <span class="ml-3 text-2xl font-headline">RPM Shop</span>
           </router-link>
 
@@ -24,14 +17,13 @@
           <div class="space-x-4 flex items-center md:order-3">
             <!-- Cart icon and dropdown -->
             <div class="relative group">
-              <router-link to="/user/cart" class="hover:opacity-70 flex items-center transition duration-200 ease-in-out">
+              <router-link to="/user/cart"
+                class="hover:opacity-70 flex items-center transition duration-200 ease-in-out">
                 <img src="/icons/cartIcon.svg" alt="Cart" class="w-6 h-6" />
               </router-link>
               <!-- Cart item count badge -->
-              <span
-                v-if="cart.items.length"
-                class="absolute -top-2 -right-3 bg-MyRed text-MyYellow rounded-full px-2 text-xs font-bold transition-all"
-              >
+              <span v-if="cart.items.length"
+                class="absolute -top-2 -right-3 bg-MyRed text-MyYellow rounded-full px-2 text-xs font-bold transition-all">
                 {{ cart.items.length }}
               </span>
               <CartDropdown />
@@ -43,52 +35,28 @@
                 <!-- Admin: desktop link, mobile toggle -->
                 <template v-if="userStore.role === 'admin'">
                   <router-link to="/admin" class="hidden md:flex items-center">
-                    <img
-                      :key="`profilePic-${userStore.uid}-${profilePicSrc}`"
-                      :src="profilePicSrc"
-                      alt="Profile"
+                    <img :key="`profilePic-${userStore.uid}-${profilePicSrc}`" :src="profilePicSrc" alt="Profile"
                       class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-pointer transition-opacity hover:opacity-70 object-cover"
-                      @error="onProfilePicError"
-                    />
+                      @error="onProfilePicError" />
                   </router-link>
-                  <button
-                    class="flex md:hidden items-center"
-                    @click.stop="toggleUserMenu"
-                    aria-haspopup="menu"
-                    :aria-expanded="userMenuOpen"
-                  >
-                    <img
-                      :key="`profilePic-m-${userStore.uid}-${profilePicSrc}`"
-                      :src="profilePicSrc"
-                      alt="Profile"
+                  <button class="flex md:hidden items-center" @click.stop="toggleUserMenu" aria-haspopup="menu"
+                    :aria-expanded="userMenuOpen">
+                    <img :key="`profilePic-m-${userStore.uid}-${profilePicSrc}`" :src="profilePicSrc" alt="Profile"
                       class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 transition-opacity object-cover"
-                      @error="onProfilePicError"
-                    />
+                      @error="onProfilePicError" />
                   </button>
                 </template>
 
                 <!-- Non-admin: desktop image, mobile toggle -->
                 <template v-else>
-                  <img
-                    :key="`profilePic-${userStore.uid}-${profilePicSrc}`"
-                    :src="profilePicSrc"
-                    alt="Profile"
+                  <img :key="`profilePic-${userStore.uid}-${profilePicSrc}`" :src="profilePicSrc" alt="Profile"
                     class="hidden md:block w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 cursor-default transition-opacity object-cover"
-                    @error="onProfilePicError"
-                  />
-                  <button
-                    class="md:hidden flex items-center"
-                    @click.stop="toggleUserMenu"
-                    aria-haspopup="menu"
-                    :aria-expanded="userMenuOpen"
-                  >
-                    <img
-                      :key="`profilePic-m-${userStore.uid}-${profilePicSrc}`"
-                      :src="profilePicSrc"
-                      alt="Profile"
+                    @error="onProfilePicError" />
+                  <button class="md:hidden flex items-center" @click.stop="toggleUserMenu" aria-haspopup="menu"
+                    :aria-expanded="userMenuOpen">
+                    <img :key="`profilePic-m-${userStore.uid}-${profilePicSrc}`" :src="profilePicSrc" alt="Profile"
                       class="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-600 transition-opacity object-cover"
-                      @error="onProfilePicError"
-                    />
+                      @error="onProfilePicError" />
                   </button>
                 </template>
 
@@ -107,16 +75,10 @@
         </div>
 
         <!-- Center: search field for artist/album -->
-        <form
-          @submit.prevent="onSearch"
-          class="w-full md:flex-1 md:mx-8 flex items-center gap-2 mt-1 md:mt-0 md:order-2"
-        >
-          <input
-            v-model="searchInput"
-            type="text"
-            placeholder="Search by artist or album..."
-            class="border border-MyYellow rounded-3xl px-3 py-2 text-MyWhite font-main w-full"
-          />
+        <form @submit.prevent="onSearch"
+          class="w-full md:flex-1 md:mx-8 flex items-center gap-2 mt-1 md:mt-0 md:order-2">
+          <input v-model="searchInput" type="text" placeholder="Search by artist or album..."
+            class="border border-MyYellow rounded-3xl px-3 py-2 text-MyWhite font-main w-full" />
           <SimpleButton type="submit" class="ml-2">
             Search
           </SimpleButton>

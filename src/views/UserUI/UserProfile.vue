@@ -8,12 +8,8 @@
     <div class="w-full max-w-xs mx-auto">
       <h3 class="text-xl font-bold mb-2 text-MyWhite text-left">Profile Picture</h3>
       <div class="mb-6 p-4 rounded bg-MyDark shadow shadow-MyYellow flex flex-col items-center gap-3">
-        <img
-          :src="previewUrl || profilePicSrc"
-          alt="Profile Picture"
-          class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 object-cover"
-          @error="onProfilePicError"
-        />
+        <img :src="previewUrl || profilePicSrc" alt="Profile Picture"
+          class="w-24 h-24 rounded-full bg-gray-700 border-2 border-gray-600 object-cover" @error="onProfilePicError" />
 
         <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="onFileChange" />
 

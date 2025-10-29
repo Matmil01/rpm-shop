@@ -1,10 +1,6 @@
 <template>
-  <button
-    type="button"
-    @click="handleAdd"
-    :disabled="loading"
-    class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow hover:opacity-70 transition duration-200 ease-in-out flex items-center gap-2 relative bg-MyDark"
-  >
+  <button type="button" @click="handleAdd" :disabled="loading"
+    class="px-6 py-2 rounded-3xl font-main cursor-pointer border border-MyYellow text-MyYellow hover:opacity-70 transition duration-200 ease-in-out flex items-center gap-2 relative bg-MyDark">
     <!-- Show discounted price if discount is present -->
     <span v-if="item.discount && item.discount > 0">
       <span class="text-MyRed font-bold">{{ discountedPrice }} kr.</span>
@@ -15,11 +11,7 @@
       <span class="text-MyYellow font-bold">{{ item.price }} kr.</span>
     </span>
     <!-- Cart icon -->
-    <img
-      src="/icons/cartIcon.svg"
-      alt="Add to Cart"
-      class="w-5 h-5 opacity-60"
-    />
+    <img src="/icons/cartIcon.svg" alt="Add to Cart" class="w-5 h-5 opacity-60" />
   </button>
 </template>
 

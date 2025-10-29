@@ -3,16 +3,10 @@
     <div class="w-full mt-12">
       <h3 class="text-2xl font-headline mb-4">Recent Orders</h3>
       <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-        <input
-          v-model="search"
-          type="text"
-          placeholder="Search by order number or customer name..."
-          class="flex-1 border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main"
-        />
-        <select
-          v-model="statusFilter"
-          class="border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main w-48"
-        >
+        <input v-model="search" type="text" placeholder="Search by order number or customer name..."
+          class="flex-1 border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main" />
+        <select v-model="statusFilter"
+          class="border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main w-48">
           <option value="">All Statuses</option>
           <option v-for="option in statusOptions" :key="option.value" :value="option.value">
             {{ option.label }}
@@ -35,10 +29,8 @@
           <tbody>
             <tr v-for="order in filteredOrders" :key="order.id" class="border-t border-MyDark">
               <td class="p-2 border border-MyDark w-[90px]">
-                <router-link
-                  :to="`/user/orders/${order.orderNumber}`"
-                  class="text-MyWhite underline hover:opacity-70 ease-in-out duration-200 font-main"
-                >
+                <router-link :to="`/user/orders/${order.orderNumber}`"
+                  class="text-MyWhite underline hover:opacity-70 ease-in-out duration-200 font-main">
                   {{ order.orderNumber }}
                 </router-link>
               </td>
@@ -49,28 +41,19 @@
                 </span>
               </td>
               <td class="p-2 border border-MyDark w-[90px]">{{ order.totalAmount }} kr.</td>
-              <td class="p-2 border border-MyDark w-[120px]">{{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleDateString() : '' }}</td>
+              <td class="p-2 border border-MyDark w-[120px]">{{ order.orderDate?.toDate ?
+                order.orderDate.toDate().toLocaleDateString() : '' }}</td>
               <td class="p-2 border border-MyDark w-[110px]">
-                <span
-                  class="px-2 py-1 rounded text-xs"
-                  :class="getStatusColor(order.status)"
-                >
+                <span class="px-2 py-1 rounded text-xs" :class="getStatusColor(order.status)">
                   {{ getStatusLabel(order.status) }}
                 </span>
               </td>
               <td class="p-2 border border-MyDark w-[120px]">
-                <OrderStatusDropdown
-                  v-model="order.status"
-                  @update:modelValue="val => handleStatusChange(order.id, val)"
-                  class="w-full"
-                />
+                <OrderStatusDropdown v-model="order.status"
+                  @update:modelValue="val => handleStatusChange(order.id, val)" class="w-full" />
               </td>
               <td class="p-2 border border-MyDark align-middle text-center w-[60px]">
-                <TrashButton
-                  title="Delete order"
-                  :disabled="false"
-                  @click="() => confirmDelete(order.id)"
-                />
+                <TrashButton title="Delete order" :disabled="false" @click="() => confirmDelete(order.id)" />
               </td>
             </tr>
           </tbody>

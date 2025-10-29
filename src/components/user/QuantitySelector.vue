@@ -1,11 +1,9 @@
 <template>
   <!-- Quantity selector for cart -->
   <div class="flex items-center">
-    <button
-      @click="decrement"
+    <button @click="decrement"
       class="w-6 h-6 bg-gray-700 text-MyWhite rounded-l flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer"
-      :disabled="modelValue <= min"
-    >
+      :disabled="modelValue <= min">
       -
     </button>
     <!-- Display current quantity -->
@@ -13,10 +11,8 @@
       {{ modelValue }}
     </div>
     <!-- Increment button: increases quantity -->
-    <button
-      @click="increment"
-      class="w-6 h-6 bg-gray-700 text-MyWhite rounded-r flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer"
-    >
+    <button @click="increment"
+      class="w-6 h-6 bg-gray-700 text-MyWhite rounded-r flex items-center justify-center hover:opacity-70 transition ease-in-out duration-200 cursor-pointer">
       +
     </button>
   </div>

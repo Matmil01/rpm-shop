@@ -4,46 +4,29 @@
   <div class="container mx-auto px-4">
     <div class="rounded-3xl bg-MyDark p-6 shadow-MyYellow shadow font-main text-MyYellow relative">
       <div class="flex flex-col md:flex-row gap-12 md:gap-16">
-        <div
-          v-if="record && record.id"
-          class="flex-shrink-0 flex flex-col items-center md:items-start gap-4"
-        >
-          <img
-            :src="record.coverImage"
-            alt="Album Cover"
-            class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow"
-          />
+        <div v-if="record && record.id" class="flex-shrink-0 flex flex-col items-center md:items-start gap-4">
+          <img :src="record.coverImage" alt="Album Cover"
+            class="w-full max-w-md md:w-96 md:h-96 object-cover rounded shadow" />
           <div class="text-base md:text-lg font-bold text-center md:text-left mb-1">
             {{ record.album }}
           </div>
-          <router-link
-            :to="`/shop?search=${encodeURIComponent(record.artist)}`"
-            class="text-MyYellow underline hover:opacity-70 transition text-center md:text-left block mb-2"
-          >
+          <router-link :to="`/shop?search=${encodeURIComponent(record.artist)}`"
+            class="text-MyYellow underline hover:opacity-70 transition text-center md:text-left block mb-2">
             {{ record.artist }}
           </router-link>
           <div
-            class="flex flex-col items-center justify-center md:flex-row md:items-center md:justify-start mt-4 gap-3 md:gap-4"
-          >
-            <AddToCartButton
-              v-if="record.stock > 0"
-              :item="{
-                id: record.id,
-                album: record.album,
-                artist: record.artist,
-                coverImage: record.coverImage,
-                price: record.price,
-                discount: record.discount
-              }"
-              @added="showSnackbar('Added to cart!')"
-            />
+            class="flex flex-col items-center justify-center md:flex-row md:items-center md:justify-start mt-4 gap-3 md:gap-4">
+            <AddToCartButton v-if="record.stock > 0" :item="{
+              id: record.id,
+              album: record.album,
+              artist: record.artist,
+              coverImage: record.coverImage,
+              price: record.price,
+              discount: record.discount
+            }" @added="showSnackbar('Added to cart!')" />
             <OutOfStock v-else-if="record.id && record.stock === 0" />
-            <WishlistButton
-              v-if="record.id"
-              :record="record"
-              @added="showSnackbar('Added to wishlist!')"
-              @removed="showSnackbar('Removed from wishlist!')"
-            />
+            <WishlistButton v-if="record.id" :record="record" @added="showSnackbar('Added to wishlist!')"
+              @removed="showSnackbar('Removed from wishlist!')" />
           </div>
         </div>
 
@@ -54,10 +37,8 @@
               <dd>
                 <template v-if="record.genre">
                   <span v-for="(genre, idx) in record.genre.split(',').map(s => s.trim())" :key="genre">
-                    <router-link
-                      :to="`/shop?search=${encodeURIComponent(genre)}`"
-                      class="underline hover:opacity-70 transition"
-                    >
+                    <router-link :to="`/shop?search=${encodeURIComponent(genre)}`"
+                      class="underline hover:opacity-70 transition">
                       {{ genre }}
                     </router-link>
                     <span v-if="idx < record.genre.split(',').length - 1">, </span>
@@ -66,10 +47,20 @@
                 <span v-else>Unknown</span>
               </dd>
             </div>
-            <div><dt class="font-semibold">Year:</dt><dd>{{ record.year || 'Unknown' }}</dd></div>
-            <div><dt class="font-semibold">Speed:</dt><dd>{{ record.rpm || '33 RPM' }}</dd></div>
-            <div><dt class="font-semibold">Format:</dt><dd>{{ record.format || '12"' }}</dd></div>
-            <div><dt class="font-semibold">Stock:</dt>
+            <div>
+              <dt class="font-semibold">Year:</dt>
+              <dd>{{ record.year || 'Unknown' }}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold">Speed:</dt>
+              <dd>{{ record.rpm || '33 RPM' }}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold">Format:</dt>
+              <dd>{{ record.format || '12"' }}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold">Stock:</dt>
               <dd>
                 <span v-if="record.stock > 0 && record.stock < 5" class="text-MyRed font-semibold">
                   Only {{ record.stock }} left, order now!
@@ -82,7 +73,10 @@
                 </span>
               </dd>
             </div>
-            <div><dt class="font-semibold">Number of Records:</dt><dd>{{ record.numRecords || '1' }}</dd></div>
+            <div>
+              <dt class="font-semibold">Number of Records:</dt>
+              <dd>{{ record.numRecords || '1' }}</dd>
+            </div>
           </dl>
           <div v-if="record.tracklist && record.tracklist.length">
             <h2 class="text-lg font-semibold mb-2">Tracklist</h2>
@@ -93,7 +87,9 @@
               </li>
             </ol>
           </div>
-          <router-link to="/shop" class="text-MyYellow underline hover:opacity-70 transition duration-200 ease-in-out">← Back to Shop</router-link>
+          <router-link to="/shop" class="text-MyYellow underline hover:opacity-70 transition duration-200 ease-in-out">←
+            Back to
+            Shop</router-link>
         </div>
       </div>
     </div>

@@ -7,29 +7,17 @@
         <h1 class="text-2xl sm:text-3xl md:text-4xl font-headline w-full text-center uppercase">
           {{ category }}
         </h1>
-        <SimpleButton
-          :to="`/shop?tag=${encodeURIComponent(category)}`"
-          class="inline-flex w-auto self-center md:self-auto"
-        >
+        <SimpleButton :to="`/shop?tag=${encodeURIComponent(category)}`"
+          class="inline-flex w-auto self-center md:self-auto">
           See all
         </SimpleButton>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        <div
-          v-for="record in recordsByCategory(category)"
-          :key="record.id"
-          class="rounded-3xl bg-MyDark p-4 shadow-MyYellow shadow"
-        >
-          <RecordCard
-            :id="record.id"
-            :album="record.album || ''"
-            :artist="record.artist || ''"
-            :coverImage="record.coverImage || ''"
-            :price="Number(record.price) || 0"
-            :discount="Number(record.discount) || 0"
-            :stock="record.stock"
-            :showSnackbar="showSnackbar"
-          />
+        <div v-for="record in recordsByCategory(category)" :key="record.id"
+          class="rounded-3xl bg-MyDark p-4 shadow-MyYellow shadow">
+          <RecordCard :id="record.id" :album="record.album || ''" :artist="record.artist || ''"
+            :coverImage="record.coverImage || ''" :price="Number(record.price) || 0"
+            :discount="Number(record.discount) || 0" :stock="record.stock" :showSnackbar="showSnackbar" />
         </div>
       </div>
     </div>

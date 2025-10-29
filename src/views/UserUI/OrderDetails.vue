@@ -15,21 +15,17 @@
         <div>Date: {{ order.orderDate?.toDate ? order.orderDate.toDate().toLocaleString() : '' }}</div>
         <div>
           Status:
-          <span class="px-2 py-1 rounded text-xs"
-            :class="getStatusColor(order.status)"
-          >{{ getStatusLabel(order.status) }}</span>
+          <span class="px-2 py-1 rounded text-xs" :class="getStatusColor(order.status)">{{ getStatusLabel(order.status)
+            }}</span>
         </div>
         <div>Total: {{ order.totalAmount }} kr.</div>
       </div>
       <h2 class="text-xl font-bold mb-2">Items</h2>
       <div>
-        <div v-for="item in order.items" :key="item.id" class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
-          <img
-            v-if="item.coverImage"
-            :src="item.coverImage"
-            alt="Cover"
-            class="w-20 h-20 object-cover rounded shadow"
-          />
+        <div v-for="item in order.items" :key="item.id"
+          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
+          <img v-if="item.coverImage" :src="item.coverImage" alt="Cover"
+            class="w-20 h-20 object-cover rounded shadow" />
           <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
@@ -49,10 +45,8 @@
           </div>
         </div>
       </div>
-      <button
-        @click="$router.back()"
-        class="mt-8 text-MyWhite underline hover:opacity-70 ease-in-out duration-200 font-main cursor-pointer"
-      >
+      <button @click="$router.back()"
+        class="mt-8 text-MyWhite underline hover:opacity-70 ease-in-out duration-200 font-main cursor-pointer">
         ← Back to Orders
       </button>
     </div>

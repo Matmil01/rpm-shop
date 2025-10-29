@@ -1,58 +1,36 @@
 <template>
   <div class="rounded p-4 w-full mx-auto font-main text-MyWhite">
     <!-- Link to record details page -->
-    <router-link
-      :to="`/record/${props.id}`"
-      class="block"
-    >
+    <router-link :to="`/record/${props.id}`" class="block">
       <div class="relative group">
 
-        <img
-          src="/vinyl_PNG18.webp"
-          alt=""
-          loading="lazy"
-          class="absolute inset-0 w-full h-full z-0 opacity-100 transition-all duration-300
-            group-hover:translate-x-6 group-hover:animate-spin"
-          style="object-fit: contain;"
-        />
+        <img src="/vinyl_PNG18.webp" alt="" loading="lazy" class="absolute inset-0 w-full h-full z-0 opacity-100 transition-all duration-300
+            group-hover:translate-x-6 group-hover:animate-spin" style="object-fit: contain;" />
 
-        <img
-          :src="props.coverImage"
-          alt="Album Cover"
-          loading="lazy"
-          class="w-full aspect-square object-cover mb-2 rounded relative z-10 transition-all duration-300
-            group-hover:-translate-x-6 shadow-MyBlack shadow"
-        />
+        <img :src="props.coverImage" alt="Album Cover" loading="lazy" class="w-full aspect-square object-cover mb-2 rounded relative z-10 transition-all duration-300
+            group-hover:-translate-x-6 shadow-MyBlack shadow" />
       </div>
     </router-link>
     <!-- Album title -->
-    <div
-      class="text-lg font-bold w-full block mb-1 overflow-hidden whitespace-nowrap truncate"
-    >
+    <div class="text-lg font-bold w-full block mb-1 overflow-hidden whitespace-nowrap truncate">
       {{ props.album }}
     </div>
     <!-- Link to artist search -->
-    <router-link
-      :to="`/shop?search=${encodeURIComponent(props.artist)}`"
-      class="text-MyWhite underline text-left inline mb-2 hover:opacity-70 transition duration-200 ease-in-out"
-    >
+    <router-link :to="`/shop?search=${encodeURIComponent(props.artist)}`"
+      class="text-MyWhite underline text-left inline mb-2 hover:opacity-70 transition duration-200 ease-in-out">
       {{ props.artist }}
     </router-link>
 
     <!-- Add to Cart or Out of Stock button -->
     <div class="flex items-center justify-center mt-4">
-      <AddToCartButton
-        v-if="props.stock > 0"
-        :item="{
-          id: props.id,
-          album: props.album,
-          artist: props.artist,
-          coverImage: props.coverImage,
-          price: props.price,
-          discount: props.discount
-        }"
-        @added="props.showSnackbar && props.showSnackbar('Added to cart!')"
-      />
+      <AddToCartButton v-if="props.stock > 0" :item="{
+        id: props.id,
+        album: props.album,
+        artist: props.artist,
+        coverImage: props.coverImage,
+        price: props.price,
+        discount: props.discount
+      }" @added="props.showSnackbar && props.showSnackbar('Added to cart!')" />
       <OutOfStock v-else />
     </div>
   </div>

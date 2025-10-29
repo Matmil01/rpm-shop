@@ -1,12 +1,8 @@
 <template>
   <div class="max-w-7xl mx-auto mt-10 p-6 rounded shadow ">
     <h1 class="text-2xl text-MyWhite font-headline mb-6">Manage Stock</h1>
-    <input
-      v-model="search"
-      type="text"
-      placeholder="Search by artist or album..."
-      class="mb-4 w-full border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main"
-    />
+    <input v-model="search" type="text" placeholder="Search by artist or album..."
+      class="mb-4 w-full border border-MyYellow rounded-full bg-MyDark px-3 py-2 text-MyWhite font-main" />
     <div v-if="loading" class="mb-4">Loading...</div>
     <div class="rounded overflow-hidden">
       <table class="w-full border-collapse border border-MyDark table-auto font-main text-MyWhite bg-MyBlack">
@@ -26,43 +22,25 @@
             <td class="p-2 border border-MyDark">{{ record.artist }}</td>
             <td class="p-2 border border-MyDark">{{ record.album }}</td>
             <td class="p-2 border border-MyDark">
-              <input
-                type="number"
-                v-model.number="record.stock"
-                @change="autoSave(record, 'stock', record.stock)"
-                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400"
-              />
+              <input type="number" v-model.number="record.stock" @change="autoSave(record, 'stock', record.stock)"
+                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" />
             </td>
             <td class="p-2 border border-MyDark">
-              <input
-                type="number"
-                v-model.number="record.price"
-                @change="autoSave(record, 'price', record.price)"
-                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400"
-              />
+              <input type="number" v-model.number="record.price" @change="autoSave(record, 'price', record.price)"
+                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" />
             </td>
             <td class="p-2 border border-MyDark">
-              <input
-                type="number"
-                v-model.number="record.discount"
-                @change="autoSave(record, 'discount', record.discount)"
-                min="0" max="100"
-                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400"
-              />
+              <input type="number" v-model.number="record.discount"
+                @change="autoSave(record, 'discount', record.discount)" min="0" max="100"
+                class="border border-MyDark bg-MyBlack px-2 py-1 w-20 text-MyWhite font-main rounded placeholder-gray-400" />
             </td>
             <td class="p-2 border border-MyDark">
               <div class="flex flex-wrap gap-1">
-                <span
-                  v-for="tag in record.tags"
-                  :key="tag"
-                  class="bg-MyYellow text-MyBlack px-2 py-1 rounded text-xs"
-                >
+                <span v-for="tag in record.tags" :key="tag" class="bg-MyYellow text-MyBlack px-2 py-1 rounded text-xs">
                   {{ tag }}
                 </span>
-                <button
-                  @click="record.showTagSelector = !record.showTagSelector"
-                  class="bg-gray-700 text-MyWhite px-2 py-1 rounded text-xs cursor-pointer"
-                >
+                <button @click="record.showTagSelector = !record.showTagSelector"
+                  class="bg-gray-700 text-MyWhite px-2 py-1 rounded text-xs cursor-pointer">
                   Add
                 </button>
               </div>
@@ -71,20 +49,15 @@
                   <input type="checkbox" :value="tag" v-model="record.tags" />
                   {{ tag }}
                 </label>
-                <SimpleButton
-                  class="mt-2 text-xs px-2 py-1"
-                  @click="record.showTagSelector = false; autoSave(record, 'tags', record.tags)"
-                >
+                <SimpleButton class="mt-2 text-xs px-2 py-1"
+                  @click="record.showTagSelector = false; autoSave(record, 'tags', record.tags)">
                   Done
                 </SimpleButton>
               </div>
             </td>
             <td class="p-2 border border-MyDark align-middle text-center">
-              <TrashButton
-                title="Delete record"
-                :disabled="savingId === record.id"
-                @click="() => savingId === record.id ? null : confirmDelete(record.id)"
-              />
+              <TrashButton title="Delete record" :disabled="savingId === record.id"
+                @click="() => savingId === record.id ? null : confirmDelete(record.id)" />
             </td>
           </tr>
         </tbody>

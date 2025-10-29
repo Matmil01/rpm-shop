@@ -1,17 +1,9 @@
 <template>
   <!-- Dropdown for selecting order status in admin dashboard-->
-  <select
-    :value="modelValue"
-    @change="onChange"
-    class="bg-MyBlack border border-MyYellow rounded text-MyWhite font-main px-2 py-1 cursor-pointer max-w-[130px]"
-  >
+  <select :value="modelValue" @change="onChange"
+    class="bg-MyBlack border border-MyYellow rounded text-MyWhite font-main px-2 py-1 cursor-pointer max-w-[130px]">
     <!-- Render each status option -->
-    <option
-      v-for="opt in statusOptions"
-      :key="opt.value"
-      :value="opt.value"
-      class="font-main"
-    >
+    <option v-for="opt in statusOptions" :key="opt.value" :value="opt.value" class="font-main">
       {{ opt.label }}
     </option>
   </select>

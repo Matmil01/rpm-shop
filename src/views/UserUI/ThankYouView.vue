@@ -22,10 +22,7 @@
         <div>Date: {{ orderData?.orderDate?.toDate ? orderData.orderDate.toDate().toLocaleString() : '' }}</div>
         <div>
           Status:
-          <span
-            class="px-2 py-1 rounded text-xs"
-            :class="getStatusColor(orderData?.status)"
-          >
+          <span class="px-2 py-1 rounded text-xs" :class="getStatusColor(orderData?.status)">
             {{ getStatusLabel(orderData?.status) }}
           </span>
         </div>
@@ -33,17 +30,10 @@
       <!-- Items List -->
       <h2 class="font-bold mb-4 text-xl text-left">Order Summary</h2>
       <div v-if="orderItems.length" class="mb-8 text-left">
-        <div
-          v-for="item in orderItems"
-          :key="item.id"
-          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4"
-        >
-          <img
-            v-if="item.coverImage"
-            :src="item.coverImage"
-            alt="Cover"
-            class="w-20 h-20 object-cover rounded shadow"
-          />
+        <div v-for="item in orderItems" :key="item.id"
+          class="flex items-center justify-between mb-4 p-4 rounded bg-MyDark shadow shadow-MyYellow gap-4">
+          <img v-if="item.coverImage" :src="item.coverImage" alt="Cover"
+            class="w-20 h-20 object-cover rounded shadow" />
           <div v-else class="w-20 h-20 flex items-center justify-center bg-MyDark text-xs rounded">
             No Image
           </div>
@@ -67,10 +57,7 @@
         </div>
       </div>
       <div class="mt-8 text-center">
-        <SimpleButton
-          to="/"
-          class="px-6 inline-block"
-        >
+        <SimpleButton to="/" class="px-6 inline-block">
           Continue Shopping
         </SimpleButton>
       </div>

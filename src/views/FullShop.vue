@@ -5,20 +5,10 @@
       {{ tag ? tag : (search ? search : 'All Records') }}
     </h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <div
-        v-for="record in filteredRecords"
-        :key="record.id"
-        class="rounded-3xl bg-MyDark p-4 shadow-MyYellow shadow"
-      >
-        <RecordCard
-          :id="record.id"
-          :album="record.album || ''"
-          :artist="record.artist || ''"
-          :coverImage="record.coverImage || ''"
-          :price="Number(record.price) || 0"
-          :discount="Number(record.discount) || 0"
-          :stock="record.stock"
-        />
+      <div v-for="record in filteredRecords" :key="record.id" class="rounded-3xl bg-MyDark p-4 shadow-MyYellow shadow">
+        <RecordCard :id="record.id" :album="record.album || ''" :artist="record.artist || ''"
+          :coverImage="record.coverImage || ''" :price="Number(record.price) || 0"
+          :discount="Number(record.discount) || 0" :stock="record.stock" />
       </div>
     </div>
   </div>
