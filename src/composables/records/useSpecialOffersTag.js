@@ -1,4 +1,4 @@
-// Composable for managing the "Special Offers" tag based on discount
+// Composable for managing the "Special Offers" tag
 export function useSpecialOffersTag() {
   // Adds or removes "Special Offers" tag based on discount value
   function applySpecialOffersTag(record) {

@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 
-// Composable for animating a spinning effect (e.g. logo)
-// spinSpeed: degrees per second (default 180)
+// Composable for animating the spinning home logo
 export function useSpinAnimation(spinSpeed = 180) {
   const angle = ref(0)         // Current rotation angle in degrees
   let spinning = false         // Is the animation running?

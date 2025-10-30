@@ -27,7 +27,6 @@
           <textarea v-model="newComment" rows="2" placeholder="Add your (wrong) opinion..."
             class="rounded p-2 bg-MyBlack text-MyYellow border border-MyYellow" />
           <div class="self-end">
-            <!-- Submit button -->
             <SimpleButton type="submit">Post</SimpleButton>
           </div>
         </div>
@@ -54,7 +53,7 @@ const userStore = useUserStore()
 const { profilePicSrc } = useProfilePic() // Current user only
 const { comments, newComment, addComment } = useComments(props.recordId)
 
-// Composable for fetching/caching profile pics for all users
+// Bunch of crazy shit
 const {
   getUid,
   getProfilePic,

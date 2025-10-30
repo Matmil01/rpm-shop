@@ -63,7 +63,4 @@ const { calculateDiscountedPrice } = usePriceCalculator()
 const discountedPrice = computed(() =>
   calculateDiscountedPrice(props.price, props.discount)
 )
-
-// Access cart store (not used directly here, but available for future logic)
-const cart = useCartStore()
 </script>

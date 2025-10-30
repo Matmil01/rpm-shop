@@ -47,9 +47,9 @@ function showSnackbar(msg) {
 
 // List of record categories to display on homepage
 const categories = [
+  'Special Offers',
   'Soundtracks',
   'Staff Favorites',
-  'Special Offers',
   'Doom & Gloom',
   'Shock & Awe',
   'Dad Metal',

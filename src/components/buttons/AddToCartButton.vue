@@ -10,7 +10,6 @@
     <span v-else>
       <span class="text-MyYellow font-bold">{{ item.price }} kr.</span>
     </span>
-    <!-- Cart icon -->
     <img src="/icons/cartIcon.svg" alt="Add to Cart" class="w-5 h-5 opacity-60" />
   </button>
 </template>

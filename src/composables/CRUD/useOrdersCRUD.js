@@ -3,7 +3,6 @@ import { collection, getDocs, addDoc, updateDoc, doc, onSnapshot, query, where, 
 
 // Composable for CRUD operations on orders collection
 export function useOrdersCRUD() {
-  // Adds a new order to Firestore
   async function addOrder(order) {
     return await addDoc(collection(db, 'orders'), {
       ...order,

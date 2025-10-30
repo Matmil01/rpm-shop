@@ -1,5 +1,5 @@
 <template>
-  <!-- Link mode: renders a <router-link> if 'to' prop is provided -->
+  <!-- Renders <router-link> if 'to' prop is provided -->
   <router-link v-if="to" :to="to" :class="[
     'font-main text-MyYellow border border-MyYellow px-4 py-2 rounded-full shadow transition duration-200 ease-in-out whitespace-nowrap hover:bg-MyYellow hover:text-MyBlack hover:border-MyYellow inline-flex items-center justify-center',
     disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'
@@ -7,7 +7,7 @@
     <slot />
   </router-link>
 
-  <!-- Button mode: renders a <button> if 'to' prop is not provided -->
+  <!-- Renders <button> if 'to' prop is not provided -->
   <button v-else :type="type" :disabled="disabled" :class="[
     'font-main text-MyYellow border border-MyYellow px-4 py-2 rounded-full shadow transition duration-200 ease-in-out whitespace-nowrap hover:bg-MyYellow hover:text-MyBlack hover:border-MyYellow inline-flex items-center justify-center',
     disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
@@ -24,7 +24,7 @@
 // - disabled: disables the button/link
 const props = defineProps({
   to: { type: [String, Object], default: null },
-  onClick: { type: Function, default: null }, // compatibility
+  onClick: { type: Function, default: null },
   type: { type: String, default: 'button' },
   disabled: { type: Boolean, default: false }
 })
