@@ -1,6 +1,12 @@
 <template>
-  <!-- Main navigation bar -->
-  <nav class="text-MyYellow font-main">
+  <!-- Spacer for mobile -->
+  <div class="mt-[115px] md:mt-0"></div>
+
+  <nav :class="[
+    'text-MyYellow font-main transition-all duration-300',
+    isMobile ? 'fixed top-0 left-0 w-full z-50' : 'relative',
+    !showNavbar && isMobile ? 'opacity-0 pointer-events-none' : ''
+  ]">
     <div class="container mx-auto px-4">
       <div
         class="bg-MyDark rounded-3xl shadow-MyYellow shadow flex flex-col gap-3 md:flex-row md:justify-between md:items-center py-4 px-4">
@@ -130,11 +136,15 @@ function onProfilePicError(e) {
 onMounted(() => {
   document.addEventListener('click', onGlobalClick)
   document.addEventListener('keydown', onEsc)
+  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('resize', handleResize)
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', onGlobalClick)
   document.removeEventListener('keydown', onEsc)
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('resize', handleResize)
 })
 
 // Toggle user dropdown menu
@@ -158,5 +168,34 @@ function logout() {
   signOut(auth)
   userStore.clearUser?.()
   router.push('/login')
+}
+
+// Scroll handling for navbar visibility
+const showNavbar = ref(true)
+const isMobile = ref(window.innerWidth <= 768)
+let lastScrollY = window.scrollY
+
+function handleScroll() {
+  // Sticky/hide logic on mobile
+  if (!isMobile.value) {
+    showNavbar.value = true
+    lastScrollY = window.scrollY
+    return
+  }
+  const currentScrollY = window.scrollY
+  // Show navbar if scrolling up or at top
+  if (currentScrollY < lastScrollY - 5 || currentScrollY < 10) {
+    showNavbar.value = true
+  }
+  // Hide navbar if scrolling down and not near top
+  else if (currentScrollY > lastScrollY + 5 && currentScrollY > 40) {
+    showNavbar.value = false
+  }
+  lastScrollY = currentScrollY
+}
+
+function handleResize() {
+  isMobile.value = window.innerWidth <= 768
+  if (!isMobile.value) showNavbar.value = true
 }
 </script>
