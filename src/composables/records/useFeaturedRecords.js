@@ -1,5 +1,5 @@
-// Returns up to 4 records for a front page category, prioritizing those with 'featured' field.
-// Fills remaining slots with non-featured records, sorted as default.
+// Fetches records for a front page category, prioritizing those with 'featured' field in Firestore.
+// Remaining sorted as default.
 export function useFeaturedRecords(records) {
   function recordsByCategory(category) {
     const featured = records.value.filter(

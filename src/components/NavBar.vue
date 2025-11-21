@@ -19,8 +19,14 @@
             <span class="ml-3 text-2xl font-headline">RPM Shop</span>
           </router-link>
 
-          <!-- Right side: cart, user, login icons and dropdowns -->
+          <!-- Right side: wishlist, cart, user, login icons and dropdowns -->
           <div class="space-x-4 flex items-center md:order-3">
+            <!-- Wishlist icon -->
+            <router-link to="/user/wishlist"
+              class="hover:opacity-70 flex items-center transition duration-200 ease-in-out">
+              <img src="/icons/wishlistIcon.svg" alt="Wishlist" class="w-6 h-6" />
+            </router-link>
+
             <!-- Cart icon and dropdown -->
             <div class="relative group">
               <router-link to="/user/cart"
@@ -82,7 +88,7 @@
 
         <!-- Center: search field for artist/album -->
         <form @submit.prevent="onSearch"
-          class="w-full md:flex-1 md:mx-8 flex items-center gap-2 mt-1 md:mt-0 md:order-2">
+          class="w-full md:flex-1 md:mx-6 flex items-center gap-2 mt-1 md:mt-0 md:order-2">
           <input v-model="searchInput" type="text" placeholder="Search by artist or album..."
             class="border border-MyYellow rounded-3xl px-3 py-2 text-MyWhite font-main w-full" />
           <SimpleButton type="submit" class="ml-2">
